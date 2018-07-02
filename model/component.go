@@ -37,13 +37,15 @@ func (c *Component) GetID() String {
 
 // SetID ...
 func (c *Component) SetID(id string) *Component {
-	c.id = id
+	if c.id == "" {
+		c.id = id
+	}
 	return c
 }
 
 // HasPrefix ...
 func (c *Component) HasPrefix() bool {
-	return c.prefix == ""
+	return c.prefix != ""
 }
 
 // GetPrefix ...
@@ -53,7 +55,7 @@ func (c *Component) GetPrefix() String {
 
 // GetPrefixOrDefault ...
 func (c *Component) GetPrefixOrDefault() String {
-	if c.prefix != "" {
+	if c.HasPrefix() {
 		return String(c.prefix)
 	} else if len(c.GetMember()) <= 0 {
 		return String("is")

@@ -7,8 +7,8 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-// EventListenerComponentGenerator_C_1_6_1 ...
-func EventListenerComponentGenerator_C_1_6_1(m *model.M) ([]proton.FileInfo, error) {
+// EventListenerEntityGenerator_C_1_6_1 ...
+func EventListenerEntityGenerator_C_1_6_1(m *model.M) ([]proton.FileInfo, error) {
 	slice := make([]proton.FileInfo, 0)
 	for _, c := range m.GetComponentWithEvent() {
 		for _, ctx := range c.GetContext() {
