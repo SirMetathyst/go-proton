@@ -10,33 +10,34 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func ComponentLookup_C_1_4_2(ctx *model.Context, c []*model.Component, b *bytes.Buffer) string {
-	b.WriteString(`public static class `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`ComponentsLookup {
+func ComponentLookup_C_1_4_2(c *model.C, cp []*model.CP, b *bytes.Buffer) string {
+	b.WriteString(`
+public static class `)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`ComponentsLookup 
+{
 `)
-	for i, cc := range c {
+	for i, ccp := range cp {
 		b.WriteString("\tpublic const int ")
-		b.WriteString(cc.GetID().WithoutComponentSuffix().ToUpperFirst().String())
+		b.WriteString(ccp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 		b.WriteString(" = ")
 		b.WriteString(strconv.Itoa(i))
 		b.WriteString(";\n")
 	}
-
 	b.WriteString(`
-	
     public const int TotalComponents = `)
-	b.WriteString(strconv.Itoa(len(c)))
+	b.WriteString(strconv.Itoa(len(cp)))
 	b.WriteString(`;
 	
-	public static readonly string[] componentNames = {
+	public static readonly string[] componentNames = 
+    {
 `)
 
-	for i, cc := range c {
+	for i, ccp := range cp {
 		b.WriteString("\t\t\"")
-		b.WriteString(cc.GetID().WithoutComponentSuffix().ToUpperFirst().String())
+		b.WriteString(ccp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 		b.WriteString("\"")
-		if i != len(c)-1 {
+		if i != len(cp)-1 {
 			b.WriteString(",\n")
 		}
 	}
@@ -44,14 +45,15 @@ func ComponentLookup_C_1_4_2(ctx *model.Context, c []*model.Component, b *bytes.
 	b.WriteString(`
 	};
 	
-	public static readonly System.Type[] componentTypes = {
+	public static readonly System.Type[] componentTypes = 
+    {
 `)
 
-	for i, cc := range c {
+	for i, ccp := range cp {
 		b.WriteString("\t\ttypeof(")
-		b.WriteString(cc.GetID().WithComponentSuffix().ToUpperFirst().String())
+		b.WriteString(ccp.ID().WithComponentSuffix().ToUpperFirst().String())
 		b.WriteRune(')')
-		if i != len(c)-1 {
+		if i != len(cp)-1 {
 			b.WriteString(",\n")
 		}
 	}

@@ -9,43 +9,43 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func EntityIndexGetCustomIndices_C_1_4_2(ei []*model.EntityIndex, b *bytes.Buffer) string {
-	for _, e := range ei {
-		if e.GetContext() != nil {
-			IndexType := e.GetID().String()
+func EntityIndexGetCustomIndices_C_1_4_2(ei []*model.EI, b *bytes.Buffer) string {
+	for _, cei := range ei {
 
-			ReturnType := ""
-			if !e.IsPrimary() {
-				ReturnType = "System.Collections.Generic.HashSet<" + e.GetContext().GetID().WithoutContextSuffix().ToUpperFirst().String() + "Entity>"
-			} else {
-				ReturnType = e.GetContext().GetID().WithoutContextSuffix().ToUpperFirst().String() + "Entity"
-			}
+		IndexType := cei.ID().String()
 
-			for _, eim := range e.GetEntityIndexMethod() {
+		ReturnType := ""
+		if !cei.IsPrimary() {
+			ReturnType = "System.Collections.Generic.HashSet<" + cei.Context().ID().WithoutContextSuffix().ToUpperFirst().String() + "Entity>"
+		} else {
+			ReturnType = cei.Context().ID().WithoutContextSuffix().ToUpperFirst().String() + "Entity"
+		}
 
-				b.WriteString(`
+		for _, eim := range cei.EntityIndexMethodList() {
+
+			b.WriteString(`
 public static `)
-				b.WriteString(ReturnType)
-				b.WriteRune(' ')
-				b.WriteString(eim.GetID().String())
-				b.WriteString(`(this `)
-				b.WriteString(e.GetContext().GetID().WithContextSuffix().ToUpperFirst().String())
-				b.WriteString(` context, `)
-				EntityIndexArgument_C_1_4_2(eim, b)
-				b.WriteString(`) {
-        return ((`)
-				b.WriteString(IndexType)
-				b.WriteString(`)(context.GetEntityIndex(Contexts.`)
-				b.WriteString(IndexType)
-				b.WriteString(`))).`)
-				b.WriteString(eim.GetID().String())
-				b.WriteString(`(`)
-				EntityIndexArgumentPass_C_1_4_2(eim, b)
-				b.WriteString(`);
+			b.WriteString(ReturnType)
+			b.WriteRune(' ')
+			b.WriteString(eim.ID().String())
+			b.WriteString(`(this `)
+			b.WriteString(cei.Context().ID().WithContextSuffix().ToUpperFirst().String())
+			b.WriteString(` context, `)
+			EntityIndexArgument_C_1_4_2(eim, b)
+			b.WriteString(`) 
+{
+    return ((`)
+			b.WriteString(IndexType)
+			b.WriteString(`)(context.GetEntityIndex(Contexts.`)
+			b.WriteString(IndexType)
+			b.WriteString(`))).`)
+			b.WriteString(eim.ID().String())
+			b.WriteString(`(`)
+			EntityIndexArgumentPass_C_1_4_2(eim, b)
+			b.WriteString(`);
 }
 
 `)
-			}
 		}
 	}
 	return b.String()

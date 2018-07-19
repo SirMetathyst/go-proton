@@ -1,9 +1,5 @@
 package configuration
 
-var (
-	configuration = New()
-)
-
 // Provider ...
 type Provider func(*C) error
 
@@ -12,13 +8,17 @@ type C struct {
 	value map[string]interface{}
 }
 
-// New ...
-func New() *C {
+// NewConfiguration ...
+func NewConfiguration() *C {
 	return &C{make(map[string]interface{}, 0)}
 }
 
-// Get ...
-func Get() *C {
+var (
+	configuration = NewConfiguration()
+)
+
+// Singleton ...
+func Singleton() *C {
 	return configuration
 }
 
@@ -32,12 +32,12 @@ func SetValue(key string, value interface{}) {
 	configuration.SetValue(key, value)
 }
 
-// GetValue ...
-func (c *C) GetValue(key string) interface{} {
+// Value ...
+func (c *C) Value(key string) interface{} {
 	return c.value[key]
 }
 
-// GetValue ...
-func GetValue(key string) interface{} {
-	return configuration.GetValue(key)
+// Value ...
+func Value(key string) interface{} {
+	return configuration.Value(key)
 }

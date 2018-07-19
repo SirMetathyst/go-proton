@@ -8,19 +8,19 @@ import (
 )
 
 // ComponentEntityGenerator_C_1_4_2 ...
-func ComponentEntityGenerator_C_1_4_2(m *model.M) ([]proton.FileInfo, error) {
+func ComponentEntityGenerator_C_1_4_2(m *model.MD) ([]proton.FileInfo, error) {
 	slice := make([]proton.FileInfo, 0)
-	for _, c := range m.GetComponent() {
-		for _, ctx := range c.GetContext() {
+	for _, cp := range m.ComponentList() {
+		for _, c := range cp.ContextList() {
 			b := new(bytes.Buffer)
 
-			if len(c.GetMember()) == 0 {
-				ComponentEntityFlag_C_1_4_2(ctx, c, b)
+			if len(cp.MemberList()) == 0 {
+				ComponentEntityFlag_C_1_4_2(c, cp, b)
 			} else {
-				ComponentEntity_C_1_4_2(ctx, c, b)
+				ComponentEntity_C_1_4_2(c, cp, b)
 			}
 
-			slice = append(slice, proton.NewFileInfo(ctx.GetID().WithoutContextSuffix().String()+"/Components/"+ctx.GetID().WithoutContextSuffix().String()+c.GetID().WithComponentSuffix().String()+".cs", b.String(), "ComponentEntityGenerator_C_1_4_2"))
+			slice = append(slice, proton.NewFileInfo(c.ID().WithoutContextSuffix().String()+"/Components/"+c.ID().WithoutContextSuffix().String()+cp.ID().WithComponentSuffix().String()+".cs", b.String(), "ComponentEntityGenerator_C_1_4_2"))
 		}
 	}
 	return slice, nil

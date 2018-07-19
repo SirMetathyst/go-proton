@@ -1,21 +1,22 @@
 <%! import "github.com/SirMetathyst/proton/model"; %>
-<%: func EntityIndexGetCustomIndices_C_1_4_2(ei []*model.EntityIndex, b *bytes.Buffer) string %>
-<% for _, e := range ei { 
-    if e.GetContext() != nil {
-    IndexType := e.GetID().String()
+<%: func EntityIndexGetCustomIndices_C_1_4_2(ei []*model.EI, b *bytes.Buffer) string %>
+<% for _, cei := range ei { 
+
+    IndexType := cei.ID().String()
     
     ReturnType := ""
-    if !e.IsPrimary() {
-       ReturnType = "System.Collections.Generic.HashSet<" + e.GetContext().GetID().WithoutContextSuffix().ToUpperFirst().String() + "Entity>" 
+    if !cei.IsPrimary() {
+       ReturnType = "System.Collections.Generic.HashSet<" + cei.Context().ID().WithoutContextSuffix().ToUpperFirst().String() + "Entity>" 
     } else {
-        ReturnType = e.GetContext().GetID().WithoutContextSuffix().ToUpperFirst().String() + "Entity"
+        ReturnType = cei.Context().ID().WithoutContextSuffix().ToUpperFirst().String() + "Entity"
     }
     
-    for _, eim := range e.GetEntityIndexMethod() {
+    for _, eim := range cei.EntityIndexMethodList() {
 %>
-public static <%==s ReturnType%><% b.WriteRune(' ')%><%==s eim.GetID().String()%>(this <%==s e.GetContext().GetID().WithContextSuffix().ToUpperFirst().String()%> context, <% EntityIndexArgument_C_1_4_2(eim, b) %>) {
-        return ((<%==s IndexType%>)(context.GetEntityIndex(Contexts.<%==s IndexType%>))).<%==s eim.GetID().String()%>(<% EntityIndexArgumentPass_C_1_4_2(eim, b) %>);
+public static <%==s ReturnType%><% b.WriteRune(' ')%><%==s eim.ID().String()%>(this <%==s cei.Context().ID().WithContextSuffix().ToUpperFirst().String()%> context, <% EntityIndexArgument_C_1_4_2(eim, b) %>) 
+{
+    return ((<%==s IndexType%>)(context.GetEntityIndex(Contexts.<%==s IndexType%>))).<%==s eim.ID().String()%>(<% EntityIndexArgumentPass_C_1_4_2(eim, b) %>);
 }
 
-<% }}} %>
+<% }} %>
 <% return b.String() %>

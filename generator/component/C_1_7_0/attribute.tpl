@@ -1,0 +1,1 @@
+<% b.WriteString(ComponentAttribute_C_1_7_0(cp)) %>

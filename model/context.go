@@ -1,53 +1,30 @@
 package model
 
-import "bytes"
+import "fmt"
 
-// Context ...
-type Context struct {
-	id        string
-	isDefault bool
-}
+var (
+	ErrContextIDUndefined = fmt.Errorf("Context: `ID` Undefined.")
+)
 
-// NewContextWithID ...
-func NewContextWithID(id string) *Context {
-	return &Context{id: id}
+// C ...
+type C struct {
+	id string
 }
 
 // NewContext ...
-func NewContext() *Context {
-	return new(Context)
+func NewContext(id string) (*C, error) {
+	if id == "" {
+		return nil, ErrContextIDUndefined
+	}
+	return &C{id}, nil
 }
 
-// GetID ...
-func (c *Context) GetID() String {
+// ID ...
+func (c *C) ID() String {
 	return String(c.id)
 }
 
-// SetID ...
-func (c *Context) SetID(id string) *Context {
-	c.id = id
-	return c
-}
-
-// IsDefault ...
-func (c *Context) IsDefault() bool {
-	return c.isDefault
-}
-
-// SetDefault ...
-func (c *Context) SetDefault(value bool) *Context {
-	c.isDefault = value
-	return c
-}
-
 // String ...
-func (c Context) String() string {
-	var buffer bytes.Buffer
-	buffer.WriteString(string(c.GetID()))
-	buffer.WriteRune('(')
-	if c.IsDefault() {
-		buffer.WriteString("Default")
-	}
-	buffer.WriteRune(')')
-	return buffer.String()
+func (c C) String() string {
+	return "[" + c.ID().String() + "]"
 }

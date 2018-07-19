@@ -9,32 +9,40 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func ComponentEntityInterface_C_1_4_2(c *model.Component, b *bytes.Buffer) string {
-	b.WriteString(`public interface I`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity {
-
+func ComponentEntityInterface_C_1_4_2(cp *model.CP, b *bytes.Buffer) string {
+	b.WriteString(`
+public interface I`)
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity 
+{
     `)
-	b.WriteString(c.GetID().WithComponentSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
 	b.WriteRune(' ')
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToLowerFirst().String())
-	b.WriteString(` { get; }
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(` 
+    { 
+        get; 
+    }
+    
     bool has`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` { get; }
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(` 
+    { 
+        get; 
+    }
 
     void Add`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
-	ComponentEntityInterfaceArgument_C_1_4_2(c, b)
+	ComponentEntityInterfaceArgument_C_1_4_2(cp, b)
 	b.WriteString(`);
     void Replace`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
-	ComponentEntityInterfaceArgument_C_1_4_2(c, b)
+	ComponentEntityInterfaceArgument_C_1_4_2(cp, b)
 	b.WriteString(`);
     void Remove`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`();
 }
 `)

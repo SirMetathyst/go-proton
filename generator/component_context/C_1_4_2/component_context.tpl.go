@@ -9,95 +9,121 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func ComponentContext_C_1_4_2(ctx *model.Context, c *model.Component, b *bytes.Buffer) string {
-	b.WriteString(`public partial class `)
-	b.WriteString(ctx.GetID().WithContextSuffix().ToUpperFirst().String())
-	b.WriteString(` {
-
+func ComponentContext_C_1_4_2(c *model.C, cp *model.CP, b *bytes.Buffer) string {
+	b.WriteString(`
+public partial class `)
+	b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
+	b.WriteString(` 
+{
     public `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
-	b.WriteString(`Entity { get { return GetGroup(`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(`Entity 
+    { 
+        get 
+        { 
+            return GetGroup(`)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Matcher.`)
-	b.WriteString(c.GetID().ToUpperFirst().String())
-	b.WriteString(`).GetSingleEntity(); } }
-    public `)
-	b.WriteString(c.GetID().ToUpperFirst().String())
-	b.WriteString(`Component `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
-	b.WriteString(` { get { return `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
-	b.WriteString(`Entity.`)
-	b.WriteString(c.GetID().ToLowerFirst().String())
-	b.WriteString(`; } }
-    public bool `)
-	b.WriteString(c.GetPrefixOrDefault().ToLowerFirst().String())
-	b.WriteString(c.GetID().ToUpperFirst().String())
-	b.WriteString(` { get { return `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
-	b.WriteString(`Entity != null; } }
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`).GetSingleEntity(); 
+        } 
+    }
 
     public `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
+	b.WriteRune(' ')
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(` 
+    { 
+        get 
+        { 
+            return `)
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(`Entity.`)
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(`; 
+        } 
+    }
+
+    public bool has`)
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(` 
+    { 
+        get 
+        { 
+            return `)
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(`Entity != null; 
+        } 
+    }
+
+    public `)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity Set`)
-	b.WriteString(c.GetID().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
-	ComponentContextArgument_1_4_2(c, b)
-	b.WriteString(`) {
-        if (`)
-	b.WriteString(c.GetPrefixOrDefault().ToLowerFirst().String())
-	b.WriteString(c.GetID().String())
-	b.WriteString(`) {
+	ComponentContextArgument_1_4_2(cp, b)
+	b.WriteString(`) 
+    {
+        if (has`)
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`) 
+        {
             throw new Entitas.EntitasException("Could not set `)
-	b.WriteString(c.GetID().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`!\n" + this + " already has an entity with `)
-	b.WriteString(c.GetID().ToUpperFirst().WithComponentSuffix().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().WithComponentSuffix().String())
 	b.WriteString(`!",
                 "You should check if the context already has a `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
 	b.WriteString(`Entity before setting it or use context.Replace`)
-	b.WriteString(c.GetID().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`().");
         }
         var entity = CreateEntity();
         entity.Add`)
-	b.WriteString(c.GetID().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
-	ComponentContextArgumentPass_1_4_2(c, b)
+	ComponentContextArgumentPass_1_4_2(cp, b)
 	b.WriteString(`);
         return entity;
     }
 
     public void Replace`)
-	b.WriteString(c.GetID().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
-	ComponentContextArgument_1_4_2(c, b)
-	b.WriteString(`) {
+	ComponentContextArgument_1_4_2(cp, b)
+	b.WriteString(`) 
+    {
         var entity = `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
 	b.WriteString(`Entity;
-        if (entity == null) {
+        if (entity == null) 
+        {
             entity = Set`)
-	b.WriteString(c.GetID().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
-	ComponentContextArgumentPass_1_4_2(c, b)
+	ComponentContextArgumentPass_1_4_2(cp, b)
 	b.WriteString(`);
-        } else {
+        } 
+        else 
+        {
             entity.Replace`)
-	b.WriteString(c.GetID().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
-	ComponentContextArgumentPass_1_4_2(c, b)
+	ComponentContextArgumentPass_1_4_2(cp, b)
 	b.WriteString(`);
         }
     }
 
     public void Remove`)
-	b.WriteString(c.GetID().ToUpperFirst().String())
-	b.WriteString(`() {
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`() 
+    {
         `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
 	b.WriteString(`Entity.Destroy();
     }
 }

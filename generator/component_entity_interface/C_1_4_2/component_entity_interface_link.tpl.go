@@ -9,12 +9,15 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func ComponentEntityInterfaceLink_C_1_4_2(ctx *model.Context, c *model.Component, b *bytes.Buffer) string {
-	b.WriteString(`public partial class `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+func ComponentEntityInterfaceLink_C_1_4_2(c *model.C, cp *model.CP, b *bytes.Buffer) string {
+	b.WriteString(`
+public partial class `)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity : I`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity { }
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity 
+{ 
+}
 `)
 	return b.String()
 

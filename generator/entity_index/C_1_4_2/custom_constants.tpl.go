@@ -9,9 +9,9 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func EntityIndexCustomConstants_C_1_4_2(ei []*model.EntityIndex, b *bytes.Buffer) string {
-	for _, e := range ei {
-		ID := e.GetID().String()
+func EntityIndexCustomConstants_C_1_4_2(ei []*model.EI, b *bytes.Buffer) string {
+	for _, cei := range ei {
+		ID := cei.ID().String()
 		b.WriteRune('\t')
 		b.WriteString(`public const string`)
 		b.WriteRune(' ')

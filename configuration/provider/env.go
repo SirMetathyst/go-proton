@@ -9,7 +9,7 @@ import (
 
 // Env ...
 func Env(c *configuration.C) error {
-	for _, b := range c.GetAllBool() {
+	for _, b := range c.AllBool() {
 		*b.Value = getBool(b.Key, *b.Value)
 	}
 	return nil

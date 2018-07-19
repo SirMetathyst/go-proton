@@ -9,14 +9,20 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func ComponentEntityInterfaceFlag_C_1_4_2(c *model.Component, b *bytes.Buffer) string {
-	b.WriteString(`public interface I`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity {
+func ComponentEntityInterfaceFlag_C_1_4_2(cp *model.CP, b *bytes.Buffer) string {
+	b.WriteString(`
+public interface I`)
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity 
+{
     bool `)
-	b.WriteString(c.GetPrefixOrDefault().ToLowerFirst().String())
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` { get; set; }
+	b.WriteString(cp.FlagPrefixOrDefault().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(` 
+    { 
+        get; 
+        set; 
+    }
 }
 `)
 	return b.String()

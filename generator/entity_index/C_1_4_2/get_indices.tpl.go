@@ -9,45 +9,46 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func EntityIndexGetIndices_C_1_4_2(c []*model.Component, b *bytes.Buffer) string {
-	for _, cc := range c {
-		for _, cctx := range cc.GetContext() {
-			for _, m := range cc.GetMember() {
-				if m.GetEntityIndex() > 0 {
+func EntityIndexGetIndices_C_1_4_2(cp []*model.CP, b *bytes.Buffer) string {
+	for _, ccp := range cp {
+		for _, c := range ccp.ContextList() {
+			for _, m := range ccp.MemberList() {
+				if m.EntityIndex() > 0 {
 
-					ID := cc.GetID().WithoutComponentSuffix().ToUpperFirst().String()
-					Type := m.GetValue().String()
-					MemberName := m.GetID().ToLowerFirst().String()
+					ID := ccp.ID().WithoutComponentSuffix().ToUpperFirst().String()
+					Type := m.Value().String()
+					MemberName := m.ID().ToLowerFirst().String()
 					IndexName := ""
 					IndexType := ""
-					if m.GetEntityIndex() == 1 {
+					if m.EntityIndex() == 1 {
 						IndexType = "Entitas.PrimaryEntityIndex"
-					} else if m.GetEntityIndex() > 1 {
+					} else if m.EntityIndex() > 1 {
 						IndexType = "Entitas.EntityIndex"
 					}
-
-					if cc.GetEntityIndexCount() == 1 {
+					entityIndexCount := len(ccp.MembersWithEntityIndex())
+					if entityIndexCount == 1 {
 						IndexName = ID
-					} else if cc.GetEntityIndexCount() > 1 {
-						IndexName = ID + m.GetID().ToUpperFirst().String()
+					} else if entityIndexCount > 1 {
+						IndexName = ID + m.ID().ToUpperFirst().String()
 					}
-					if m.GetEntityIndex() == 1 {
+					if m.EntityIndex() == 1 {
 						b.WriteRune('\t')
 						b.WriteString(`public static `)
-						b.WriteString(cctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+						b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 						b.WriteString(`Entity GetEntityWith`)
 						b.WriteString(IndexName)
 						b.WriteString(`(this `)
-						b.WriteString(cctx.GetID().WithContextSuffix().ToUpperFirst().String())
+						b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
 						b.WriteString(` context, `)
 						b.WriteString(Type)
 						b.WriteRune(' ')
 						b.WriteString(MemberName)
-						b.WriteString(`) {
+						b.WriteString(`)
+    {
         return ((`)
 						b.WriteString(IndexType)
 						b.WriteString(`<`)
-						b.WriteString(cctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+						b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 						b.WriteString(`Entity, `)
 						b.WriteString(Type)
 						b.WriteString(`>)context.GetEntityIndex(Contexts.`)
@@ -58,23 +59,24 @@ func EntityIndexGetIndices_C_1_4_2(c []*model.Component, b *bytes.Buffer) string
     }`)
 						b.WriteRune('\n')
 
-					} else if m.GetEntityIndex() > 1 {
+					} else if m.EntityIndex() > 1 {
 						b.WriteRune('\t')
 						b.WriteString(`public static System.Collections.Generic.HashSet<`)
-						b.WriteString(cctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+						b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 						b.WriteString(`Entity> GetEntitiesWith`)
 						b.WriteString(IndexName)
 						b.WriteString(`(this `)
-						b.WriteString(cctx.GetID().WithContextSuffix().ToUpperFirst().String())
+						b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
 						b.WriteString(` context, `)
 						b.WriteString(Type)
 						b.WriteRune(' ')
 						b.WriteString(MemberName)
-						b.WriteString(`) {
+						b.WriteString(`)
+    {
         return ((`)
 						b.WriteString(IndexType)
 						b.WriteString(`<`)
-						b.WriteString(cctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+						b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 						b.WriteString(`Entity, `)
 						b.WriteString(Type)
 						b.WriteString(`>)context.GetEntityIndex(Contexts.`)

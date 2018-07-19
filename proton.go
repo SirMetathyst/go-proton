@@ -1,37 +1,43 @@
 package proton
 
 import (
+	"fmt"
+
 	"github.com/SirMetathyst/proton/model"
 )
 
+var (
+	ErrProtonModelUndefined = fmt.Errorf("Proton: Model Undefined.")
+)
+
 // Generator ...
-type Generator func(*model.M) ([]FileInfo, error)
+type Generator func(*model.MD) ([]FileInfo, error)
 
 // PostProcessor ...
 type PostProcessor func([]FileInfo) ([]FileInfo, error)
 
-// GeneratorInfo ...
-type GeneratorInfo struct {
+// GI ...
+type GI struct {
 	GeneratorVersion string
 	Generator        Generator
 	Enabled          bool
 }
 
 // NewGeneratorInfo ...
-func NewGeneratorInfo(GeneratorVersion string, Generator Generator, Enabled bool) *GeneratorInfo {
-	return &GeneratorInfo{GeneratorVersion, Generator, Enabled}
+func NewGeneratorInfo(GeneratorVersion string, Generator Generator, Enabled bool) *GI {
+	return &GI{GeneratorVersion, Generator, Enabled}
 }
 
-// PostProcessorInfo ...
-type PostProcessorInfo struct {
+// PI ...
+type PI struct {
 	PostProcessorVersion string
 	PostProcessor        PostProcessor
 	Enabled              bool
 }
 
 // NewPostProcessorInfo ...
-func NewPostProcessorInfo(PostProcessorVersion string, PostProcessor PostProcessor, Enabled bool) *PostProcessorInfo {
-	return &PostProcessorInfo{PostProcessorVersion, PostProcessor, Enabled}
+func NewPostProcessorInfo(PostProcessorVersion string, PostProcessor PostProcessor, Enabled bool) *PI {
+	return &PI{PostProcessorVersion, PostProcessor, Enabled}
 }
 
 // FileInfo ...
@@ -48,8 +54,8 @@ func NewFileInfo(File, FileContent, Generator string) FileInfo {
 
 // P ...
 type P struct {
-	generatorInfo     []*GeneratorInfo
-	postProcessorInfo []*PostProcessorInfo
+	generatorInfo     []*GI
+	postProcessorInfo []*PI
 }
 
 // NewProton ...
@@ -58,27 +64,32 @@ func NewProton() *P {
 }
 
 var (
-	Proton = NewProton()
+	proton = NewProton()
 )
 
-// GetGeneratorInfo ...
-func (p *P) GetGeneratorInfo() []*GeneratorInfo {
+// Singleton ...
+func Singleton() *P {
+	return proton
+}
+
+// GeneratorInfo ...
+func (p *P) GeneratorInfo() []*GI {
 	return p.generatorInfo
 }
 
-// GetGeneratorInfo ...
-func GetGeneratorInfo() []*GeneratorInfo {
-	return Proton.generatorInfo
+// GeneratorInfo ...
+func GeneratorInfo() []*GI {
+	return proton.generatorInfo
 }
 
-// GetPostProcessorInfo ...
-func (p *P) GetPostProcessorInfo() []*PostProcessorInfo {
+// PostProcessorInfo ...
+func (p *P) PostProcessorInfo() []*PI {
 	return p.postProcessorInfo
 }
 
-// GetPostProcessorInfo ...
-func GetPostProcessorInfo() []*PostProcessorInfo {
-	return Proton.postProcessorInfo
+// PostProcessorInfo ...
+func PostProcessorInfo() []*PI {
+	return proton.postProcessorInfo
 }
 
 // AddGenerator ...
@@ -88,7 +99,7 @@ func (p *P) AddGenerator(GeneratorVersion string, Generator Generator, Enabled b
 
 // AddGenerator ...
 func AddGenerator(GeneratorVersion string, Generator Generator, Enabled bool) {
-	Proton.AddGenerator(GeneratorVersion, Generator, Enabled)
+	proton.AddGenerator(GeneratorVersion, Generator, Enabled)
 }
 
 // AddPostProcessor ...
@@ -98,7 +109,7 @@ func (p *P) AddPostProcessor(PostProcessorVersion string, PostProcessor PostProc
 
 // AddPostProcessor ...
 func AddPostProcessor(PostProcessorVersion string, PostProcessor PostProcessor, Enabled bool) {
-	Proton.AddPostProcessor(PostProcessorVersion, PostProcessor, Enabled)
+	proton.AddPostProcessor(PostProcessorVersion, PostProcessor, Enabled)
 }
 
 // EnableGenerator ...
@@ -112,7 +123,7 @@ func (p *P) EnableGenerator(GeneratorVersion string, Enabled bool) {
 
 // EnableGenerator ...
 func EnableGenerator(GeneratorVersion string, Enabled bool) {
-	Proton.EnableGenerator(GeneratorVersion, Enabled)
+	proton.EnableGenerator(GeneratorVersion, Enabled)
 }
 
 // EnablePostProcessor ...
@@ -126,11 +137,11 @@ func (p *P) EnablePostProcessor(PostProcessorVersion string, Enabled bool) {
 
 // EnablePostProcessor ...
 func EnablePostProcessor(PostProcessorVersion string, Enabled bool) {
-	Proton.EnablePostProcessor(PostProcessorVersion, Enabled)
+	proton.EnablePostProcessor(PostProcessorVersion, Enabled)
 }
 
 // RunGenerator ...
-func (p *P) RunGenerator(m *model.M) ([]FileInfo, error) {
+func (p *P) RunGenerator(m *model.MD) ([]FileInfo, error) {
 	r := make([]FileInfo, 0)
 	for _, generatorInfo := range p.generatorInfo {
 		if generatorInfo.Enabled {
@@ -145,8 +156,8 @@ func (p *P) RunGenerator(m *model.M) ([]FileInfo, error) {
 }
 
 // RunGenerator ...
-func RunGenerator(m *model.M) ([]FileInfo, error) {
-	return Proton.RunGenerator(m)
+func RunGenerator(m *model.MD) ([]FileInfo, error) {
+	return proton.RunGenerator(m)
 }
 
 // RunPostProcessor ...
@@ -166,11 +177,15 @@ func (p *P) RunPostProcessor(fileInfo []FileInfo) ([]FileInfo, error) {
 
 // RunPostProcessor ...
 func RunPostProcessor(fileInfo []FileInfo) ([]FileInfo, error) {
-	return Proton.RunPostProcessor(fileInfo)
+	return proton.RunPostProcessor(fileInfo)
 }
 
 // Run ...
-func (p *P) Run(m *model.M) ([]FileInfo, error) {
+func (p *P) Run(m *model.MD) ([]FileInfo, error) {
+	if m == nil {
+		return nil, ErrProtonModelUndefined
+	}
+
 	gv, err := p.RunGenerator(m)
 	if err != nil {
 		return nil, err
@@ -183,6 +198,6 @@ func (p *P) Run(m *model.M) ([]FileInfo, error) {
 }
 
 // Run ...
-func Run(m *model.M) ([]FileInfo, error) {
-	return Proton.Run(m)
+func Run(m *model.MD) ([]FileInfo, error) {
+	return proton.Run(m)
 }

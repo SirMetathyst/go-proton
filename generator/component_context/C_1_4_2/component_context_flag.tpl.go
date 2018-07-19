@@ -9,39 +9,54 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func ComponentContextFlag_C_1_4_2(ctx *model.Context, c *model.Component, b *bytes.Buffer) string {
-	b.WriteString(`public partial class `)
-	b.WriteString(ctx.GetID().WithContextSuffix().ToUpperFirst().String())
-	b.WriteString(` {
-
+func ComponentContextFlag_C_1_4_2(c *model.C, cp *model.CP, b *bytes.Buffer) string {
+	b.WriteString(`
+public partial class `)
+	b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
+	b.WriteString(` 
+{
     public `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
-	b.WriteString(`Entity { get { return GetGroup(`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(`Entity 
+    { 
+        get 
+        { 
+            return GetGroup(`)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Matcher.`)
-	b.WriteString(c.GetID().ToUpperFirst().String())
-	b.WriteString(`).GetSingleEntity(); } }
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`).GetSingleEntity(); 
+        } 
+    }
 
     public bool `)
-	b.WriteString(c.GetPrefixOrDefault().ToLowerFirst().String())
-	b.WriteString(c.GetID().ToUpperFirst().String())
-	b.WriteString(` {
-        get { return `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
-	b.WriteString(`Entity != null; }
+	b.WriteString(cp.FlagPrefixOrDefault().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(` 
+    {
+        get 
+        { 
+            return `)
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(`Entity != null; 
+        }
         set {
             var entity = `)
-	b.WriteString(c.GetID().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
 	b.WriteString(`Entity;
-            if (value != (entity != null)) {
-                if (value) {
+            if (value != (entity != null))
+            {
+                if (value) 
+                {
                     CreateEntity().`)
-	b.WriteString(c.GetPrefixOrDefault().ToLowerFirst().String())
-	b.WriteString(c.GetID().ToUpperFirst().String())
+	b.WriteString(cp.FlagPrefixOrDefault().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(` = true;
-                } else {
+                } 
+                else 
+                {
                     entity.Destroy();
                 }
             }

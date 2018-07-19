@@ -8,19 +8,21 @@ import (
 )
 
 // ComponentContextGenerator_1_4_2 ...
-func ComponentContextGenerator_C_1_4_2(m *model.M) ([]proton.FileInfo, error) {
+func ComponentContextGenerator_C_1_4_2(md *model.MD) ([]proton.FileInfo, error) {
 	slice := make([]proton.FileInfo, 0)
-	for _, c := range m.GetUniqueComponent() {
-		for _, ctx := range c.GetContext() {
-			b := new(bytes.Buffer)
+	for _, cp := range md.ComponentList() {
+		if cp.IsUnique() {
+			for _, c := range cp.ContextList() {
+				b := new(bytes.Buffer)
 
-			if len(c.GetMember()) == 0 {
-				ComponentContextFlag_C_1_4_2(ctx, c, b)
-			} else {
-				ComponentContext_C_1_4_2(ctx, c, b)
+				if len(cp.MemberList()) == 0 {
+					ComponentContextFlag_C_1_4_2(c, cp, b)
+				} else {
+					ComponentContext_C_1_4_2(c, cp, b)
+				}
+
+				slice = append(slice, proton.NewFileInfo(c.ID().String()+"/Components/"+c.ID().String()+cp.ID().WithComponentSuffix().String()+".cs", b.String(), "ComponentContextGenerator_C_1_4_2"))
 			}
-
-			slice = append(slice, proton.NewFileInfo(ctx.GetID().WithoutContextSuffix().String()+"/Components/"+ctx.GetID().WithoutContextSuffix().String()+c.GetID().WithComponentSuffix().String()+".cs", b.String(), "ComponentContextGenerator_C_1_4_2"))
 		}
 	}
 	return slice, nil

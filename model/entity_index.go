@@ -1,113 +1,67 @@
 package model
 
-import "bytes"
-
 // EntityIndex ...
-type EntityIndex struct {
-	id        string
-	isPrimary bool
-	context   *Context
-	method    map[string]*EntityIndexMethod
+type EntityIndex int
+
+const (
+	NoEntityIndex EntityIndex = iota
+	SingleEntityIndex
+	MultipleEntityIndex
+)
+
+// IsValid ...
+func (i EntityIndex) IsValid() bool {
+	return i >= 0 || i <= 2
 }
 
-// NewEntityIndexWith ...
-func NewEntityIndexWith(id string, context *Context) *EntityIndex {
-	return &EntityIndex{
-		id:        id,
-		isPrimary: false,
-		context:   context,
-		method:    make(map[string]*EntityIndexMethod, 0)}
-}
-
-// NewEntityIndexWithID ...
-func NewEntityIndexWithID(id string) *EntityIndex {
-	return NewEntityIndexWith(id, nil)
-}
-
-// NewEntityIndex ...
-func NewEntityIndex() *EntityIndex {
-	return NewEntityIndexWithID("Untitled")
-}
-
-// GetID ...
-func (i *EntityIndex) GetID() String {
-	return String(i.id)
-}
-
-// SetID ...
-func (i *EntityIndex) SetID(id string) *EntityIndex {
-	i.id = id
-	return i
-}
-
-// GetContext ...
-func (i *EntityIndex) GetContext() *Context {
-	return i.context
-}
-
-// SetContext ...
-func (i *EntityIndex) SetContext(context *Context) *EntityIndex {
-	i.context = context
-	return i
-}
-
-// IsPrimary ...
-func (i *EntityIndex) IsPrimary() bool {
-	return i.isPrimary
-}
-
-// SetPrimary ...
-func (i *EntityIndex) SetPrimary(value bool) *EntityIndex {
-	i.isPrimary = value
-	return i
-}
-
-// GetEntityIndexMethodWithID ...
-func (i *EntityIndex) GetEntityIndexMethodWithID(id string) *EntityIndexMethod {
-	m, _ := i.method[id]
-	return m
-}
-
-// GetEntityIndexMethod ...
-func (i *EntityIndex) GetEntityIndexMethod() []*EntityIndexMethod {
-	slice := make([]*EntityIndexMethod, 0)
-	for _, m := range i.method {
-		slice = append(slice, m)
+// AsValid ...
+func (i EntityIndex) AsValid() EntityIndex {
+	if i.IsValid() {
+		return i
 	}
-	return slice
-}
-
-// AddEntityIndexMethod ...
-func (i *EntityIndex) AddEntityIndexMethod(overwrite bool, method ...*EntityIndexMethod) *EntityIndex {
-	for _, m := range method {
-		_, exist := i.method[m.GetID().String()]
-		if overwrite || !overwrite && !exist {
-			i.method[m.GetID().String()] = m
-		}
-	}
-	return i
-}
-
-// CreateEntityIndexMethod ...
-func (i *EntityIndex) CreateEntityIndexMethod(overwrite bool) *EntityIndexMethod {
-	m := NewEntityIndexMethod()
-	i.AddEntityIndexMethod(overwrite, m)
-	return m
+	return NoEntityIndex
 }
 
 // String ...
 func (i EntityIndex) String() string {
-	var buffer bytes.Buffer
-	buffer.WriteString(string(i.GetID()))
-	buffer.WriteRune('(')
-	if i.IsPrimary() {
-		buffer.WriteString("[primary]")
+	switch i {
+	case SingleEntityIndex:
+		return "PrimaryEntityIndex"
+	case MultipleEntityIndex:
+		return "EntityIndex"
 	}
-	buffer.WriteString(") ")
-	for _, Method := range i.GetEntityIndexMethod() {
-		buffer.WriteString("Method{")
-		buffer.WriteString(Method.String())
-		buffer.WriteString("} ")
-	}
-	return buffer.String()
+	return ""
+}
+
+// EI ...
+type EI struct {
+	id        string
+	isPrimary bool
+	c         *C
+	eiml      EIML
+}
+
+// NewEntityIndex ...
+func NewEntityIndex(id string, isPrimary bool, c *C, eiml EIML) (*EI, error) {
+	return &EI{id, isPrimary, c, eiml}, nil
+}
+
+// ID ...
+func (ei *EI) ID() String {
+	return String(ei.id)
+}
+
+// IsPrimary ...
+func (ei *EI) IsPrimary() bool {
+	return ei.isPrimary
+}
+
+// Context ...
+func (ei *EI) Context() *C {
+	return ei.c
+}
+
+// EntityIndexMethodList ...
+func (ei *EI) EntityIndexMethodList() []*EIM {
+	return ei.eiml.EntityIndexMethodList()
 }

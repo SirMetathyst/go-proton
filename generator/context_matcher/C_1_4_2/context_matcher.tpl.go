@@ -9,44 +9,49 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func ContextMatcher_C_1_4_2(ctx *model.Context, b *bytes.Buffer) string {
-	b.WriteString(`public sealed partial class `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Matcher {
-
+func ContextMatcher_C_1_4_2(c *model.C, b *bytes.Buffer) string {
+	b.WriteString(`
+public sealed partial class `)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`Matcher 
+{
     public static Entitas.IAllOfMatcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> AllOf(params int[] indices) {
-        return Entitas.Matcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity> AllOf(params int[] indices) 
+    {
+          return Entitas.Matcher<`)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity>.AllOf(indices);
     }
 
     public static Entitas.IAllOfMatcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity> AllOf(params Entitas.IMatcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity>[] matchers) {
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity>[] matchers)
+    {
           return Entitas.Matcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity>.AllOf(matchers);
     }
 
     public static Entitas.IAnyOfMatcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> AnyOf(params int[] indices) {
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity> AnyOf(params int[] indices)
+    {
           return Entitas.Matcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity>.AnyOf(indices);
     }
 
     public static Entitas.IAnyOfMatcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity> AnyOf(params Entitas.IMatcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity>[] matchers) {
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity>[] matchers)
+    {
           return Entitas.Matcher<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity>.AnyOf(matchers);
     }
 }

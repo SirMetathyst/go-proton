@@ -107,7 +107,7 @@ func GoFile(c *configuration.C) (*model.M, error) {
 	return m, errd.Run(func(e *errd.E) {
 
 		fset := token.NewFileSet()
-		file, err := parser.ParseFile(fset, suffix(*c.GetStringP("File"), ".go"), nil, 0)
+		file, err := parser.ParseFile(fset, suffix(*c.StringP("File"), ".go"), nil, 0)
 		e.Must(err)
 
 		ast.Walk(new(walker), file)

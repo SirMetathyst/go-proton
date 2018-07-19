@@ -1,11 +1,11 @@
 <%! import "github.com/SirMetathyst/proton/model"; %>
-<%: func EntityIndexArgument_C_1_4_2(eim *model.EntityIndexMethod, b *bytes.Buffer) string %>
-<% ms := eim.GetMember()
-    for i, m := range ms {
-        b.WriteString(m.GetValue().String())
+<%: func EntityIndexArgument_C_1_4_2(eim *model.EIM, b *bytes.Buffer) string %>
+<% ml := eim.MemberList()
+    for i, m := range ml {
+        b.WriteString(m.Value().String())
         b.WriteRune(' ')
-        b.WriteString(m.GetID().ToLowerFirst().String())
-        if i != len(ms)-1 {
+        b.WriteString(m.ID().ToLowerFirst().String())
+        if i != len(ml)-1 {
              b.WriteString(", ")
         }
     }

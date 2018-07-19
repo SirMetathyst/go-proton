@@ -9,48 +9,58 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func ComponentEntityFlag_C_1_4_2(ctx *model.Context, c *model.Component, b *bytes.Buffer) string {
-	b.WriteString(`public partial class `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity {
-
+func ComponentEntityFlag_C_1_4_2(c *model.C, cp *model.CP, b *bytes.Buffer) string {
+	b.WriteString(`
+public partial class `)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity 
+{
     static readonly `)
-	b.WriteString(c.GetID().WithComponentSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
 	b.WriteRune(' ')
-	b.WriteString(c.GetID().WithComponentSuffix().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithComponentSuffix().ToLowerFirst().String())
 	b.WriteString(` = new `)
-	b.WriteString(c.GetID().WithComponentSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`();
 
     public bool `)
-	b.WriteString(c.GetPrefixOrDefault().ToLowerFirst().String())
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` {
-        get { return HasComponent(`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(cp.FlagPrefixOrDefault().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(` 
+    {
+        get 
+        { 
+            return HasComponent(`)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`); }
-        set {
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`); 
+        }
+        set 
+        {
             if (value != `)
-	b.WriteString(c.GetPrefixOrDefault().ToLowerFirst().String())
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`) {
+	b.WriteString(cp.FlagPrefixOrDefault().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`) 
+            {
                 var index = `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`;
-                if (value) {
+                if (value) 
+                {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
                             : `)
-	b.WriteString(c.GetID().WithComponentSuffix().ToLowerFirst().String())
+	b.WriteString(cp.ID().WithComponentSuffix().ToLowerFirst().String())
 	b.WriteString(`;
 
                     AddComponent(index, component);
-                } else {
+                } 
+                else 
+                {
                     RemoveComponent(index);
                 }
             }

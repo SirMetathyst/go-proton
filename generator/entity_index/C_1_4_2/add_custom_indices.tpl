@@ -1,8 +1,18 @@
 <%! import "github.com/SirMetathyst/proton/model"; %>
-<%: func EntityIndexAddCustomIndices_C_1_4_2(ei []*model.EntityIndex, b *bytes.Buffer) string %>
-<% for _, e := range ei { 
-    if e.GetContext() != nil {%>
-<% b.WriteString("\t\t")%><%==s e.GetContext().GetID().WithoutContextSuffix().ToLowerFirst().String() %>.AddEntityIndex(new <%==s e.GetID().String()%>(<%==s e.GetContext().GetID().WithoutContextSuffix().ToLowerFirst().String()%>));<% b.WriteRune('\n')%>
-
-<% }} %>
+<%: func EntityIndexAddCustomIndices_C_1_4_2(ei []*model.EI, b *bytes.Buffer) string %>
+<% 
+for _, cei := range ei { 
+    if cei.Context() != nil { 
+        b.WriteString("\t\t")
+        b.WriteString(cei.Context().ID().WithoutContextSuffix().ToLowerFirst().String())
+        b.WriteRune('.')
+        b.WriteString("AddEntityIndex(")
+        b.WriteString("new ")
+        b.WriteString(cei.ID().String())
+        b.WriteRune('(')
+        b.WriteString(cei.Context().ID().WithoutContextSuffix().ToLowerFirst().String())
+        b.WriteRune(')')
+        b.WriteRune('\n') 
+    } 
+} %>
 <% return b.String() %>

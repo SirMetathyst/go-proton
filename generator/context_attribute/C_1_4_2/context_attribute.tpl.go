@@ -9,16 +9,18 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func ContextAttribute_C_1_4_2(ctx *model.Context, b *bytes.Buffer) string {
-	b.WriteString(`public sealed class `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Attribute : Entitas.CodeGeneration.Attributes.ContextAttribute {
-    
+func ContextAttribute_C_1_4_2(c *model.C, b *bytes.Buffer) string {
+	b.WriteString(`
+public sealed class `)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`Attribute : Entitas.CodeGeneration.Attributes.ContextAttribute 
+{
     public `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Attribute() : base("`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`") {
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`") 
+    {
     }
 }
 `)

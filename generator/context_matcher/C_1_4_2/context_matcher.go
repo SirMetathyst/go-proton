@@ -8,10 +8,10 @@ import (
 )
 
 // ContextMatcherGenerator_C_1_4_2 ...
-func ContextMatcherGenerator_C_1_4_2(m *model.M) ([]proton.FileInfo, error) {
+func ContextMatcherGenerator_C_1_4_2(md *model.MD) ([]proton.FileInfo, error) {
 	slice := make([]proton.FileInfo, 0)
-	for _, ctx := range m.GetContext() {
-		slice = append(slice, proton.NewFileInfo(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String()+"/"+ctx.GetID().WithoutContextSuffix().ToUpperFirst().String()+"Matcher.cs", ContextMatcher_C_1_4_2(ctx, new(bytes.Buffer)), "ContextMatcherGenerator_C_1_4_2"))
+	for _, c := range md.ContextList() {
+		slice = append(slice, proton.NewFileInfo(c.ID().WithoutContextSuffix().ToUpperFirst().String()+"/"+c.ID().WithoutContextSuffix().ToUpperFirst().String()+"Matcher.cs", ContextMatcher_C_1_4_2(c, new(bytes.Buffer)), "ContextMatcherGenerator_C_1_4_2"))
 	}
 	return slice, nil
 }

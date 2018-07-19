@@ -9,10 +9,12 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func Entity_C_1_4_2(ctx *model.Context, b *bytes.Buffer) string {
-	b.WriteString(`public sealed partial class `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity : Entitas.Entity {
+func Entity_C_1_4_2(c *model.C, b *bytes.Buffer) string {
+	b.WriteString(`
+public sealed partial class `)
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity : Entitas.Entity
+{
 }
 `)
 	return b.String()

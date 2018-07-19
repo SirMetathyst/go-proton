@@ -1,45 +1,39 @@
 package model
 
-// Alias ...
-type Alias struct {
+import "fmt"
+
+var (
+	ErrAliasIDUndefined    = fmt.Errorf("Alias: `ID` Undefined.")
+	ErrAliasValueUndefined = fmt.Errorf("Alias: `Value` Undefined.")
+)
+
+// A ...
+type A struct {
 	id, value string
 }
 
-// NewAliasWith ...
-func NewAliasWith(id, value string) *Alias {
-	return &Alias{id, value}
-}
-
 // NewAlias ...
-func NewAlias() *Alias {
-	return &Alias{}
+func NewAlias(id, value string) (*A, error) {
+	if id == "" {
+		return nil, ErrAliasIDUndefined
+	}
+	if value == "" {
+		return nil, ErrAliasValueUndefined
+	}
+	return &A{id, value}, nil
 }
 
-// GetID ...
-func (a *Alias) GetID() String {
+// ID ...
+func (a *A) ID() String {
 	return String(a.id)
 }
 
-// SetID ...
-func (a *Alias) SetID(id string) *Alias {
-	if a.id == "" {
-		a.id = id
-	}
-	return a
-}
-
-// GetValue ...
-func (a *Alias) GetValue() String {
+// Value ...
+func (a *A) Value() String {
 	return String(a.value)
 }
 
-// SetValue ...
-func (a *Alias) SetValue(value string) *Alias {
-	a.value = value
-	return a
-}
-
 // String ...
-func (a Alias) String() string {
-	return "[" + a.GetID().String() + ":\"" + a.GetValue().String() + "\"]"
+func (a A) String() string {
+	return "[" + a.ID().String() + ":\"" + a.Value().String() + "\"]"
 }

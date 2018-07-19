@@ -9,16 +9,18 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func EventListenerInterface_C_1_6_1(ctx *model.Context, c *model.Component, b *bytes.Buffer) string {
-	b.WriteString(`public interface I`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String() + c.GetID().WithoutComponentSuffix().ToUpperFirst().String() + c.GetEventTypeSuffix().String())
-	b.WriteString(`Listener {
+func EventListenerInterface_C_1_6_1(c *model.C, cp *model.CP, b *bytes.Buffer) string {
+	b.WriteString(`
+public interface I`)
+	b.WriteString(ComponentID(c, cp).ToUpperFirst().String())
+	b.WriteString(` 
+{
     void On`)
-	b.WriteString(c.GetID().WithoutComponentSuffix().ToUpperFirst().String() + c.GetEventTypeSuffix().String())
+	b.WriteString(MethodID(cp).ToUpperFirst().String())
 	b.WriteString(`(`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity entity`)
-	EventListenerArgumentPass_1_6_1(c, b)
+	EventListenerArgumentPass_1_6_1(cp, b)
 	b.WriteString(`);
 }
 `)

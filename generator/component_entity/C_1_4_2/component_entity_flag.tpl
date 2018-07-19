@@ -1,21 +1,31 @@
 <%! import "github.com/SirMetathyst/proton/model"; %>
-<%: func ComponentEntityFlag_C_1_4_2(ctx *model.Context, c *model.Component, b *bytes.Buffer) string %>public partial class <%==s ctx.GetID().WithoutContextSuffix().ToUpperFirst().String()%>Entity {
+<%: func ComponentEntityFlag_C_1_4_2(c *model.C, cp *model.CP, b *bytes.Buffer) string %>
+public partial class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity 
+{
+    static readonly <%==s cp.ID().WithComponentSuffix().ToUpperFirst().String()%><% b.WriteRune(' ') %><%==s cp.ID().WithComponentSuffix().ToLowerFirst().String()%> = new <%==s cp.ID().WithComponentSuffix().ToUpperFirst().String()%>();
 
-    static readonly <%==s c.GetID().WithComponentSuffix().ToUpperFirst().String()%><% b.WriteRune(' ') %><%==s c.GetID().WithComponentSuffix().ToLowerFirst().String()%> = new <%==s c.GetID().WithComponentSuffix().ToUpperFirst().String()%>();
-
-    public bool <%==s c.GetPrefixOrDefault().ToLowerFirst().String() %><%==s c.GetID().WithoutComponentSuffix().ToUpperFirst().String()%> {
-        get { return HasComponent(<%==s ctx.GetID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s c.GetID().WithoutComponentSuffix().ToUpperFirst().String()%>); }
-        set {
-            if (value != <%==s c.GetPrefixOrDefault().ToLowerFirst().String() %><%==s c.GetID().WithoutComponentSuffix().ToUpperFirst().String()%>) {
-                var index = <%==s ctx.GetID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s c.GetID().WithoutComponentSuffix().ToUpperFirst().String()%>;
-                if (value) {
+    public bool <%==s cp.FlagPrefixOrDefault().ToLowerFirst().String() %><%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%> 
+    {
+        get 
+        { 
+            return HasComponent(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>); 
+        }
+        set 
+        {
+            if (value != <%==s cp.FlagPrefixOrDefault().ToLowerFirst().String() %><%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>) 
+            {
+                var index = <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>;
+                if (value) 
+                {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : <%==s c.GetID().WithComponentSuffix().ToLowerFirst().String()%>;
+                            : <%==s cp.ID().WithComponentSuffix().ToLowerFirst().String()%>;
 
                     AddComponent(index, component);
-                } else {
+                } 
+                else 
+                {
                     RemoveComponent(index);
                 }
             }

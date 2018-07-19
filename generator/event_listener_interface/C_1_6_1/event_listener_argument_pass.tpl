@@ -1,13 +1,13 @@
 <%! import "github.com/SirMetathyst/proton/model"; %>
-<%: func EventListenerArgumentPass_1_6_1(c *model.Component, b *bytes.Buffer) string %>
-<% ms := c.GetMember()
-if len(ms) > 0 && c.GetEventType() != 1 {
+<%: func EventListenerArgumentPass_1_6_1(cp *model.CP, b *bytes.Buffer) string %>
+<% ml := cp.MemberList()
+if len(ml) > 0 && cp.EventType() == model.AddedEvent {
     b.WriteString(", ")
-    for i, m := range ms {
-        b.WriteString(m.GetValue().String())
+    for i, m := range ml {
+        b.WriteString(m.Value().String())
         b.WriteRune(' ')
-        b.WriteString(m.GetID().ToLowerFirst().String())
-        if i != len(ms)-1 {
+        b.WriteString(m.ID().ToLowerFirst().String())
+        if i != len(ml)-1 {
              b.WriteString(", ")
         }
     }

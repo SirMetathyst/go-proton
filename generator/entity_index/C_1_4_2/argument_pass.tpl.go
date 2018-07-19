@@ -9,11 +9,11 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func EntityIndexArgumentPass_C_1_4_2(eim *model.EntityIndexMethod, b *bytes.Buffer) string {
-	ms := eim.GetMember()
-	for i, m := range ms {
-		b.WriteString(m.GetID().ToLowerFirst().String())
-		if i != len(ms)-1 {
+func EntityIndexArgumentPass_C_1_4_2(eim *model.EIM, b *bytes.Buffer) string {
+	ml := eim.MemberList()
+	for i, m := range ml {
+		b.WriteString(m.ID().ToLowerFirst().String())
+		if i != len(ml)-1 {
 			b.WriteString(", ")
 		}
 	}

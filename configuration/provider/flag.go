@@ -61,15 +61,15 @@ func usage() {
 // Flag ...
 func Flag(c *configuration.C) error {
 
-	for _, opt := range c.GetAllBool() {
+	for _, opt := range c.AllBool() {
 		flag.BoolVar(opt.Value, opt.Key, *opt.Value, "")
 	}
 
-	for _, opt := range c.GetAllStringSlice() {
+	for _, opt := range c.AllStringSlice() {
 		flag.Var(newStringSlice(*opt.Value, opt.Value), opt.Key, "")
 	}
 
-	for _, opt := range c.GetAllString() {
+	for _, opt := range c.AllString() {
 		flag.StringVar(opt.Value, opt.Key, *opt.Value, "")
 	}
 

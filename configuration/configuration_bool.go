@@ -26,18 +26,18 @@ func SetBool(key string, value bool) {
 	configuration.SetValue(key, &value)
 }
 
-// GetBoolP ...
-func (c *C) GetBoolP(key string) *bool {
-	return c.GetValue(key).(*bool)
+// BoolP ...
+func (c *C) BoolP(key string) *bool {
+	return c.Value(key).(*bool)
 }
 
-// GetBoolP ...
-func GetBoolP(key string) *bool {
-	return configuration.GetValue(key).(*bool)
+// BoolP ...
+func BoolP(key string) *bool {
+	return configuration.Value(key).(*bool)
 }
 
-// GetAllBool ...
-func (c *C) GetAllBool() []KeyBool {
+// AllBool ...
+func (c *C) AllBool() []KeyBool {
 	slice := make([]KeyBool, 0)
 	for k, v := range c.value {
 		if bv, ok := v.(*bool); ok {
@@ -47,7 +47,7 @@ func (c *C) GetAllBool() []KeyBool {
 	return slice
 }
 
-// GetAllBool ...
-func GetAllBool() (Slice []KeyBool) {
-	return configuration.GetAllBool()
+// AllBool ...
+func AllBool() (Slice []KeyBool) {
+	return configuration.AllBool()
 }

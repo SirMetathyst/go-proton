@@ -9,52 +9,52 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func EntityIndexAddIndices_C_1_4_2(c []*model.Component, b *bytes.Buffer) string {
-	for _, cc := range c {
-		for _, cctx := range cc.GetContext() {
-			for _, m := range cc.GetMember() {
-				if m.GetEntityIndex() > 0 {
+func EntityIndexAddIndices_C_1_4_2(cp []*model.CP, b *bytes.Buffer) string {
+	for _, ccp := range cp {
+		for _, c := range ccp.ContextList() {
+			for _, m := range ccp.MemberList() {
+				if m.EntityIndex() > 0 {
 
-					ID := cc.GetID().WithoutComponentSuffix().ToUpperFirst().String()
-					Type := m.GetValue().String()
+					ID := ccp.ID().WithoutComponentSuffix().ToUpperFirst().String()
+					Type := m.Value().String()
 					IndexType := ""
-					if m.GetEntityIndex() == 1 {
+					if m.EntityIndex() == 1 {
 						IndexType = "Entitas.PrimaryEntityIndex"
-					} else if m.GetEntityIndex() > 1 {
+					} else if m.EntityIndex() > 1 {
 						IndexType = "Entitas.EntityIndex"
 					}
 
 					b.WriteString("\t\t")
-					b.WriteString(cctx.GetID().WithoutContextSuffix().ToLowerFirst().String())
+					b.WriteString(c.ID().WithoutContextSuffix().ToLowerFirst().String())
 					b.WriteString(`.AddEntityIndex(new `)
 					b.WriteString(IndexType)
 					b.WriteString(`<`)
-					b.WriteString(cctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+					b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 					b.WriteString(`Entity, `)
 					b.WriteString(Type)
 					b.WriteString(`>(
 `)
-					if cc.GetEntityIndexCount() == 1 {
+					if len(ccp.MembersWithEntityIndex()) == 1 {
 						b.WriteString("\t\t\t")
 						b.WriteString(ID)
-					} else if cc.GetEntityIndexCount() > 1 {
+					} else if len(ccp.MembersWithEntityIndex()) > 1 {
 						b.WriteString("\t\t\t")
 						b.WriteString(ID)
-						b.WriteString(m.GetID().ToUpperFirst().String())
+						b.WriteString(m.ID().ToUpperFirst().String())
 
 					}
 					b.WriteString(`,`)
-					b.WriteString(cctx.GetID().WithoutContextSuffix().ToLowerFirst().String())
+					b.WriteString(c.ID().WithoutContextSuffix().ToLowerFirst().String())
 					b.WriteString(`.GetGroup(`)
-					b.WriteString(cctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+					b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 					b.WriteString(`Matcher.`)
 					b.WriteString(ID)
 					b.WriteString(`), (e, c) => ((`)
-					b.WriteString(cc.GetID().WithComponentSuffix().ToUpperFirst().String())
+					b.WriteString(ccp.ID().WithComponentSuffix().ToUpperFirst().String())
 					b.WriteString(`)c).`)
-					b.WriteString(m.GetID().ToLowerFirst().String())
+					b.WriteString(m.ID().ToLowerFirst().String())
 					b.WriteString(`));`)
-					b.WriteString("\n")
+					b.WriteString("\n\n")
 				}
 			}
 		}

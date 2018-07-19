@@ -9,39 +9,41 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func Context_C_1_4_2(ctx *model.Context, b *bytes.Buffer) string {
-	b.WriteString(`public sealed partial class `)
-	b.WriteString(ctx.GetID().WithContextSuffix().ToUpperFirst().String())
+func Context_C_1_4_2(c *model.C, b *bytes.Buffer) string {
+	b.WriteString(`
+public sealed partial class `)
+	b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
 	b.WriteString(` : Entitas.Context<`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> {
-
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(`Entity> 
+{
     public `)
-	b.WriteString(ctx.GetID().WithContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
 	b.WriteString(`()
         : base(
             `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.TotalComponents,
             0,
             new Entitas.ContextInfo(
                 "`)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`",
                 `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.componentNames,
                 `)
-	b.WriteString(ctx.GetID().WithoutContextSuffix().ToUpperFirst().String())
+	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.componentTypes
             ),
             (entity) =>
 #if (ENTITAS_FAST_AND_UNSAFE)
-                new Entitas.UnsafeAERC()
+            new Entitas.UnsafeAERC()
 #else
-                new Entitas.SafeAERC(entity)
+            new Entitas.SafeAERC(entity)
 #endif
-        ) {
+        ) 
+    {
     }
 }
 `)

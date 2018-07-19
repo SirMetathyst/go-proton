@@ -1,99 +1,71 @@
 package model
 
-// Member ...
-type Member struct {
+import "fmt"
+
+var (
+	ErrMemberIDUndefined        = fmt.Errorf("Member: `ID` Undefined.")
+	ErrMemberValueUndefined     = fmt.Errorf("Member: `Value` Undefined.")
+	ErrMemberAliasUndefined     = fmt.Errorf("Member: `Alias` Undefined.")
+	ErrMemberEntityIndexInvalid = fmt.Errorf("Member: `EntityIndex` is Invalid.")
+)
+
+// M ...
+type M struct {
 	id, value   string
-	alias       *Alias
-	entityIndex int
+	alias       *A
+	entityIndex EntityIndex
 }
 
-// NewMemberWithAlias ...
-func NewMemberWithAlias(id string, alias *Alias, entityIndex int) *Member {
-	return &Member{id, "", alias, InRange(entityIndex, 0, 2)}
-}
-
-// NewMemberWithValue ...
-func NewMemberWithValue(id, value string, entityIndex int) *Member {
-	return &Member{id, value, nil, InRange(entityIndex, 0, 2)}
-}
-
-// NewMemberWithID ...
-func NewMemberWithID(id string) *Member {
-	return &Member{id, "", nil, 0}
+// NewMemberAlias ...
+func NewMemberAlias(id string, alias *A, entityIndex EntityIndex) (*M, error) {
+	if id == "" {
+		return nil, ErrMemberIDUndefined
+	}
+	if alias == nil {
+		return nil, ErrMemberAliasUndefined
+	}
+	if !entityIndex.IsValid() {
+		return nil, ErrMemberEntityIndexInvalid
+	}
+	return &M{id, "", alias, entityIndex}, nil
 }
 
 // NewMember ...
-func NewMember() *Member {
-	return &Member{id: "Undefined"}
+func NewMember(id, value string, entityIndex EntityIndex) (*M, error) {
+	if id == "" {
+		return nil, ErrMemberIDUndefined
+	}
+	if value == "" {
+		return nil, ErrAliasValueUndefined
+	}
+	if !entityIndex.IsValid() {
+		return nil, ErrMemberEntityIndexInvalid
+	}
+
+	sid := String(id).ToLowerFirst().String()
+
+	return &M{sid, value, nil, entityIndex}, nil
 }
 
-// GetID ...
-func (m *Member) GetID() String {
+// ID ...
+func (m *M) ID() String {
 	return String(m.id)
 }
 
-// SetID ...
-func (m *Member) SetID(id string) *Member {
-	m.id = id
-	return m
-}
-
-// GetEntityIndex ...
-func (m *Member) GetEntityIndex() int {
+// EntityIndex ...
+func (m *M) EntityIndex() EntityIndex {
 	return m.entityIndex
 }
 
-// GetEntityIndexString ...
-func (m *Member) GetEntityIndexString() String {
-	switch m.entityIndex {
-	case 1:
-		return String("PrimaryEntityIndex")
-	case 2:
-		return String("EntityIndex")
-	}
-	return String("")
-}
-
-// SetEntityIndex ...
-func (m *Member) SetEntityIndex(Type int) *Member {
-	m.entityIndex = InRange(Type, 0, 2)
-	return m
-}
-
-// GetValue ...
-func (m *Member) GetValue() String {
+// Value ...
+func (m *M) Value() String {
 	if m.alias != nil {
-		return m.alias.GetValue()
+		return m.alias.Value()
 	}
 	return String(m.value)
 }
 
-// SetValue ...
-func (m *Member) SetValue(value string) *Member {
-	m.value = value
-	return m
-}
-
-// GetAliasValue ...
-func (m *Member) GetAliasValue() String {
-	if m.alias != nil {
-		return m.alias.GetValue()
-	}
-	return String("")
-}
-
-// GetAlias ...
-func (m *Member) GetAlias() *Alias {
+// Alias ...
+func (m *M) Alias() *A {
 	return m.alias
-}
-
-// SetAlias ...
-func (m *Member) SetAlias(alias *Alias) *Member {
-	m.alias = alias
-	return m
-}
-
-// String ...
-func (m Member) String() string {
-	return "[" + m.GetID().String() + ":\"" + m.GetValue().String() + ":\"" + m.GetEntityIndexString().String() + "\"]"
 }

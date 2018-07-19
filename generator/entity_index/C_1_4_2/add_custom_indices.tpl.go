@@ -9,16 +9,19 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func EntityIndexAddCustomIndices_C_1_4_2(ei []*model.EntityIndex, b *bytes.Buffer) string {
-	for _, e := range ei {
-		if e.GetContext() != nil {
+func EntityIndexAddCustomIndices_C_1_4_2(ei []*model.EI, b *bytes.Buffer) string {
+
+	for _, cei := range ei {
+		if cei.Context() != nil {
 			b.WriteString("\t\t")
-			b.WriteString(e.GetContext().GetID().WithoutContextSuffix().ToLowerFirst().String())
-			b.WriteString(`.AddEntityIndex(new `)
-			b.WriteString(e.GetID().String())
-			b.WriteString(`(`)
-			b.WriteString(e.GetContext().GetID().WithoutContextSuffix().ToLowerFirst().String())
-			b.WriteString(`));`)
+			b.WriteString(cei.Context().ID().WithoutContextSuffix().ToLowerFirst().String())
+			b.WriteRune('.')
+			b.WriteString("AddEntityIndex(")
+			b.WriteString("new ")
+			b.WriteString(cei.ID().String())
+			b.WriteRune('(')
+			b.WriteString(cei.Context().ID().WithoutContextSuffix().ToLowerFirst().String())
+			b.WriteRune(')')
 			b.WriteRune('\n')
 		}
 	}

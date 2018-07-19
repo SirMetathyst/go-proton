@@ -26,18 +26,18 @@ func SetStringSlice(key string, value []string) {
 	configuration.SetValue(key, &value)
 }
 
-// GetStringSliceP ...
-func (c *C) GetStringSliceP(key string) *[]string {
-	return c.GetValue(key).(*[]string)
+// StringSliceP ...
+func (c *C) StringSliceP(key string) *[]string {
+	return c.Value(key).(*[]string)
 }
 
-// GetStringSliceP ...
-func GetStringSliceP(key string) *[]string {
-	return configuration.GetValue(key).(*[]string)
+// StringSliceP ...
+func StringSliceP(key string) *[]string {
+	return configuration.Value(key).(*[]string)
 }
 
-// GetAllStringSlice ...
-func (c *C) GetAllStringSlice() []KeyStringSlice {
+// AllStringSlice ...
+func (c *C) AllStringSlice() []KeyStringSlice {
 	slice := make([]KeyStringSlice, 0)
 	for k, v := range c.value {
 		if ssv, ok := v.(*[]string); ok {
@@ -47,7 +47,7 @@ func (c *C) GetAllStringSlice() []KeyStringSlice {
 	return slice
 }
 
-// GetAllStringSlice ...
-func GetAllStringSlice() []KeyStringSlice {
-	return configuration.GetAllStringSlice()
+// AllStringSlice ...
+func AllStringSlice() []KeyStringSlice {
+	return configuration.AllStringSlice()
 }

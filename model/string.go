@@ -69,8 +69,3 @@ func (s String) WithoutComponentSuffix() String {
 	}
 	return s
 }
-
-// AsComponentPath ...
-func (s String) AsComponentPath() String {
-	return String("Components/") + s.ToUpperFirst().WithComponentSuffix() + String(".cs")
-}

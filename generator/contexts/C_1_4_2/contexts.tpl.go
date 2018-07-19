@@ -9,50 +9,63 @@ import (
 	"github.com/SirMetathyst/proton/model"
 )
 
-func Contexts_C_1_4_2(ctx []*model.Context, b *bytes.Buffer) string {
-	b.WriteString(`public partial class Contexts : Entitas.IContexts {
-
-    public static Contexts sharedInstance {
-        get {
-			if (_sharedInstance == null) {
+func Contexts_C_1_4_2(c []*model.C, b *bytes.Buffer) string {
+	b.WriteString(`
+public partial class Contexts : Entitas.IContexts 
+{
+    public static Contexts sharedInstance 
+    {
+        get 
+        {
+			if (_sharedInstance == null)
+            {
 				_sharedInstance = new Contexts();
             }
             return _sharedInstance;
         }
-        set { _sharedInstance = value; }
+        set 
+        {
+            _sharedInstance = value; 
+        }
     }
   
     static Contexts _sharedInstance;
 
 `)
-	for _, cctx := range ctx {
+	for _, cc := range c {
 		b.WriteRune('\t')
 		b.WriteString(`public `)
-		b.WriteString(cctx.GetID().WithContextSuffix().ToUpperFirst().String())
+		b.WriteString(cc.ID().WithContextSuffix().ToUpperFirst().String())
 		b.WriteRune(' ')
-		b.WriteString(cctx.GetID().WithoutContextSuffix().ToLowerFirst().String())
+		b.WriteString(cc.ID().WithoutContextSuffix().ToLowerFirst().String())
 		b.WriteString(` { get; set; }`)
 		b.WriteRune('\n')
 	}
 	b.WriteString(`
 
-    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { `)
-	for Index, cctx := range ctx {
-		b.WriteString(cctx.GetID().WithoutContextSuffix().ToLowerFirst().String())
-		if Index != len(ctx)-1 {
+    public Entitas.IContext[] allContexts 
+    {
+        get 
+        { 
+            return new Entitas.IContext [] { `)
+	for Index, cc := range c {
+		b.WriteString(cc.ID().WithoutContextSuffix().ToLowerFirst().String())
+		if Index != len(c)-1 {
 			b.WriteString(", ")
 		}
 	}
-	b.WriteString(` }; } }
+	b.WriteString(` };
+        } 
+    }
   
-	public Contexts() {
-
+	public Contexts()
+    {
 `)
-	for _, cctx := range ctx {
+	for _, cc := range c {
 		b.WriteString("\t\t")
-		b.WriteString(cctx.GetID().WithoutContextSuffix().ToLowerFirst().String())
+		b.WriteString(cc.ID().WithoutContextSuffix().ToLowerFirst().String())
 		b.WriteString(` = new `)
-		b.WriteString(cctx.GetID().WithContextSuffix().ToUpperFirst().String())
+		b.WriteString(cc.ID().WithContextSuffix().ToUpperFirst().String())
 		b.WriteString(`();`)
 		b.WriteRune('\n')
 	}
@@ -63,14 +76,17 @@ func Contexts_C_1_4_2(ctx []*model.Context, b *bytes.Buffer) string {
             method => System.Attribute.IsDefined(method, typeof(Entitas.CodeGeneration.Attributes.PostConstructorAttribute))
         );
   
-        foreach (var postConstructor in postConstructors) {
+        foreach (var postConstructor in postConstructors)
+        {
             postConstructor.Invoke(this, null);
         }
     }
   
-    public void Reset() {
+    public void Reset() 
+    {
         var contexts = allContexts;
-        for (int i = 0; i < contexts.Length; i++) {
+        for (int i = 0; i < contexts.Length; i++)
+        {
             contexts[i].Reset();
         }
     }
