@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/SirMetathyst/proton/configuration"
+	"github.com/SirMetathyst/go-blackboard"
 )
 
 type stringSlice []string
@@ -59,17 +59,17 @@ func usage() {
 }
 
 // Flag ...
-func Flag(c *configuration.C) error {
+func Flag(bb *blackboard.BB) error {
 
-	for _, opt := range c.AllBool() {
+	for _, opt := range bb.AllBool() {
 		flag.BoolVar(opt.Value, opt.Key, *opt.Value, "")
 	}
 
-	for _, opt := range c.AllStringSlice() {
+	for _, opt := range bb.AllStringSlice() {
 		flag.Var(newStringSlice(*opt.Value, opt.Value), opt.Key, "")
 	}
 
-	for _, opt := range c.AllString() {
+	for _, opt := range bb.AllString() {
 		flag.StringVar(opt.Value, opt.Key, *opt.Value, "")
 	}
 

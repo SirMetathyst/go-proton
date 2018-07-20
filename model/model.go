@@ -1,11 +1,9 @@
 package model
 
-import (
-	"github.com/SirMetathyst/proton/configuration"
-)
+import "github.com/SirMetathyst/go-blackboard"
 
 // Provider ...
-type Provider func(*configuration.C) (*MD, error)
+type Provider func(*blackboard.BB) (*MD, error)
 
 // MD ...
 type MD struct {

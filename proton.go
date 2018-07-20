@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	ErrProtonModelUndefined = fmt.Errorf("Proton: Model Undefined.")
+	ErrProtonModelUndefined    = fmt.Errorf("Proton: `Model` Undefined.")
+	ErrProtonFileInfoUndefined = fmt.Errorf("Proton: `FileInfo` Undefined.")
 )
 
 // Generator ...
@@ -24,8 +25,8 @@ type GI struct {
 }
 
 // NewGeneratorInfo ...
-func NewGeneratorInfo(GeneratorVersion string, Generator Generator, Enabled bool) *GI {
-	return &GI{GeneratorVersion, Generator, Enabled}
+func NewGeneratorInfo(generatorVersion string, generator Generator, enabled bool) *GI {
+	return &GI{generatorVersion, generator, enabled}
 }
 
 // PI ...
@@ -36,8 +37,8 @@ type PI struct {
 }
 
 // NewPostProcessorInfo ...
-func NewPostProcessorInfo(PostProcessorVersion string, PostProcessor PostProcessor, Enabled bool) *PI {
-	return &PI{PostProcessorVersion, PostProcessor, Enabled}
+func NewPostProcessorInfo(postProcessorVersion string, postProcessor PostProcessor, enabled bool) *PI {
+	return &PI{postProcessorVersion, postProcessor, enabled}
 }
 
 // FileInfo ...
@@ -48,8 +49,8 @@ type FileInfo struct {
 }
 
 // NewFileInfo ...
-func NewFileInfo(File, FileContent, Generator string) FileInfo {
-	return FileInfo{File, FileContent, Generator}
+func NewFileInfo(file, fileContent, generator string) FileInfo {
+	return FileInfo{file, fileContent, generator}
 }
 
 // P ...
@@ -93,59 +94,62 @@ func PostProcessorInfo() []*PI {
 }
 
 // AddGenerator ...
-func (p *P) AddGenerator(GeneratorVersion string, Generator Generator, Enabled bool) {
-	p.generatorInfo = append(p.generatorInfo, NewGeneratorInfo(GeneratorVersion, Generator, Enabled))
+func (p *P) AddGenerator(generatorVersion string, generator Generator, enabled bool) {
+	p.generatorInfo = append(p.generatorInfo, NewGeneratorInfo(generatorVersion, generator, enabled))
 }
 
 // AddGenerator ...
-func AddGenerator(GeneratorVersion string, Generator Generator, Enabled bool) {
-	proton.AddGenerator(GeneratorVersion, Generator, Enabled)
+func AddGenerator(generatorVersion string, generator Generator, enabled bool) {
+	proton.AddGenerator(generatorVersion, generator, enabled)
 }
 
 // AddPostProcessor ...
-func (p *P) AddPostProcessor(PostProcessorVersion string, PostProcessor PostProcessor, Enabled bool) {
-	p.postProcessorInfo = append(p.postProcessorInfo, NewPostProcessorInfo(PostProcessorVersion, PostProcessor, Enabled))
+func (p *P) AddPostProcessor(postProcessorVersion string, postProcessor PostProcessor, enabled bool) {
+	p.postProcessorInfo = append(p.postProcessorInfo, NewPostProcessorInfo(postProcessorVersion, postProcessor, enabled))
 }
 
 // AddPostProcessor ...
-func AddPostProcessor(PostProcessorVersion string, PostProcessor PostProcessor, Enabled bool) {
-	proton.AddPostProcessor(PostProcessorVersion, PostProcessor, Enabled)
+func AddPostProcessor(postProcessorVersion string, postProcessor PostProcessor, enabled bool) {
+	proton.AddPostProcessor(postProcessorVersion, postProcessor, enabled)
 }
 
 // EnableGenerator ...
-func (p *P) EnableGenerator(GeneratorVersion string, Enabled bool) {
+func (p *P) EnableGenerator(generatorVersion string, enabled bool) {
 	for _, generatorInfo := range p.generatorInfo {
-		if generatorInfo.GeneratorVersion == GeneratorVersion {
-			generatorInfo.Enabled = Enabled
+		if generatorInfo.GeneratorVersion == generatorVersion {
+			generatorInfo.Enabled = enabled
 		}
 	}
 }
 
 // EnableGenerator ...
-func EnableGenerator(GeneratorVersion string, Enabled bool) {
-	proton.EnableGenerator(GeneratorVersion, Enabled)
+func EnableGenerator(generatorVersion string, enabled bool) {
+	proton.EnableGenerator(generatorVersion, enabled)
 }
 
 // EnablePostProcessor ...
-func (p *P) EnablePostProcessor(PostProcessorVersion string, Enabled bool) {
+func (p *P) EnablePostProcessor(postProcessorVersion string, enabled bool) {
 	for _, postProcessorInfo := range p.postProcessorInfo {
-		if postProcessorInfo.PostProcessorVersion == PostProcessorVersion {
-			postProcessorInfo.Enabled = Enabled
+		if postProcessorInfo.PostProcessorVersion == postProcessorVersion {
+			postProcessorInfo.Enabled = enabled
 		}
 	}
 }
 
 // EnablePostProcessor ...
-func EnablePostProcessor(PostProcessorVersion string, Enabled bool) {
-	proton.EnablePostProcessor(PostProcessorVersion, Enabled)
+func EnablePostProcessor(postProcessorVersion string, enabled bool) {
+	proton.EnablePostProcessor(postProcessorVersion, enabled)
 }
 
 // RunGenerator ...
-func (p *P) RunGenerator(m *model.MD) ([]FileInfo, error) {
+func (p *P) RunGenerator(md *model.MD) ([]FileInfo, error) {
+	if md == nil {
+		return nil, ErrProtonModelUndefined
+	}
 	r := make([]FileInfo, 0)
 	for _, generatorInfo := range p.generatorInfo {
 		if generatorInfo.Enabled {
-			gv, err := generatorInfo.Generator(m)
+			gv, err := generatorInfo.Generator(md)
 			if err != nil {
 				return nil, err
 			}
@@ -156,12 +160,15 @@ func (p *P) RunGenerator(m *model.MD) ([]FileInfo, error) {
 }
 
 // RunGenerator ...
-func RunGenerator(m *model.MD) ([]FileInfo, error) {
-	return proton.RunGenerator(m)
+func RunGenerator(md *model.MD) ([]FileInfo, error) {
+	return proton.RunGenerator(md)
 }
 
 // RunPostProcessor ...
 func (p *P) RunPostProcessor(fileInfo []FileInfo) ([]FileInfo, error) {
+	if fileInfo == nil {
+		return nil, ErrProtonFileInfoUndefined
+	}
 	r := fileInfo
 	for _, postProcessorInfo := range p.postProcessorInfo {
 		if postProcessorInfo.Enabled {
@@ -181,12 +188,11 @@ func RunPostProcessor(fileInfo []FileInfo) ([]FileInfo, error) {
 }
 
 // Run ...
-func (p *P) Run(m *model.MD) ([]FileInfo, error) {
-	if m == nil {
+func (p *P) Run(md *model.MD) ([]FileInfo, error) {
+	if md == nil {
 		return nil, ErrProtonModelUndefined
 	}
-
-	gv, err := p.RunGenerator(m)
+	gv, err := p.RunGenerator(md)
 	if err != nil {
 		return nil, err
 	}
@@ -198,6 +204,6 @@ func (p *P) Run(m *model.MD) ([]FileInfo, error) {
 }
 
 // Run ...
-func Run(m *model.MD) ([]FileInfo, error) {
-	return proton.Run(m)
+func Run(md *model.MD) ([]FileInfo, error) {
+	return proton.Run(md)
 }

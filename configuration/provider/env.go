@@ -4,12 +4,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/SirMetathyst/proton/configuration"
+	"github.com/SirMetathyst/go-blackboard"
 )
 
 // Env ...
-func Env(c *configuration.C) error {
-	for _, b := range c.AllBool() {
+func Env(bb *blackboard.BB) error {
+	for _, b := range bb.AllBool() {
 		*b.Value = getBool(b.Key, *b.Value)
 	}
 	return nil

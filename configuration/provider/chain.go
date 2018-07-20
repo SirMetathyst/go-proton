@@ -1,12 +1,12 @@
 package configurationprovider
 
-import "github.com/SirMetathyst/proton/configuration"
+import "github.com/SirMetathyst/go-blackboard"
 
 // Chain ...
-func Chain(returnOnError bool, provider ...func(*configuration.C) error) func(*configuration.C) error {
-	return func(c *configuration.C) error {
+func Chain(returnOnError bool, provider ...func(*blackboard.BB) error) func(*blackboard.BB) error {
+	return func(bb *blackboard.BB) error {
 		for _, p := range provider {
-			err := p(c)
+			err := p(bb)
 			if returnOnError && err != nil {
 				return err
 			}

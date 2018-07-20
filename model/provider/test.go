@@ -1,7 +1,7 @@
 package modelprovider
 
 import (
-	"github.com/SirMetathyst/proton/configuration"
+	"github.com/SirMetathyst/go-blackboard"
 	"github.com/SirMetathyst/proton/model"
 	"github.com/SirMetathyst/proton/model/builder"
 )
@@ -30,6 +30,6 @@ func createTestModel() (*model.MD, error) {
 }
 
 // Test ...
-func Test(c *configuration.C) (*model.MD, error) {
+func Test(bb *blackboard.BB) (*model.MD, error) {
 	return createTestModel()
 }

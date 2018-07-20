@@ -7,9 +7,10 @@ import (
 	"go/token"
 	"strings"
 
-	"github.com/SirMetathyst/proton/configuration"
+	"github.com/SirMetathyst/proton/model/builder"
+
+	"github.com/SirMetathyst/go-blackboard"
 	"github.com/SirMetathyst/proton/model"
-	"github.com/mpvl/errd"
 )
 
 // functionData [DATA]...
@@ -102,15 +103,15 @@ func (w *walker) Visit(node ast.Node) ast.Visitor {
 }
 
 // GoFile ...
-func GoFile(c *configuration.C) (*model.M, error) {
-	var m *model.M
-	return m, errd.Run(func(e *errd.E) {
+func GoFile(bb *blackboard.BB) (*model.MD, error) {
+	mdb := modelbuilder.NewModelBuilder()
+	fset := token.NewFileSet()
+	file, err := parser.ParseFile(fset, suffix(*bb.StringP("File"), ".go"), nil, 0)
+	if err != nil {
+		return nil, err
+	}
+	ast.Walk(new(walker), file)
+	print()
 
-		fset := token.NewFileSet()
-		file, err := parser.ParseFile(fset, suffix(*c.StringP("File"), ".go"), nil, 0)
-		e.Must(err)
-
-		ast.Walk(new(walker), file)
-		print()
-	})
+	return mdb.Build()
 }

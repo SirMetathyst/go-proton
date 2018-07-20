@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
+	"github.com/SirMetathyst/go-blackboard"
 	"github.com/SirMetathyst/proton/model/builder"
 
-	"github.com/SirMetathyst/proton/configuration"
 	"github.com/SirMetathyst/proton/model"
 )
 
@@ -131,10 +131,10 @@ func createEventComponent(mdb *modelbuilder.MDB, default_context string, cp json
 }
 
 // JSON ...
-func JSON(c *configuration.C) (*model.MD, error) {
+func JSON(bb *blackboard.BB) (*model.MD, error) {
 	jm := jsonModel{}
 
-	raw, _ := ioutil.ReadFile(suffix(*c.StringP("File"), ".json"))
+	raw, _ := ioutil.ReadFile(suffix(*bb.StringP("File"), ".json"))
 
 	err := json.Unmarshal(raw, &jm)
 	if err != nil {
