@@ -2,16 +2,16 @@ package modelprovider
 
 import (
 	"github.com/SirMetathyst/go-blackboard"
-	"github.com/SirMetathyst/proton/model/builder"
 
 	//protonlang "github.com/SirMetathyst/proton-lang"
 
-	"github.com/SirMetathyst/proton/model"
+	"github.com/SirMetathyst/go-entitas"
+	"github.com/SirMetathyst/go-entitas/builder"
 )
 
 // ProtonLang ...
-func ProtonLang(bb *blackboard.BB) (*model.MD, error) {
-	mdb := modelbuilder.NewModelBuilder()
+func ProtonLang(bb *blackboard.BB) (*entitas.MD, error) {
+	mdb := entitasbuilder.NewModelBuilder()
 
 	//file, err := os.Open(suffix(*c.StringP("File"), ".proton"))
 	//defer file.Close()

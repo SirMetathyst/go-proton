@@ -7,10 +7,9 @@ import (
 	"go/token"
 	"strings"
 
-	"github.com/SirMetathyst/proton/model/builder"
-
 	"github.com/SirMetathyst/go-blackboard"
-	"github.com/SirMetathyst/proton/model"
+	"github.com/SirMetathyst/go-entitas"
+	"github.com/SirMetathyst/go-entitas/builder"
 )
 
 // functionData [DATA]...
@@ -103,8 +102,8 @@ func (w *walker) Visit(node ast.Node) ast.Visitor {
 }
 
 // GoFile ...
-func GoFile(bb *blackboard.BB) (*model.MD, error) {
-	mdb := modelbuilder.NewModelBuilder()
+func GoFile(bb *blackboard.BB) (*entitas.MD, error) {
+	mdb := entitasbuilder.NewModelBuilder()
 	fset := token.NewFileSet()
 	file, err := parser.ParseFile(fset, suffix(*bb.StringP("File"), ".go"), nil, 0)
 	if err != nil {

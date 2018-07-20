@@ -5,9 +5,8 @@ import (
 	"io/ioutil"
 
 	"github.com/SirMetathyst/go-blackboard"
-	"github.com/SirMetathyst/proton/model/builder"
-
-	"github.com/SirMetathyst/proton/model"
+	"github.com/SirMetathyst/go-entitas"
+	"github.com/SirMetathyst/go-entitas/builder"
 )
 
 // jsonContext ...
@@ -43,55 +42,55 @@ type jsonModel struct {
 	Component      []jsonComponent `json:"component"`
 }
 
-func getEventTarget(b string) model.EventTarget {
+func getEventTarget(b string) entitas.EventTarget {
 	if b == "self" {
-		return model.SelfTarget
+		return entitas.SelfTarget
 	} else if b == "any" {
-		return model.AnyTarget
+		return entitas.AnyTarget
 	}
-	return model.NoTarget
+	return entitas.NoTarget
 }
 
-func getEventType(e string) model.EventType {
+func getEventType(e string) entitas.EventType {
 	if e == "removed" {
-		return model.RemovedEvent
+		return entitas.RemovedEvent
 	}
-	return model.AddedEvent
+	return entitas.AddedEvent
 }
 
-func getEntityIndex(e string) model.EntityIndex {
+func getEntityIndex(e string) entitas.EntityIndex {
 	if e == "multiple" {
-		return model.MultipleEntityIndex
+		return entitas.MultipleEntityIndex
 	} else if e == "single" {
-		return model.SingleEntityIndex
+		return entitas.SingleEntityIndex
 	}
-	return model.NoEntityIndex
+	return entitas.NoEntityIndex
 }
 
-func getCleanupMode(m string) model.CleanupMode {
+func getCleanupMode(m string) entitas.CleanupMode {
 	if m == "destroy_entity" {
-		return model.DestroyEntity
+		return entitas.DestroyEntity
 	} else if m == "remove_component" {
-		return model.RemoveComponent
+		return entitas.RemoveComponent
 	}
-	return model.NoCleanup
+	return entitas.NoCleanup
 }
 
 // componentID ...
 func componentID(c string, cp jsonComponent) string {
 	var eventTypeSuffix = ""
-	if getEventType(cp.EventType) == model.RemovedEvent {
+	if getEventType(cp.EventType) == entitas.RemovedEvent {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
 	if len(cp.Context) > 1 {
 		optionalContextID = c
 	}
-	componentID := optionalContextID + model.String(cp.ID).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener"
+	componentID := optionalContextID + entitas.String(cp.ID).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener"
 	return componentID
 }
 
-func createEventComponent(mdb *modelbuilder.MDB, default_context string, cp jsonComponent) error {
+func createEventComponent(mdb *entitasbuilder.MDB, default_context string, cp jsonComponent) error {
 	g := func(c string, cp jsonComponent) error {
 		cpb := mdb.NewComponent()
 		cpb.SetID(componentID(c, cp) + "Component")
@@ -131,7 +130,7 @@ func createEventComponent(mdb *modelbuilder.MDB, default_context string, cp json
 }
 
 // JSON ...
-func JSON(bb *blackboard.BB) (*model.MD, error) {
+func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 	jm := jsonModel{}
 
 	raw, _ := ioutil.ReadFile(suffix(*bb.StringP("File"), ".json"))
@@ -141,7 +140,7 @@ func JSON(bb *blackboard.BB) (*model.MD, error) {
 		return nil, err
 	}
 
-	mdb := modelbuilder.NewModelBuilder()
+	mdb := entitasbuilder.NewModelBuilder()
 	mdb.SetNamespace(jm.Namespace)
 
 	for _, c := range jm.Context {

@@ -2,13 +2,13 @@ package modelprovider
 
 import (
 	"github.com/SirMetathyst/go-blackboard"
-	"github.com/SirMetathyst/proton/model"
-	"github.com/SirMetathyst/proton/model/builder"
+	"github.com/SirMetathyst/go-entitas"
+	"github.com/SirMetathyst/go-entitas/builder"
 )
 
 // createTestModel ...
-func createTestModel() (*model.MD, error) {
-	mdb := modelbuilder.NewModelBuilder()
+func createTestModel() (*entitas.MD, error) {
+	mdb := entitasbuilder.NewModelBuilder()
 
 	mdb.NewContext().SetID("ContextA").Build()
 	mdb.NewContext().SetID("ContextB").Build()
@@ -30,6 +30,6 @@ func createTestModel() (*model.MD, error) {
 }
 
 // Test ...
-func Test(bb *blackboard.BB) (*model.MD, error) {
+func Test(bb *blackboard.BB) (*entitas.MD, error) {
 	return createTestModel()
 }

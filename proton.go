@@ -3,7 +3,7 @@ package proton
 import (
 	"fmt"
 
-	"github.com/SirMetathyst/proton/model"
+	entitas "github.com/SirMetathyst/go-entitas"
 )
 
 var (
@@ -12,7 +12,7 @@ var (
 )
 
 // Generator ...
-type Generator func(*model.MD) ([]FileInfo, error)
+type Generator func(*entitas.MD) ([]FileInfo, error)
 
 // PostProcessor ...
 type PostProcessor func([]FileInfo) ([]FileInfo, error)
@@ -142,7 +142,7 @@ func EnablePostProcessor(postProcessorVersion string, enabled bool) {
 }
 
 // RunGenerator ...
-func (p *P) RunGenerator(md *model.MD) ([]FileInfo, error) {
+func (p *P) RunGenerator(md *entitas.MD) ([]FileInfo, error) {
 	if md == nil {
 		return nil, ErrProtonModelUndefined
 	}
@@ -160,7 +160,7 @@ func (p *P) RunGenerator(md *model.MD) ([]FileInfo, error) {
 }
 
 // RunGenerator ...
-func RunGenerator(md *model.MD) ([]FileInfo, error) {
+func RunGenerator(md *entitas.MD) ([]FileInfo, error) {
 	return proton.RunGenerator(md)
 }
 
@@ -188,7 +188,7 @@ func RunPostProcessor(fileInfo []FileInfo) ([]FileInfo, error) {
 }
 
 // Run ...
-func (p *P) Run(md *model.MD) ([]FileInfo, error) {
+func (p *P) Run(md *entitas.MD) ([]FileInfo, error) {
 	if md == nil {
 		return nil, ErrProtonModelUndefined
 	}
@@ -204,6 +204,6 @@ func (p *P) Run(md *model.MD) ([]FileInfo, error) {
 }
 
 // Run ...
-func Run(md *model.MD) ([]FileInfo, error) {
+func Run(md *entitas.MD) ([]FileInfo, error) {
 	return proton.Run(md)
 }
