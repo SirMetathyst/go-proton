@@ -23,8 +23,22 @@ type jsonComponent struct {
 	EventType     string       `json:"event_type"`
 	EventPriority int          `json:"event_priority"`
 	CleanupMode   string       `json:"cleanup_mode"`
-	Context       []string     `json:"context"`
-	Member        []jsonMember `json:"member"`
+	Contexts      []string     `json:"contexts"`
+	Members       []jsonMember `json:"members"`
+}
+
+// jsonEntityIndex ...
+type jsonEntityIndex struct {
+	ID      string       `json:"id"`
+	Primary bool         `json:"primary`
+	Context string       `json:"context"`
+	Methods []jsonMethod `json:"methods"`
+}
+
+// jsonMethod ...
+type jsonMethod struct {
+	ID      string       `json:"id"`
+	Members []jsonMember `json:"members"`
 }
 
 // jsonMember ...
@@ -36,10 +50,11 @@ type jsonMember struct {
 
 // jsonModel ...
 type jsonModel struct {
-	Namespace      string          `json:"namespace"`
-	Context        []jsonContext   `json:"context"`
-	DefaultContext string          `json:"default_context"`
-	Component      []jsonComponent `json:"component"`
+	Namespace      string            `json:"namespace"`
+	Contexts       []jsonContext     `json:"contexts"`
+	DefaultContext string            `json:"default_context"`
+	Components     []jsonComponent   `json:"components"`
+	EntityIndex    []jsonEntityIndex `json:"entity_index"`
 }
 
 func getEventTarget(b string) entitas.EventTarget {
@@ -83,7 +98,7 @@ func componentID(c string, cp jsonComponent) string {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
-	if len(cp.Context) > 1 {
+	if len(cp.Contexts) > 1 {
 		optionalContextID = c
 	}
 	componentID := optionalContextID + entitas.String(cp.ID).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener"
@@ -112,8 +127,8 @@ func createEventComponent(mdb *builder.MDB, default_context string, cp jsonCompo
 		return nil
 	}
 
-	if len(cp.Context) > 0 {
-		for _, c := range cp.Context {
+	if len(cp.Contexts) > 0 {
+		for _, c := range cp.Contexts {
 			err := g(c, cp)
 			if err != nil {
 				return err
@@ -143,7 +158,7 @@ func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 	mdb := builder.NewModelBuilder()
 	mdb.SetNamespace(jm.Namespace)
 
-	for _, c := range jm.Context {
+	for _, c := range jm.Contexts {
 		err = mdb.NewContext().
 			SetID(c.ID).
 			Build()
@@ -155,7 +170,7 @@ func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 
 	mdb.SetDefaultContext(jm.DefaultContext)
 
-	for _, cp := range jm.Component {
+	for _, cp := range jm.Components {
 		cpb := mdb.NewComponent().
 			SetID(cp.ID).
 			SetFlagPrefix(cp.FlagPrefix).
@@ -164,33 +179,60 @@ func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 			SetEventType(getEventType(cp.EventType)).
 			SetEventPriority(cp.EventPriority).
 			SetCleanupMode(getCleanupMode(cp.CleanupMode))
-
-		for _, c := range cp.Context {
+		for _, c := range cp.Contexts {
 			cpb.AddContext(c)
 		}
-
-		for _, m := range cp.Member {
+		for _, m := range cp.Members {
 			err := cpb.NewMember().
 				SetID(m.ID).
 				SetValue(m.Value).
 				SetEntityIndex(getEntityIndex(m.EntityIndex)).
 				Build()
-
 			if err != nil {
 				return nil, err
 			}
 		}
-
 		err := cpb.Build()
 		if err != nil {
 			return nil, err
 		}
-
 		if getEventTarget(cp.EventTarget) > 0 {
 			err = createEventComponent(mdb, jm.DefaultContext, cp)
 			if err != nil {
 				return nil, err
 			}
+		}
+	}
+
+	for _, ei := range jm.EntityIndex {
+		eib := mdb.NewEntityIndex().
+			SetID(ei.ID).
+			SetPrimary(ei.Primary).
+			AddContext(ei.Context)
+
+		for _, eim := range ei.Methods {
+			eimb := eib.NewMethod().
+				SetID(eim.ID)
+
+			for _, m := range eim.Members {
+				err := eimb.NewMember().
+					SetID(m.ID).
+					SetValue(m.Value).
+					SetEntityIndex(getEntityIndex(m.EntityIndex)).
+					Build()
+
+				if err != nil {
+					return nil, err
+				}
+			}
+			err := eimb.Build()
+			if err != nil {
+				return nil, err
+			}
+		}
+		err := eib.Build()
+		if err != nil {
+			return nil, err
 		}
 	}
 

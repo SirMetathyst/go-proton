@@ -26,13 +26,6 @@ func Must(err error) {
 	}
 }
 
-// Optional ...
-func Optional(err error) {
-	if err != nil {
-		log.Printf("Electron: %s", err)
-	}
-}
-
 // SetupProton ...
 func SetupProton(p *proton.P) error {
 
@@ -78,10 +71,11 @@ func Setup(bb *blackboard.BB, p *proton.P) error {
 // Run ...
 func Run(bb *blackboard.BB, p *proton.P) error {
 	md, err := JSON(bb)
-	Optional(err)
+	if err != nil {
+		return err
+	}
 	_, err = p.Run(md)
-	Optional(err)
-	return nil
+	return err
 }
 
 // Watcher ...
@@ -99,7 +93,10 @@ func Watcher(bb *blackboard.BB, p *proton.P, File ...string) error {
 			select {
 			case <-w.Events:
 				{
-					Optional(Run(bb, p))
+					err := Run(bb, p)
+					if err != nil {
+						log.Println(err)
+					}
 				}
 			}
 		}
@@ -132,10 +129,15 @@ func (pc *PC) Run() {
 	Must(Setup(bb, p))
 
 	if WatchFileEnable(bb) && len(WatchFile(bb)) >= 1 {
-		Must(Run(bb, p))
+		err := Run(bb, p)
+		if err != nil {
+			log.Println(err)
+		}
 		Must(Watcher(bb, p, WatchFile(bb)...))
 		return
 	}
-
-	Must(Run(bb, p))
+	err := Run(bb, p)
+	if err != nil {
+		log.Println(err)
+	}
 }
