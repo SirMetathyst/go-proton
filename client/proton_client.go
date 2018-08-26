@@ -91,8 +91,9 @@ func Watcher(bb *blackboard.BB, p *proton.P, File ...string) error {
 	go func() {
 		for {
 			select {
-			case <-w.Events:
+			case ev := <-w.Events:
 				{
+					log.Printf("Electron: %v\n", ev)
 					err := Run(bb, p)
 					if err != nil {
 						log.Println(err)

@@ -30,7 +30,7 @@ type jsonComponent struct {
 // jsonEntityIndex ...
 type jsonEntityIndex struct {
 	ID      string       `json:"id"`
-	Primary bool         `json:"primary`
+	Primary bool         `json:"primary"`
 	Context string       `json:"context"`
 	Methods []jsonMethod `json:"methods"`
 }
@@ -105,7 +105,7 @@ func componentID(c string, cp jsonComponent) string {
 	return componentID
 }
 
-func createEventComponent(mdb *builder.MDB, default_context string, cp jsonComponent) error {
+func createEventComponent(mdb *builder.MDB, defaultContext string, cp jsonComponent) error {
 	g := func(c string, cp jsonComponent) error {
 		cpb := mdb.NewComponent()
 		cpb.SetID(componentID(c, cp) + "Component")
@@ -135,7 +135,7 @@ func createEventComponent(mdb *builder.MDB, default_context string, cp jsonCompo
 			}
 		}
 	} else {
-		err := g(default_context, cp)
+		err := g(defaultContext, cp)
 		if err != nil {
 			return err
 		}

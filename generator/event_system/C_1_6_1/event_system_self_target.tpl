@@ -15,7 +15,7 @@ public sealed class <%==s componentID(c, cp).ToUpperFirst().String()%>EventSyste
         );
     }
 
-    protected override bool filter(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity entity) 
+    protected override bool Filter(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity entity) 
     {
         return <%==s filter(c, cp)%>;
     }

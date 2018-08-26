@@ -49,7 +49,7 @@ public sealed class `)
         );
     }
 
-    protected override bool filter(`)
+    protected override bool Filter(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity entity) 
     {
