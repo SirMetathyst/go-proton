@@ -1,12 +1,18 @@
-package client
+package main
 
 import (
 	"github.com/SirMetathyst/go-blackboard"
 	"github.com/SirMetathyst/go-entitas"
 )
 
-// ConfigurationChain ...
-func ConfigurationChain(returnOnError bool, provider ...CP) CP {
+// CP ...
+type CP func(*blackboard.BB) error
+
+// MP ...
+type MP func(*blackboard.BB) (*entitas.MD, error)
+
+// ConfigurationFallback ...
+func ConfigurationFallback(returnOnError bool, provider ...CP) CP {
 	return func(bb *blackboard.BB) error {
 		for _, p := range provider {
 			err := p(bb)
@@ -18,8 +24,8 @@ func ConfigurationChain(returnOnError bool, provider ...CP) CP {
 	}
 }
 
-// ModelChain ...
-func ModelChain(provider ...MP) MP {
+// ModelFallback ...
+func ModelFallback(provider ...MP) MP {
 	return func(bb *blackboard.BB) (md *entitas.MD, err error) {
 		for _, p := range provider {
 			md, err = p(bb)

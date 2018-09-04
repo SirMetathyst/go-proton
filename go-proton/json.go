@@ -1,4 +1,4 @@
-package client
+package main
 
 import (
 	"encoding/json"
@@ -148,7 +148,7 @@ func createEventComponent(mdb *builder.MDB, defaultContext string, cp jsonCompon
 func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 	jm := jsonModel{}
 
-	raw, _ := ioutil.ReadFile(suffix(*bb.StringP("File"), ".json"))
+	raw, _ := ioutil.ReadFile(suffix(File(bb), ".json"))
 
 	err := json.Unmarshal(raw, &jm)
 	if err != nil {

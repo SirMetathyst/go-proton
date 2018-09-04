@@ -5,13 +5,11 @@ for _, cei := range ei {
         b.WriteString("\t\t")
         b.WriteString(cei.Context().ID().WithoutContextSuffix().ToLowerFirst().String())
         b.WriteRune('.')
-        b.WriteString("AddEntityIndex(")
-        b.WriteString("new ")
+        b.WriteString("AddEntityIndex(new ")
         b.WriteString(cei.ID().String())
         b.WriteRune('(')
         b.WriteString(cei.Context().ID().WithoutContextSuffix().ToLowerFirst().String())
-        b.WriteRune(')')
-        b.WriteRune('\n') 
+        b.WriteString("));\n")
     } 
 } %>
 <% return b.String() %>

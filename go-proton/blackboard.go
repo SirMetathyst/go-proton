@@ -1,4 +1,4 @@
-package client
+package main
 
 import "github.com/SirMetathyst/go-blackboard"
 
@@ -11,7 +11,7 @@ const (
 
 // SetupBlackboard ...
 func SetupBlackboard(bb *blackboard.BB) error {
-	SetFile(bb, "electron")
+	SetFile(bb, "proton")
 	SetOutputDirectory(bb, "Generated")
 	SetWatchFile(bb, []string{})
 	SetWatchFileEnable(bb, false)
