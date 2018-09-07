@@ -1,23 +1,38 @@
 {
     "default_context": "Core",
     "contexts": [
-        { "id": "Input" },
-        { "id": "Command" },
-        { "id": "Meta" },
-        { "id": "Core" }
+        {
+            "id": "Input"
+        },
+        {
+            "id": "Command"
+        },
+        {
+            "id": "Meta"
+        },
+        {
+            "id": "Core"
+        }
     ],
     "components": [
         {
             "id": "Position",
             "event_target": "self",
             "members": [
-                { "id": "value", "value": "UnityEngine.Vector3"}
+                {
+                    "id": "value",
+                    "value": "UnityEngine.Vector3"
+                }
             ]
         },
         {
             "id": "ID",
             "members": [
-                { "id": "value", "value": "int", "entity_index": "single"}
+                {
+                    "id": "value",
+                    "value": "int",
+                    "entity_index": "single"
+                }
             ]
         }
     ],
@@ -29,7 +44,10 @@
                 {
                     "id": "MyCustomEntityIndexMethod",
                     "members": [
-                        {"id": "value1", "value": "int"}
+                        {
+                            "id": "value1",
+                            "value": "int"
+                        }
                     ]
                 }
             ]

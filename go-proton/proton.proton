@@ -1,0 +1,3 @@
+target entitas_csharp
+namespace my.game
+context Core

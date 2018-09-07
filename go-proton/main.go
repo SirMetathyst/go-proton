@@ -131,7 +131,10 @@ func Setup(bb *blackboard.BB, p *proton.P) error {
 
 // Run ...
 func Run(bb *blackboard.BB, p *proton.P) error {
-	md, err := ModelFallback(JSON)(bb)
+	md, err := ModelFallback(func(err error) {
+		log.Printf("Proton: %s", err)
+	}, ProtonLang, JSON)(bb)
+
 	if err != nil {
 		return err
 	}

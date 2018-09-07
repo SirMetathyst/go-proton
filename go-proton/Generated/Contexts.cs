@@ -27,9 +27,6 @@ public partial class Contexts : Entitas.IContexts
   
     static Contexts _sharedInstance;
 
-	public InputContext input { get; set; }
-	public CommandContext command { get; set; }
-	public MetaContext meta { get; set; }
 	public CoreContext core { get; set; }
 
 
@@ -37,15 +34,12 @@ public partial class Contexts : Entitas.IContexts
     {
         get 
         { 
-            return new Entitas.IContext [] { input, command, meta, core };
+            return new Entitas.IContext [] { core };
         } 
     }
   
 	public Contexts()
     {
-		input = new InputContext();
-		command = new CommandContext();
-		meta = new MetaContext();
 		core = new CoreContext();
 
 
@@ -78,9 +72,6 @@ public partial class Contexts
     {
         try 
         {
-			CreateContextObserver(input);
-			CreateContextObserver(command);
-			CreateContextObserver(meta);
 			CreateContextObserver(core);
 
         } 
@@ -101,32 +92,16 @@ public partial class Contexts
 
 public partial class Contexts
 {
-	public const string ID = "ID";
-	public const string MyCustomEntityIndex = "MyCustomEntityIndex";
 
 
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices()
     {
-		core.AddEntityIndex(new Entitas.PrimaryEntityIndex<CoreEntity, int>(
-			ID,core.GetGroup(CoreMatcher.ID), (e, c) => ((IDComponent)c).value));
-
-		core.AddEntityIndex(new MyCustomEntityIndex(core));
 
     }
 }
 
 public static class ContextsExtensions 
 {
-	public static CoreEntity GetEntityWithID(this CoreContext context, int value)
-    {
-        return ((Entitas.PrimaryEntityIndex<CoreEntity, int>)context.GetEntityIndex(Contexts.ID)).GetEntity(value); 
-    }
-
-public static System.Collections.Generic.HashSet<CoreEntity> MyCustomEntityIndexMethod(this CoreContext context, int value1) 
-{
-    return ((MyCustomEntityIndex)(context.GetEntityIndex(Contexts.MyCustomEntityIndex))).MyCustomEntityIndexMethod(value1);
-}
-
 
 }

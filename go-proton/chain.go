@@ -25,13 +25,14 @@ func ConfigurationFallback(returnOnError bool, provider ...CP) CP {
 }
 
 // ModelFallback ...
-func ModelFallback(provider ...MP) MP {
+func ModelFallback(logger func(error), provider ...MP) MP {
 	return func(bb *blackboard.BB) (md *entitas.MD, err error) {
 		for _, p := range provider {
 			md, err = p(bb)
 			if err == nil {
-				return
+				return md, nil
 			}
+			logger(err)
 		}
 		return
 	}

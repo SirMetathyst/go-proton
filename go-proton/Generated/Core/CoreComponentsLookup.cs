@@ -9,23 +9,16 @@
 
 public static class CoreComponentsLookup 
 {
-	public const int Position = 0;
-	public const int PositionListener = 1;
-	public const int ID = 2;
 
-    public const int TotalComponents = 3;
+    public const int TotalComponents = 0;
 	
 	public static readonly string[] componentNames = 
     {
-		"Position",
-		"PositionListener",
-		"ID"
+
 	};
 	
 	public static readonly System.Type[] componentTypes = 
     {
-		typeof(PositionComponent),
-		typeof(PositionListenerComponent),
-		typeof(IDComponent)
+
 	};
 }
