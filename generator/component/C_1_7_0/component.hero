@@ -1,7 +1,7 @@
 <%: func Component_C_1_7_0(cp *entitas.CP, b *bytes.Buffer) string %>
-<%+ "attribute.tpl" %>
+<% b.WriteString(ComponentAttribute_C_1_7_0(cp)) %>
 public sealed partial class <%==s cp.ID().WithComponentSuffix().String()%> : Entitas.IComponent 
 {
-<%+ "member.tpl" %>
+<%+ "member.hero" %>
 }
 <% return b.String() %>
