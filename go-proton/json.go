@@ -109,7 +109,6 @@ func createEventComponent(mdb *builder.MDB, defaultContext string, cp jsonCompon
 	g := func(c string, cp jsonComponent) error {
 		cpb := mdb.NewComponent()
 		cpb.SetID(componentID(c, cp) + "Component")
-		cpb.SetListener(true)
 		cpb.AddContext(c)
 
 		err := cpb.NewMember().

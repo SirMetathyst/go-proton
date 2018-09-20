@@ -1,3 +1,15 @@
-target entitas_csharp
-namespace my.game
-context Core
+#include "csharp_alias.proton";
+#include "unity_alias.proton";
+
+target entitas_csharp;
+namespace my.game;
+
+context core(default);
+
+component Position(eventTarget:self), Scale, Rotation {
+    a,b,c as Vector3;
+}
+
+component PositionListener {
+    value as "System.Collections.Generic.List<IPositionListener>"
+}

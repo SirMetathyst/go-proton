@@ -19,7 +19,7 @@ func ComponentEntityGenerator_C_1_4_2(m *entitas.MD) ([]entitas.FI, error) {
 				ComponentEntity_C_1_4_2(c, cp, b)
 			}
 
-			slice = append(slice, entitas.NewFileInfo(c.ID().WithoutContextSuffix().String()+"/Components/"+c.ID().WithoutContextSuffix().String()+cp.ID().WithComponentSuffix().String()+".cs", b.String(), "ComponentEntityGenerator_C_1_4_2"))
+			slice = append(slice, entitas.NewFileInfo(c.ID().WithoutContextSuffix().ToUpperFirst().String()+"/Components/"+c.ID().WithoutContextSuffix().ToUpperFirst().String()+cp.ID().WithComponentSuffix().ToUpperFirst().String()+".cs", b.String(), "ComponentEntityGenerator_C_1_4_2"))
 		}
 	}
 	return slice, nil

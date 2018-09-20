@@ -10,7 +10,6 @@ import (
 	entitas "github.com/SirMetathyst/go-entitas"
 	"github.com/SirMetathyst/go-proton"
 
-	. "github.com/SirMetathyst/go-proton/generator/component/C_1_7_0"
 	. "github.com/SirMetathyst/go-proton/generator/component/E_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/component_context/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/component_entity/C_1_4_2"
@@ -70,7 +69,6 @@ func Middleware(eg EG) proton.G {
 func SetupProton(p *proton.P) error {
 
 	/* Generator(s).*/
-	p.AddGenerator("CSharpComponentGenerator_C_1_7_0", Middleware(ComponentGenerator_C_1_7_0), false)
 	p.AddGenerator("CSharpComponentGenerator_E_1_4_2", Middleware(ComponentGenerator_E_1_4_2), true)
 	p.AddGenerator("CSharpComponentContextGenerator_C_1_4_2", Middleware(ComponentContextGenerator_C_1_4_2), true)
 	p.AddGenerator("CSharpComponentEntityGenerator_C_1_4_2", Middleware(ComponentEntityGenerator_C_1_4_2), true)
@@ -95,7 +93,7 @@ func SetupProton(p *proton.P) error {
 	/* PostProcessor(s). */
 	p.AddPostProcessor("MergeContentPostProcessor_C_1_4_2", MergeContentPostProcessor_C_1_4_2, true)
 	p.AddPostProcessor("FileHeaderPostProcessor_C_1_4_2", FileHeaderPostProcessor_C_1_4_2, true)
-	p.AddPostProcessor("PrintFilePostProcessor_C_1_4_2", PrintFilePostProcessor_C_1_4_2, true)
+	p.AddPostProcessor("PrintFilePostProcessor_C_1_4_2", PrintFilePostProcessor_C_1_4_2, false)
 	p.AddPostProcessor("PrintFileContentPostProcessor_C_1_4_2", PrintFileContentPostProcessor_C_1_4_2, false)
 	p.AddPostProcessor("CleanTargetDirectoryPostProcessor_C_1_4_2", CleanTargetDirectoryPostProcessor_C_1_4_2, true)
 	p.AddPostProcessor("WriteToDiskPostProcessor_C_1_4_2", WriteToDiskPostProcessor_C_1_4_2, true)
@@ -161,6 +159,8 @@ func Watcher(bb *blackboard.BB, p *proton.P, File ...string) error {
 					err := Run(bb, p)
 					if err != nil {
 						log.Println(err)
+					} else {
+						log.Println("Generated.")
 					}
 				}
 			}
@@ -190,5 +190,7 @@ func main() {
 	err := Run(bb, p)
 	if err != nil {
 		log.Println(err)
+	} else {
+		log.Println("Generated.")
 	}
 }

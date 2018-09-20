@@ -9,16 +9,26 @@
 
 public static class CoreComponentsLookup 
 {
+	public const int Position = 0;
+	public const int Scale = 1;
+	public const int Rotation = 2;
+	public const int PositionListener = 3;
 
-    public const int TotalComponents = 0;
+    public const int TotalComponents = 4;
 	
 	public static readonly string[] componentNames = 
     {
-
+		"Position",
+		"Scale",
+		"Rotation",
+		"PositionListener"
 	};
 	
 	public static readonly System.Type[] componentTypes = 
     {
-
+		typeof(PositionComponent),
+		typeof(ScaleComponent),
+		typeof(RotationComponent),
+		typeof(PositionListenerComponent)
 	};
 }
