@@ -1,5 +1,5 @@
 @echo off
 pushd %~dp0
-proton.exe --WatchFileEnable=true --WatchFile=proton.proton
+go-proton.exe --WatchFileEnable=true --WatchFile=./proton.proton --File=./proton.proton --PrintFilePostProcessor_C_1_4_2
 popd
 pause
