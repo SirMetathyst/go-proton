@@ -1,4 +1,4 @@
 build:
-	go.exe build -o proton.exe ./**.go 
+	packr.exe build -o proton.exe ./**.go 
 install:
-	go.exe install
+	packr.exe install
