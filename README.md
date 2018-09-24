@@ -67,6 +67,15 @@ index BlankEntityIndex(primary) in Core {
 ```
 When Proton-Lang parses an include statement that file will then be immediately parsed before moving onto the rest of the file.
 
+You can prepend your ```${PWD}``` to your include statement to get the absolute file path of the current file.
+
+```
+// In my_alias/all_alias.proton
+// ${PWD} will be full path to my_alias directory
+
+#include "${PWD}/more_alias.proton";
+```
+
 ### Reserved Includes
 
 Proton-Lang uses [Packr](https://github.com/gobuffalo/packr) and converts .proton files into go code so you can use common C# and UnityEngine types without having to write your own. Reserved proton includes start with ```~```
