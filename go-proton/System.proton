@@ -1,5 +1,0 @@
-alias int = "int";
-alias string = "string";
-alias double = "double";
-alias float = "float";
-alias bool = "bool";
