@@ -135,12 +135,12 @@ func Watcher(bb *blackboard.BB, p *proton.P, File ...string) error {
 			select {
 			case ev := <-w.Events:
 				{
-					log.Printf("Proton: %v\n", ev)
+					log.Printf("Proton: %s\n", ev)
 					err := Run(bb, p)
 					if err != nil {
-						log.Println(err)
+						log.Printf("Proton: %s\n", err)
 					} else {
-						log.Println("Generated.")
+						log.Printf("Proton: Generated\n")
 					}
 				}
 			}
@@ -159,18 +159,15 @@ func main() {
 
 	Must(Setup(bb, p))
 
-	if WatchFileEnable(bb) && len(WatchFile(bb)) >= 1 {
-		err := Run(bb, p)
-		if err != nil {
-			log.Println(err)
-		}
-		Must(Watcher(bb, p, WatchFile(bb)...))
-		return
-	}
 	err := Run(bb, p)
 	if err != nil {
-		log.Println(err)
+		log.Printf("Proton: %s", err)
 	} else {
-		log.Println("Generated.")
+		log.Printf("Proton: Generated")
+	}
+
+	if WatchFileEnable(bb) && len(WatchFile(bb)) >= 1 {
+		Must(Watcher(bb, p, WatchFile(bb)...))
+		return
 	}
 }
