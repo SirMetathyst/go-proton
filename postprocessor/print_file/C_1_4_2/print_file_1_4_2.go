@@ -2,6 +2,8 @@ package postprocessor
 
 import (
 	"fmt"
+
+	entitas "github.com/SirMetathyst/go-entitas"
 )
 
 // file ...
@@ -10,10 +12,9 @@ type file interface {
 }
 
 // PrintFilePostProcessor_C_1_4_2 ...
-func PrintFilePostProcessor_C_1_4_2(v []interface{}) ([]interface{}, error) {
-	for _, cv := range v {
-		f := cv.(file)
+func PrintFilePostProcessor_C_1_4_2(fi []entitas.FI) ([]entitas.FI, error) {
+	for _, f := range fi {
 		fmt.Println(f.File())
 	}
-	return v, nil
+	return fi, nil
 }

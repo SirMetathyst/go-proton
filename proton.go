@@ -2,6 +2,8 @@ package proton
 
 import (
 	"fmt"
+
+	entitas "github.com/SirMetathyst/go-entitas"
 )
 
 var (
@@ -98,14 +100,14 @@ func EnablePostProcessor(postProcessorVersion string, enabled bool) {
 }
 
 // RunGenerator ...
-func (p *P) RunGenerator(v interface{}) ([]interface{}, error) {
-	if v == nil {
+func (p *P) RunGenerator(md *entitas.MD) ([]entitas.FI, error) {
+	if md == nil {
 		return nil, ErrProtonModelUndefined
 	}
-	r := make([]interface{}, 0)
+	r := make([]entitas.FI, 0)
 	for _, generatorInfo := range p.generatorInfo {
 		if generatorInfo.Enabled {
-			gv, err := generatorInfo.Generator(v)
+			gv, err := generatorInfo.Generator(md)
 			if err != nil {
 				return nil, err
 			}
@@ -116,16 +118,16 @@ func (p *P) RunGenerator(v interface{}) ([]interface{}, error) {
 }
 
 // RunGenerator ...
-func RunGenerator(md interface{}) ([]interface{}, error) {
+func RunGenerator(md *entitas.MD) ([]entitas.FI, error) {
 	return p.RunGenerator(md)
 }
 
 // RunPostProcessor ...
-func (p *P) RunPostProcessor(v []interface{}) ([]interface{}, error) {
-	if v == nil {
+func (p *P) RunPostProcessor(fi []entitas.FI) ([]entitas.FI, error) {
+	if fi == nil {
 		return nil, ErrProtonFileInfoUndefined
 	}
-	r := v
+	r := fi
 	for _, postProcessorInfo := range p.postProcessorInfo {
 		if postProcessorInfo.Enabled {
 			pv, err := postProcessorInfo.PostProcessor(r)
@@ -139,16 +141,16 @@ func (p *P) RunPostProcessor(v []interface{}) ([]interface{}, error) {
 }
 
 // RunPostProcessor ...
-func RunPostProcessor(v []interface{}) ([]interface{}, error) {
-	return p.RunPostProcessor(v)
+func RunPostProcessor(fi []entitas.FI) ([]entitas.FI, error) {
+	return p.RunPostProcessor(fi)
 }
 
 // Run ...
-func (p *P) Run(v interface{}) ([]interface{}, error) {
-	if v == nil {
+func (p *P) Run(md *entitas.MD) ([]entitas.FI, error) {
+	if md == nil {
 		return nil, ErrProtonModelUndefined
 	}
-	gv, err := p.RunGenerator(v)
+	gv, err := p.RunGenerator(md)
 	if err != nil {
 		return nil, err
 	}
@@ -160,6 +162,6 @@ func (p *P) Run(v interface{}) ([]interface{}, error) {
 }
 
 // Run ...
-func Run(v interface{}) ([]interface{}, error) {
-	return p.Run(v)
+func Run(md *entitas.MD) ([]entitas.FI, error) {
+	return p.Run(md)
 }

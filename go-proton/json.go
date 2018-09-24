@@ -91,58 +91,6 @@ func getCleanupMode(m string) entitas.CleanupMode {
 	return entitas.NoCleanup
 }
 
-// componentID ...
-func componentID(c string, cp jsonComponent) string {
-	var eventTypeSuffix = ""
-	if getEventType(cp.EventType) == entitas.RemovedEvent {
-		eventTypeSuffix = "Removed"
-	}
-	var optionalContextID = ""
-	if len(cp.Contexts) > 1 {
-		optionalContextID = c
-	}
-	componentID := optionalContextID + entitas.String(cp.ID).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener"
-	return componentID
-}
-
-func createEventComponent(mdb *builder.MDB, defaultContext string, cp jsonComponent) error {
-	g := func(c string, cp jsonComponent) error {
-		cpb := mdb.NewComponent()
-		cpb.SetID(componentID(c, cp) + "Component")
-		cpb.AddContext(c)
-
-		err := cpb.NewMember().
-			SetID("value").
-			SetValue("System.Collections.Generic.List<I" + componentID(c, cp) + ">").
-			Build()
-
-		if err != nil {
-			return err
-		}
-		err = cpb.Build()
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if len(cp.Contexts) > 0 {
-		for _, c := range cp.Contexts {
-			err := g(c, cp)
-			if err != nil {
-				return err
-			}
-		}
-	} else {
-		err := g(defaultContext, cp)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 // JSON ...
 func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 	jm := jsonModel{}
@@ -194,12 +142,6 @@ func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 		err := cpb.Build()
 		if err != nil {
 			return nil, err
-		}
-		if getEventTarget(cp.EventTarget) > 0 {
-			err = createEventComponent(mdb, jm.DefaultContext, cp)
-			if err != nil {
-				return nil, err
-			}
 		}
 	}
 

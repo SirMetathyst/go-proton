@@ -4,6 +4,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	entitas "github.com/SirMetathyst/go-entitas"
 )
 
 var (
@@ -17,12 +19,11 @@ type file interface {
 }
 
 // WriteToDiskPostProcessor_C_1_4_2 ...
-func WriteToDiskPostProcessor_C_1_4_2(v []interface{}) ([]interface{}, error) {
-	for _, cv := range v {
-		f := cv.(file)
+func WriteToDiskPostProcessor_C_1_4_2(fi []entitas.FI) ([]entitas.FI, error) {
+	for _, f := range fi {
 		WriteFile(WriteToDiskDirectory+"/"+f.File(), []byte(f.FileContent()))
 	}
-	return v, nil
+	return fi, nil
 }
 
 // CreateDirectory ...

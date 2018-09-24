@@ -17,28 +17,54 @@ public static class `)
 	b.WriteString(`ComponentsLookup 
 {
 `)
-	for i, ccp := range cp {
+
+	i := 0
+	ci := 0
+	for _, ccp := range cp {
 		b.WriteString("\tpublic const int ")
 		b.WriteString(ccp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 		b.WriteString(" = ")
 		b.WriteString(strconv.Itoa(i))
 		b.WriteString(";\n")
+		i++
+		ci++
+
+		if ccp.EventTarget() != entitas.NoTarget {
+			b.WriteString("\tpublic const int ")
+			b.WriteString(eventComponentID(c, ccp).String())
+			b.WriteString(" = ")
+			b.WriteString(strconv.Itoa(i))
+			b.WriteString(";\n")
+			i++
+			ci++
+		}
 	}
 	b.WriteString(`
     public const int TotalComponents = `)
-	b.WriteString(strconv.Itoa(len(cp)))
+	b.WriteString(strconv.Itoa(i))
 	b.WriteString(`;
 	
 	public static readonly string[] componentNames = 
     {
 `)
 
-	for i, ccp := range cp {
+	i = 0
+	for _, ccp := range cp {
 		b.WriteString("\t\t\"")
 		b.WriteString(ccp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 		b.WriteString("\"")
-		if i != len(cp)-1 {
+		if i != ci-1 {
 			b.WriteString(",\n")
+		}
+		i++
+		if ccp.EventTarget() != entitas.NoTarget {
+			b.WriteString("\t\t\"")
+			b.WriteString(eventComponentID(c, ccp).String())
+			b.WriteString("\"")
+			if i != ci-1 {
+				b.WriteString(",\n")
+			}
+			i++
 		}
 	}
 
@@ -49,12 +75,24 @@ public static class `)
     {
 `)
 
-	for i, ccp := range cp {
+	i = 0
+	for _, ccp := range cp {
 		b.WriteString("\t\ttypeof(")
 		b.WriteString(ccp.ID().WithComponentSuffix().ToUpperFirst().String())
 		b.WriteRune(')')
-		if i != len(cp)-1 {
+		if i != ci-1 {
 			b.WriteString(",\n")
+		}
+		i++
+
+		if ccp.EventTarget() != entitas.NoTarget {
+			b.WriteString("\t\ttypeof(")
+			b.WriteString(eventComponentID(c, ccp).WithComponentSuffix().String())
+			b.WriteRune(')')
+			if i != ci-1 {
+				b.WriteString(",\n")
+			}
+			i++
 		}
 	}
 

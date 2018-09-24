@@ -1,20 +1,31 @@
-<%: func ComponentMatcher_C_1_4_2(c *entitas.C, cp *entitas.CP, b *bytes.Buffer) string %>
+<%: func ComponentMatcher_C_1_4_2(c *entitas.C, cp *entitas.CP, isEventComponent bool, b *bytes.Buffer) string %>
+<%
+
+ID := entitas.String("")
+
+if isEventComponent {
+    ID = eventComponentID(c, cp)
+} else {
+    ID = cp.ID()
+}
+
+%>
 public sealed partial class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Matcher
 {
-    static Entitas.IMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> _matcher<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>;
+    static Entitas.IMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> _matcher<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>;
 
-    public static Entitas.IMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity><% b.WriteRune(' ')%><%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%> 
+    public static Entitas.IMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity><% b.WriteRune(' ')%><%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%> 
     {
         get 
         {
-            if (_matcher<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%> == null) 
+            if (_matcher<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%> == null) 
             {
-                var matcher = (Entitas.Matcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>)Entitas.Matcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>.AllOf(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>);
+                var matcher = (Entitas.Matcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>)Entitas.Matcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>.AllOf(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>);
                 matcher.componentNames = <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.componentNames;
-                _matcher<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%> = matcher;
+                _matcher<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%> = matcher;
             }
 
-            return _matcher<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>;
+            return _matcher<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>;
         }
     }
 }

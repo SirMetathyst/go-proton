@@ -1,0 +1,6 @@
+<%: func EventComponent_E_1_4_2(cp *entitas.CP, b *bytes.Buffer) string %>
+public sealed partial class <%==s cp.ID().WithoutComponentSuffix().String()%>ListenerComponent : Entitas.IComponent 
+{
+    public System.Collections.Generic.List<I<%==s cp.ID().WithoutComponentSuffix().String()%>Listener> value;
+}
+<% return b.String() %>

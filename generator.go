@@ -1,7 +1,11 @@
 package proton
 
+import (
+	"github.com/SirMetathyst/go-entitas"
+)
+
 // G ...
-type G func(interface{}) ([]interface{}, error)
+type G func(md *entitas.MD) ([]entitas.FI, error)
 
 // GI ...
 type GI struct {

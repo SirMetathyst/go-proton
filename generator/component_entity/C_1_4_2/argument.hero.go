@@ -9,15 +9,24 @@ import (
 	entitas "github.com/SirMetathyst/go-entitas"
 )
 
-func ComponentEntityArgument_C_1_4_2(cp *entitas.CP, b *bytes.Buffer) string {
-	ms := cp.MemberList()
-	for i, m := range ms {
-		b.WriteString(m.Value().String())
+func ComponentEntityArgument_C_1_4_2(cp *entitas.CP, isEventComponent bool, b *bytes.Buffer) string {
+
+	if isEventComponent {
+		b.WriteString("System.Collections.Generic.List<I")
+		b.WriteString(cp.ID().ToUpperFirst().String())
+		b.WriteString("Listener>")
 		b.WriteRune(' ')
-		b.WriteString("new")
-		b.WriteString(m.ID().ToUpperFirst().String())
-		if i != len(ms)-1 {
-			b.WriteString(", ")
+		b.WriteString("newValue")
+	} else {
+		ms := cp.MemberList()
+		for i, m := range ms {
+			b.WriteString(m.Value().String())
+			b.WriteRune(' ')
+			b.WriteString("new")
+			b.WriteString(m.ID().ToUpperFirst().String())
+			if i != len(ms)-1 {
+				b.WriteString(", ")
+			}
 		}
 	}
 

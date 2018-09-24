@@ -9,7 +9,16 @@ import (
 	entitas "github.com/SirMetathyst/go-entitas"
 )
 
-func ComponentMatcher_C_1_4_2(c *entitas.C, cp *entitas.CP, b *bytes.Buffer) string {
+func ComponentMatcher_C_1_4_2(c *entitas.C, cp *entitas.CP, isEventComponent bool, b *bytes.Buffer) string {
+
+	ID := entitas.String("")
+
+	if isEventComponent {
+		ID = eventComponentID(c, cp)
+	} else {
+		ID = cp.ID()
+	}
+
 	b.WriteString(`
 public sealed partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
@@ -18,20 +27,20 @@ public sealed partial class `)
     static Entitas.IMatcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity> _matcher`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`;
 
     public static Entitas.IMatcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity>`)
 	b.WriteRune(' ')
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(` 
     {
         get 
         {
             if (_matcher`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(` == null) 
             {
                 var matcher = (Entitas.Matcher<`)
@@ -41,18 +50,18 @@ public sealed partial class `)
 	b.WriteString(`Entity>.AllOf(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`);
                 matcher.componentNames = `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.componentNames;
                 _matcher`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(` = matcher;
             }
 
             return _matcher`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`;
         }
     }

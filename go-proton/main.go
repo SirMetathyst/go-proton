@@ -7,7 +7,6 @@ import (
 	"syscall"
 
 	"github.com/SirMetathyst/go-blackboard"
-	entitas "github.com/SirMetathyst/go-entitas"
 	"github.com/SirMetathyst/go-proton"
 
 	. "github.com/SirMetathyst/go-proton/generator/component/E_1_4_2"
@@ -46,49 +45,30 @@ func Must(err error) {
 	}
 }
 
-// EG ...
-type EG func(md *entitas.MD) ([]entitas.FI, error)
-
-// Middleware ...
-func Middleware(eg EG) proton.G {
-	return func(v interface{}) ([]interface{}, error) {
-		slice := make([]interface{}, 0)
-		md := v.(*entitas.MD)
-		r, err := eg(md)
-		if err != nil {
-			return nil, err
-		}
-		for _, cr := range r {
-			slice = append(slice, cr)
-		}
-		return slice, err
-	}
-}
-
 // SetupProton ...
 func SetupProton(p *proton.P) error {
 
 	/* Generator(s).*/
-	p.AddGenerator("CSharpComponentGenerator_E_1_4_2", Middleware(ComponentGenerator_E_1_4_2), true)
-	p.AddGenerator("CSharpComponentContextGenerator_C_1_4_2", Middleware(ComponentContextGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpComponentEntityGenerator_C_1_4_2", Middleware(ComponentEntityGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpComponentEntityInterfaceGenerator_C_1_4_2", Middleware(ComponentEntityInterfaceGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpComponentLookupGenerator_C_1_4_2", Middleware(ComponentLookupGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpComponentMatcherGenerator_C_1_4_2", Middleware(ComponentMatcherGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpContextGenerator_C_1_4_2", Middleware(ContextGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpContextAttributeGenerator_C_1_4_2", Middleware(ContextAttributeGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpContextMatcherGenerator_C_1_4_2", Middleware(ContextMatcherGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpContextMatcherGenerator_E_1_4_2", Middleware(ContextMatcherGenerator_E_1_4_2), false)
-	p.AddGenerator("CSharpContextsGenerator_C_1_4_2", Middleware(ContextsGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpContextObserverGenerator_C_1_4_2", Middleware(ContextObserverGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpEntityGenerator_C_1_4_2", Middleware(EntityGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpEntityIndexGenerator_C_1_4_2", Middleware(EntityIndexGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpFeatureGenerator_C_1_4_2", Middleware(FeatureGenerator_C_1_4_2), true)
-	p.AddGenerator("CSharpEventListenerComponentEntityGenerator_C_1_6_1", Middleware(EventListenerComponentEntityGenerator_C_1_6_1), true)
-	p.AddGenerator("CSharpEventListenerInterfaceGenerator_C_1_6_1", Middleware(EventListenerInterfaceGenerator_C_1_6_1), true)
-	p.AddGenerator("CSharpEventSystemGenerator_C_1_6_1", Middleware(EventSystemGenerator_C_1_6_1), true)
-	p.AddGenerator("CSharpEventSystemsGenerator_C_1_6_1", Middleware(EventSystemsGenerator_C_1_6_1), true)
-	p.AddGenerator("CSharpCompositeSystemGenerator_C_1_6_1", Middleware(CompositeSystemGenerator_C_1_4_2), true)
+	p.AddGenerator("CSharpComponentGenerator_E_1_4_2", ComponentGenerator_E_1_4_2, true)
+	p.AddGenerator("CSharpComponentContextGenerator_C_1_4_2", ComponentContextGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpComponentEntityGenerator_C_1_4_2", ComponentEntityGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpComponentEntityInterfaceGenerator_C_1_4_2", ComponentEntityInterfaceGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpComponentLookupGenerator_C_1_4_2", ComponentLookupGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpComponentMatcherGenerator_C_1_4_2", ComponentMatcherGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpContextGenerator_C_1_4_2", ContextGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpContextAttributeGenerator_C_1_4_2", ContextAttributeGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpContextMatcherGenerator_C_1_4_2", ContextMatcherGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpContextMatcherGenerator_E_1_4_2", ContextMatcherGenerator_E_1_4_2, false)
+	p.AddGenerator("CSharpContextsGenerator_C_1_4_2", ContextsGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpContextObserverGenerator_C_1_4_2", ContextObserverGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpEntityGenerator_C_1_4_2", EntityGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpEntityIndexGenerator_C_1_4_2", EntityIndexGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpFeatureGenerator_C_1_4_2", FeatureGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpEventListenerComponentEntityGenerator_C_1_6_1", EventListenerComponentEntityGenerator_C_1_6_1, true)
+	p.AddGenerator("CSharpEventListenerInterfaceGenerator_C_1_6_1", EventListenerInterfaceGenerator_C_1_6_1, true)
+	p.AddGenerator("CSharpEventSystemGenerator_C_1_6_1", EventSystemGenerator_C_1_6_1, true)
+	p.AddGenerator("CSharpEventSystemsGenerator_C_1_6_1", EventSystemsGenerator_C_1_6_1, true)
+	p.AddGenerator("CSharpCompositeSystemGenerator_C_1_6_1", CompositeSystemGenerator_C_1_4_2, true)
 
 	/* PostProcessor(s). */
 	p.AddPostProcessor("MergeContentPostProcessor_C_1_4_2", MergeContentPostProcessor_C_1_4_2, true)

@@ -1,13 +1,14 @@
 package postprocessor
 
-// MergeContentPostProcessor_C_1_4_2 ...
-func MergeContentPostProcessor_C_1_4_2(v []interface{}) ([]interface{}, error) {
-	fl := make(map[string][]fI)
-	inl := make([]fI, 0)
+import entitas "github.com/SirMetathyst/go-entitas"
 
-	for _, cv := range v {
-		f := cv.(fII)
-		fl[f.File()] = append(fl[f.File()], newFileInfo(f.File(), f.FileContent(), f.Generator()))
+// MergeContentPostProcessor_C_1_4_2 ...
+func MergeContentPostProcessor_C_1_4_2(fi []entitas.FI) ([]entitas.FI, error) {
+	fl := make(map[string][]entitas.FI)
+	inl := make([]entitas.FI, 0)
+
+	for _, f := range fi {
+		fl[f.File()] = append(fl[f.File()], entitas.NewFileInfo(f.File(), f.FileContent(), f.Generator()))
 	}
 
 	for k, v := range fl {
@@ -24,13 +25,8 @@ func MergeContentPostProcessor_C_1_4_2(v []interface{}) ([]interface{}, error) {
 			}
 		}
 
-		inl = append(inl, newFileInfo(file, fileContent, generator))
+		inl = append(inl, entitas.NewFileInfo(file, fileContent, generator))
 	}
 
-	outl := make([]interface{}, 0)
-	for _, f := range inl {
-		outl = append(outl, f)
-	}
-
-	return outl, nil
+	return inl, nil
 }

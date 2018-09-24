@@ -9,32 +9,41 @@ import (
 	entitas "github.com/SirMetathyst/go-entitas"
 )
 
-func ComponentEntity_C_1_4_2(c *entitas.C, cp *entitas.CP, b *bytes.Buffer) string {
+func ComponentEntity_C_1_4_2(c *entitas.C, cp *entitas.CP, isEventComponent bool, b *bytes.Buffer) string {
+
+	ID := entitas.String("")
+
+	if isEventComponent {
+		ID = eventComponentID(c, cp)
+	} else {
+		ID = cp.ID()
+	}
+
 	b.WriteString(`
 public partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity
 {
     public `)
-	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithComponentSuffix().ToUpperFirst().String())
 	b.WriteRune(' ')
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToLowerFirst().String())
 	b.WriteString(` 
     { 
         get 
         { 
             return (`)
-	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`)GetComponent(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`); 
         } 
     }
 
     public bool has`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(` 
     { 
         get 
@@ -42,59 +51,59 @@ public partial class `)
             return HasComponent(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`); 
         } 
     }
 
     public void Add`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
-	ComponentEntityArgument_C_1_4_2(cp, b)
+	ComponentEntityArgument_C_1_4_2(cp, isEventComponent, b)
 	b.WriteString(`) 
     {
         var index = `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`;
         var component = CreateComponent<`)
-	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`>(index);
 `)
-	ComponentEntityAssignment_C_1_4_2(cp, b)
+	ComponentEntityAssignment_C_1_4_2(cp, isEventComponent, b)
 	b.WriteString(`
         AddComponent(index, component);
     }
 
     public void Replace`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
-	ComponentEntityArgument_C_1_4_2(cp, b)
+	ComponentEntityArgument_C_1_4_2(cp, isEventComponent, b)
 	b.WriteString(`)
     {
         var index = `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`;
         var component = CreateComponent<`)
-	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`>(index);
 `)
-	ComponentEntityAssignment_C_1_4_2(cp, b)
+	ComponentEntityAssignment_C_1_4_2(cp, isEventComponent, b)
 	b.WriteString(`
         ReplaceComponent(index, component);
     }
 
     public void Remove`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`()
     {
         RemoveComponent(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`);
     }
 }

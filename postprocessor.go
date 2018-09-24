@@ -1,7 +1,9 @@
 package proton
 
+import entitas "github.com/SirMetathyst/go-entitas"
+
 // PP ...
-type PP func([]interface{}) ([]interface{}, error)
+type PP func([]entitas.FI) ([]entitas.FI, error)
 
 // PPI ...
 type PPI struct {
