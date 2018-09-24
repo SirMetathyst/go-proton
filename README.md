@@ -67,7 +67,7 @@ index BlankEntityIndex(primary) in Core {
 ```
 When Proton-Lang parses an include statement that file will then be immediately parsed before moving onto the rest of the file.
 
-You can prepend your ```${PWD}``` to your include statement to get the absolute file path of the current file.
+You can prepend ```${PWD}``` to your include statement to get the absolute file path of the current file.
 
 ```
 // In my_alias/all_alias.proton
