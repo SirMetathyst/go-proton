@@ -1,13 +1,17 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 
 	"github.com/SirMetathyst/go-blackboard"
+	entitas "github.com/SirMetathyst/go-entitas"
 	"github.com/SirMetathyst/go-proton"
+	protonlang "github.com/SirMetathyst/go-proton-lang"
 
 	. "github.com/SirMetathyst/go-proton/generator/component/E_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/component_context/C_1_4_2"
@@ -17,7 +21,6 @@ import (
 	. "github.com/SirMetathyst/go-proton/generator/component_matcher/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/composite_system/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/context/C_1_4_2"
-	. "github.com/SirMetathyst/go-proton/generator/context_attribute/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/context_matcher/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/context_matcher/E_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/context_observer/C_1_4_2"
@@ -56,7 +59,6 @@ func SetupProton(p *proton.P) error {
 	p.AddGenerator("CSharpComponentLookupGenerator_C_1_4_2", ComponentLookupGenerator_C_1_4_2, true)
 	p.AddGenerator("CSharpComponentMatcherGenerator_C_1_4_2", ComponentMatcherGenerator_C_1_4_2, true)
 	p.AddGenerator("CSharpContextGenerator_C_1_4_2", ContextGenerator_C_1_4_2, true)
-	p.AddGenerator("CSharpContextAttributeGenerator_C_1_4_2", ContextAttributeGenerator_C_1_4_2, true)
 	p.AddGenerator("CSharpContextMatcherGenerator_C_1_4_2", ContextMatcherGenerator_C_1_4_2, true)
 	p.AddGenerator("CSharpContextMatcherGenerator_E_1_4_2", ContextMatcherGenerator_E_1_4_2, false)
 	p.AddGenerator("CSharpContextsGenerator_C_1_4_2", ContextsGenerator_C_1_4_2, true)
@@ -109,15 +111,21 @@ func Setup(bb *blackboard.BB, p *proton.P) error {
 
 // Run ...
 func Run(bb *blackboard.BB, p *proton.P) error {
-	md, err := ModelFallback(func(err error) {
-		log.Printf("Proton: %s", err)
-	}, ProtonLang, JSON)(bb)
+	providers := make(map[string]func(string) (*entitas.MD, error))
+	providers[".json"] = JSON
+	providers[".proton"] = protonlang.Parse
 
-	if err != nil {
+	f := filepath.Ext(File(bb))
+	if tp, ok := providers[f]; ok {
+		md, err := tp(File(bb))
+		if err != nil {
+			return err
+		}
+		_, err = p.Run(md)
 		return err
 	}
-	_, err = p.Run(md)
-	return err
+
+	return errors.New("No provider for " + File(bb))
 }
 
 // Watcher ...

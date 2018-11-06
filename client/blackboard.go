@@ -11,7 +11,7 @@ const (
 
 // SetupBlackboard ...
 func SetupBlackboard(bb *blackboard.BB) error {
-	SetFile(bb, "proton")
+	SetFile(bb, "proton.proton")
 	SetOutputDirectory(bb, "Generated")
 	SetWatchFile(bb, []string{})
 	SetWatchFileEnable(bb, false)

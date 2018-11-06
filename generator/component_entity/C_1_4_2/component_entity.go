@@ -19,6 +19,15 @@ func eventComponentID(c *entitas.C, cp *entitas.CP) entitas.String {
 	return entitas.String(optionalContextID + entitas.String(cp.ID()).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener")
 }
 
+// eventComponentInterfaceID ...
+func eventComponentInterfaceID(cp *entitas.CP) entitas.String {
+	var eventTypeSuffix = ""
+	if cp.EventType() == entitas.RemovedEvent {
+		eventTypeSuffix = "Removed"
+	}
+	return entitas.String(entitas.String(cp.ID()).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener")
+}
+
 // ComponentEntityGenerator_C_1_4_2 ...
 func ComponentEntityGenerator_C_1_4_2(m *entitas.MD) ([]entitas.FI, error) {
 	slice := make([]entitas.FI, 0)

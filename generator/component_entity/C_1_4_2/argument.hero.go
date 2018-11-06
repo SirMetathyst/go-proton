@@ -13,9 +13,8 @@ func ComponentEntityArgument_C_1_4_2(cp *entitas.CP, isEventComponent bool, b *b
 
 	if isEventComponent {
 		b.WriteString("System.Collections.Generic.List<I")
-		b.WriteString(cp.ID().ToUpperFirst().String())
-		b.WriteString("Listener>")
-		b.WriteRune(' ')
+		b.WriteString(eventComponentInterfaceID(cp).ToUpperFirst().String())
+		b.WriteString("> ")
 		b.WriteString("newValue")
 	} else {
 		ms := cp.MemberList()

@@ -12,12 +12,12 @@ import (
 func EventComponent_E_1_4_2(cp *entitas.CP, b *bytes.Buffer) string {
 	b.WriteString(`
 public sealed partial class `)
-	b.WriteString(cp.ID().WithoutComponentSuffix().String())
-	b.WriteString(`ListenerComponent : Entitas.IComponent 
+	b.WriteString(eventComponentID(cp).WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`Component : Entitas.IComponent 
 {
     public System.Collections.Generic.List<I`)
-	b.WriteString(cp.ID().WithoutComponentSuffix().String())
-	b.WriteString(`Listener> value;
+	b.WriteString(eventComponentID(cp).WithoutComponentSuffix().ToUpperFirst().String())
+	b.WriteString(`> value;
 }
 `)
 	return b.String()

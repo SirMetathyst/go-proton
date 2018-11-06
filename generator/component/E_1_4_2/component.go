@@ -7,16 +7,12 @@ import (
 )
 
 // eventComponentID ...
-func eventComponentID(c *entitas.C, cp *entitas.CP) entitas.String {
+func eventComponentID(cp *entitas.CP) entitas.String {
 	var eventTypeSuffix = ""
 	if cp.EventType() == entitas.RemovedEvent {
 		eventTypeSuffix = "Removed"
 	}
-	var optionalContextID = ""
-	if len(cp.ContextList()) > 1 {
-		optionalContextID = c.ID().String()
-	}
-	return entitas.String(optionalContextID + entitas.String(cp.ID()).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener")
+	return entitas.String(entitas.String(cp.ID()).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener")
 }
 
 // ComponentGenerator_E_1_4_2 ...

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/SirMetathyst/go-blackboard"
 	"github.com/SirMetathyst/go-entitas"
 	"github.com/SirMetathyst/go-entitas/builder"
 )
@@ -92,19 +91,18 @@ func getCleanupMode(m string) entitas.CleanupMode {
 }
 
 // JSON ...
-func JSON(bb *blackboard.BB) (*entitas.MD, error) {
+func JSON(file string) (*entitas.MD, error) {
 	jm := jsonModel{}
-
-	raw, _ := ioutil.ReadFile(suffix(File(bb), ".json"))
-
-	err := json.Unmarshal(raw, &jm)
+	raw, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
-
+	err = json.Unmarshal(raw, &jm)
+	if err != nil {
+		return nil, err
+	}
 	mdb := builder.NewModelBuilder()
 	mdb.SetNamespace(jm.Namespace)
-
 	for _, c := range jm.Contexts {
 		err = mdb.NewContext().
 			SetID(c.ID).
@@ -114,9 +112,7 @@ func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 			return nil, err
 		}
 	}
-
 	mdb.SetDefaultContext(jm.DefaultContext)
-
 	for _, cp := range jm.Components {
 		cpb := mdb.NewComponent().
 			SetID(cp.ID).
@@ -144,7 +140,6 @@ func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 			return nil, err
 		}
 	}
-
 	for _, ei := range jm.EntityIndex {
 		eib := mdb.NewEntityIndex().
 			SetID(ei.ID).
@@ -176,11 +171,9 @@ func JSON(bb *blackboard.BB) (*entitas.MD, error) {
 			return nil, err
 		}
 	}
-
 	md, err := mdb.Build()
 	if err != nil {
 		return nil, err
 	}
-
 	return md, nil
 }

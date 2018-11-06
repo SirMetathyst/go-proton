@@ -12,7 +12,7 @@ import (
 func Component_E_1_4_2(cp *entitas.CP, b *bytes.Buffer) string {
 	b.WriteString(`
 public sealed partial class `)
-	b.WriteString(cp.ID().WithComponentSuffix().String())
+	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
 	b.WriteString(` : Entitas.IComponent 
 {
 `)
