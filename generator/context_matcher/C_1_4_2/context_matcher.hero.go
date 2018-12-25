@@ -17,43 +17,28 @@ public sealed partial class `)
 {
     public static Entitas.IAllOfMatcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> AllOf(params int[] indices) 
-    {
-          return Entitas.Matcher<`)
+	b.WriteString(`Entity> AllOf(params int[] Index) => Entitas.Matcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity>.AllOf(indices);
-    }
-
+	b.WriteString(`Entity>.AllOf(Index);
     public static Entitas.IAllOfMatcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity> AllOf(params Entitas.IMatcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity>[] matchers)
-    {
-          return Entitas.Matcher<`)
+	b.WriteString(`Entity>[] Matcher) => Entitas.Matcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity>.AllOf(matchers);
-    }
-
+	b.WriteString(`Entity>.AllOf(Matcher);
     public static Entitas.IAnyOfMatcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> AnyOf(params int[] indices)
-    {
-          return Entitas.Matcher<`)
+	b.WriteString(`Entity> AnyOf(params int[] Index) => Entitas.Matcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity>.AnyOf(indices);
-    }
-
+	b.WriteString(`Entity>.AnyOf(Index);
     public static Entitas.IAnyOfMatcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity> AnyOf(params Entitas.IMatcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity>[] matchers)
-    {
-          return Entitas.Matcher<`)
+	b.WriteString(`Entity>[] Matcher) => Entitas.Matcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity>.AnyOf(matchers);
-    }
+	b.WriteString(`Entity>.AnyOf(Matcher);
 }
 `)
 	return b.String()

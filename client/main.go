@@ -23,7 +23,6 @@ import (
 	. "github.com/SirMetathyst/go-proton/generator/context/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/context/C_1_9_0"
 	. "github.com/SirMetathyst/go-proton/generator/context_matcher/C_1_4_2"
-	. "github.com/SirMetathyst/go-proton/generator/context_matcher/E_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/context_observer/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/contexts/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/entity/C_1_4_2"
@@ -62,7 +61,6 @@ func SetupProton(p *proton.P) error {
 	p.AddGenerator("CSharpContextGenerator_C_1_4_2", ContextGenerator_C_1_4_2, false)
 	p.AddGenerator("CSharpContextGenerator_C_1_9_0", ContextGenerator_C_1_9_0, true)
 	p.AddGenerator("CSharpContextMatcherGenerator_C_1_4_2", ContextMatcherGenerator_C_1_4_2, true)
-	p.AddGenerator("CSharpContextMatcherGenerator_E_1_4_2", ContextMatcherGenerator_E_1_4_2, false)
 	p.AddGenerator("CSharpContextsGenerator_C_1_4_2", ContextsGenerator_C_1_4_2, true)
 	p.AddGenerator("CSharpContextObserverGenerator_C_1_4_2", ContextObserverGenerator_C_1_4_2, true)
 	p.AddGenerator("CSharpEntityGenerator_C_1_4_2", EntityGenerator_C_1_4_2, true)
