@@ -11,20 +11,16 @@ import (
 
 func EntityIndexGetCustomIndices_C_1_4_2(ei []*entitas.EI, b *bytes.Buffer) string {
 	for _, cei := range ei {
-
 		IndexType := cei.ID().String()
-
 		ReturnType := ""
 		if !cei.IsPrimary() {
 			ReturnType = "System.Collections.Generic.HashSet<" + cei.Context().ID().WithoutContextSuffix().ToUpperFirst().String() + "Entity>"
 		} else {
 			ReturnType = cei.Context().ID().WithoutContextSuffix().ToUpperFirst().String() + "Entity"
 		}
-
 		for _, eim := range cei.EntityIndexMethodList() {
-
 			b.WriteString(`
-public static `)
+    public static `)
 			b.WriteString(ReturnType)
 			b.WriteRune(' ')
 			b.WriteString(eim.ID().String())
@@ -32,9 +28,7 @@ public static `)
 			b.WriteString(cei.Context().ID().WithContextSuffix().ToUpperFirst().String())
 			b.WriteString(` context, `)
 			EntityIndexArgument_C_1_4_2(eim, b)
-			b.WriteString(`) 
-{
-    return ((`)
+			b.WriteString(`) => ((`)
 			b.WriteString(IndexType)
 			b.WriteString(`)(context.GetEntityIndex(Contexts.`)
 			b.WriteString(IndexType)
@@ -42,10 +36,7 @@ public static `)
 			b.WriteString(eim.ID().String())
 			b.WriteString(`(`)
 			EntityIndexArgumentPass_C_1_4_2(eim, b)
-			b.WriteString(`);
-}
-
-`)
+			b.WriteString(`);`)
 		}
 	}
 	return b.String()

@@ -13,7 +13,9 @@ func ContextObserver_C_1_4_2(c []*entitas.C, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class Contexts 
 {
+
 #if (!ENTITAS_DISABLE_VISUAL_DEBUGGING && UNITY_EDITOR)
+
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeContexObservers() 
     {
@@ -41,7 +43,9 @@ public partial class Contexts
             UnityEngine.Object.DontDestroyOnLoad(observer.gameObject);
         }
     }
+
 #endif
+
 }
 `)
 	return b.String()

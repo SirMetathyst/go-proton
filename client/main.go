@@ -21,6 +21,7 @@ import (
 	. "github.com/SirMetathyst/go-proton/generator/component_matcher/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/composite_system/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/context/C_1_4_2"
+	. "github.com/SirMetathyst/go-proton/generator/context/C_1_9_0"
 	. "github.com/SirMetathyst/go-proton/generator/context_matcher/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/context_matcher/E_1_4_2"
 	. "github.com/SirMetathyst/go-proton/generator/context_observer/C_1_4_2"
@@ -58,7 +59,8 @@ func SetupProton(p *proton.P) error {
 	p.AddGenerator("CSharpComponentEntityInterfaceGenerator_C_1_4_2", ComponentEntityInterfaceGenerator_C_1_4_2, true)
 	p.AddGenerator("CSharpComponentLookupGenerator_C_1_4_2", ComponentLookupGenerator_C_1_4_2, true)
 	p.AddGenerator("CSharpComponentMatcherGenerator_C_1_4_2", ComponentMatcherGenerator_C_1_4_2, true)
-	p.AddGenerator("CSharpContextGenerator_C_1_4_2", ContextGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpContextGenerator_C_1_4_2", ContextGenerator_C_1_4_2, false)
+	p.AddGenerator("CSharpContextGenerator_C_1_9_0", ContextGenerator_C_1_9_0, true)
 	p.AddGenerator("CSharpContextMatcherGenerator_C_1_4_2", ContextMatcherGenerator_C_1_4_2, true)
 	p.AddGenerator("CSharpContextMatcherGenerator_E_1_4_2", ContextMatcherGenerator_E_1_4_2, false)
 	p.AddGenerator("CSharpContextsGenerator_C_1_4_2", ContextsGenerator_C_1_4_2, true)
@@ -70,7 +72,7 @@ func SetupProton(p *proton.P) error {
 	p.AddGenerator("CSharpEventListenerInterfaceGenerator_C_1_6_1", EventListenerInterfaceGenerator_C_1_6_1, true)
 	p.AddGenerator("CSharpEventSystemGenerator_C_1_6_1", EventSystemGenerator_C_1_6_1, true)
 	p.AddGenerator("CSharpEventSystemsGenerator_C_1_6_1", EventSystemsGenerator_C_1_6_1, true)
-	p.AddGenerator("CSharpCompositeSystemGenerator_C_1_6_1", CompositeSystemGenerator_C_1_4_2, true)
+	p.AddGenerator("CSharpCompositeSystemGenerator_C_1_6_1", CompositeSystemGenerator_C_1_4_2, false)
 
 	/* PostProcessor(s). */
 	p.AddPostProcessor("MergeContentPostProcessor_C_1_4_2", MergeContentPostProcessor_C_1_4_2, true)

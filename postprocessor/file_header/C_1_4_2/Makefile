@@ -1,2 +1,2 @@
 generate:
-	hero.exe -extensions=.hero -pkgname=generator
+	hero.exe -extensions=.hero -pkgname=postprocessor

@@ -13,7 +13,7 @@ import (
 
 func EventSystems_C_1_6_1(c *entitas.C, cp []*entitas.CP, b *bytes.Buffer) string {
 	b.WriteString(`
-public sealed class `)
+public sealed partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`EventSystems : Feature
 {
@@ -24,13 +24,17 @@ public sealed class `)
 `)
 
 	sort.Sort(byPriority(cp))
+	cpc := 0
 	for _, ccp := range cp {
 		b.WriteString("\t\tAdd(new ")
 		b.WriteString(componentID(c, ccp).ToUpperFirst().String())
 		b.WriteString("EventSystem(contexts));")
 		b.WriteString(" // priority: ")
 		b.WriteString(strconv.Itoa(ccp.EventPriority()))
-		b.WriteRune('\n')
+		if cpc != len(cp)-1 {
+			b.WriteRune('\n')
+		}
+		cpc++
 	}
 
 	b.WriteString(`

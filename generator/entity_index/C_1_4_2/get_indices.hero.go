@@ -14,7 +14,6 @@ func EntityIndexGetIndices_C_1_4_2(cp []*entitas.CP, b *bytes.Buffer) string {
 		for _, c := range ccp.ContextList() {
 			for _, m := range ccp.MemberList() {
 				if m.EntityIndex() > 0 {
-
 					ID := ccp.ID().WithoutComponentSuffix().ToUpperFirst().String()
 					Type := m.Value().String()
 					MemberName := m.ID().ToLowerFirst().String()
@@ -43,9 +42,7 @@ func EntityIndexGetIndices_C_1_4_2(cp []*entitas.CP, b *bytes.Buffer) string {
 						b.WriteString(Type)
 						b.WriteRune(' ')
 						b.WriteString(MemberName)
-						b.WriteString(`)
-    {
-        return ((`)
+						b.WriteString(`) => ((`)
 						b.WriteString(IndexType)
 						b.WriteString(`<`)
 						b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
@@ -55,8 +52,7 @@ func EntityIndexGetIndices_C_1_4_2(cp []*entitas.CP, b *bytes.Buffer) string {
 						b.WriteString(IndexName)
 						b.WriteString(`)).GetEntity(`)
 						b.WriteString(MemberName)
-						b.WriteString(`); 
-    }`)
+						b.WriteString(`);`)
 						b.WriteRune('\n')
 
 					} else if m.EntityIndex() > 1 {
@@ -71,9 +67,7 @@ func EntityIndexGetIndices_C_1_4_2(cp []*entitas.CP, b *bytes.Buffer) string {
 						b.WriteString(Type)
 						b.WriteRune(' ')
 						b.WriteString(MemberName)
-						b.WriteString(`)
-    {
-        return ((`)
+						b.WriteString(`) => ((`)
 						b.WriteString(IndexType)
 						b.WriteString(`<`)
 						b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
@@ -83,8 +77,7 @@ func EntityIndexGetIndices_C_1_4_2(cp []*entitas.CP, b *bytes.Buffer) string {
 						b.WriteString(IndexName)
 						b.WriteString(`)).GetEntities(`)
 						b.WriteString(MemberName)
-						b.WriteString(`); 
-    }`)
+						b.WriteString(`);`)
 					}
 				}
 			}

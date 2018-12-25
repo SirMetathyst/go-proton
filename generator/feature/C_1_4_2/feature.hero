@@ -3,10 +3,8 @@
 
 public class Feature : Entitas.VisualDebugging.Unity.DebugSystems 
 {
-    public Feature(string name) : base(name) 
-    {
-    }
-
+    public Feature(string name) : base(name) { }
+    
     public Feature() : base(true) 
     {
         var typeName = DesperateDevs.Utils.SerializationTypeExtension.ToCompilableString(GetType());
@@ -20,14 +18,12 @@ public class Feature : Entitas.VisualDebugging.Unity.DebugSystems
 
 public class Feature : Entitas.Systems 
 {
-    System.Collections.Generic.List<string> _initializeSystemNames;
-    System.Collections.Generic.List<string> _executeSystemNames;
-    System.Collections.Generic.List<string> _cleanupSystemNames;
-    System.Collections.Generic.List<string> _tearDownSystemNames;
+    private System.Collections.Generic.List<string> _initializeSystemNames;
+    private System.Collections.Generic.List<string> _executeSystemNames;
+    private System.Collections.Generic.List<string> _cleanupSystemNames;
+    private System.Collections.Generic.List<string> _tearDownSystemNames;
     
-    public Feature(string name) : this() 
-    {
-    }
+    public Feature(string name) : this() { }
     
     public Feature() 
     {
@@ -104,13 +100,8 @@ public class Feature : Entitas.Systems
 
 public class Feature : Entitas.Systems 
 {
-    public Feature(string name) 
-    {
-    }
-
-    public Feature() 
-    {
-    }
+    public Feature(string name)  { }
+    public Feature() { }
 }
 
 #endif

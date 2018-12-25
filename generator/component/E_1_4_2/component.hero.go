@@ -16,15 +16,21 @@ public sealed partial class `)
 	b.WriteString(` : Entitas.IComponent 
 {
 `)
+
+	i := 0
 	for _, m := range cp.MemberList() {
 		b.WriteRune('\t')
-		b.WriteString(`public `)
+		b.WriteString("public ")
 		b.WriteString(m.Value().String())
 		b.WriteRune(' ')
 		b.WriteString(m.ID().String())
-		b.WriteString(`;`)
-		b.WriteRune('\n')
+		b.WriteRune(';')
+		if i != len(cp.MemberList())-1 {
+			b.WriteRune('\n')
+		}
+		i++
 	}
+
 	b.WriteString(`
 }
 `)
