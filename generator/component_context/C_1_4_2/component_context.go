@@ -9,12 +9,12 @@ import (
 // ComponentContextGenerator_1_4_2 ...
 func ComponentContextGenerator_C_1_4_2(md *entitas.MD) ([]entitas.FI, error) {
 	slice := make([]entitas.FI, 0)
-	for _, cp := range md.ComponentList() {
+	for _, cp := range md.ComponentSlice() {
 		if cp.IsUnique() {
-			for _, c := range cp.ContextList() {
+			for _, c := range cp.ContextSlice() {
 				b := new(bytes.Buffer)
 
-				if len(cp.MemberList()) == 0 {
+				if len(cp.MemberSlice()) == 0 {
 					ComponentContextFlag_C_1_4_2(c, cp, b)
 				} else {
 					ComponentContext_C_1_4_2(c, cp, b)

@@ -10,7 +10,7 @@ import (
 )
 
 func EntityIndexArgumentPass_C_1_4_2(eim *entitas.EIM, b *bytes.Buffer) string {
-	ml := eim.MemberList()
+	ml := eim.MemberSlice()
 	for i, m := range ml {
 		b.WriteString(m.ID().ToLowerFirst().String())
 		if i != len(ml)-1 {

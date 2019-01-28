@@ -10,7 +10,7 @@ import (
 )
 
 func ComponentContextArgumentPass_1_4_2(cp *entitas.CP, b *bytes.Buffer) string {
-	ms := cp.MemberList()
+	ms := cp.MemberSlice()
 	for i, m := range ms {
 		b.WriteString("new")
 		b.WriteString(m.ID().ToUpperFirst().String())

@@ -18,14 +18,14 @@ public sealed partial class `)
 `)
 
 	i := 0
-	for _, m := range cp.MemberList() {
+	for _, m := range cp.MemberSlice() {
 		b.WriteRune('\t')
 		b.WriteString("public ")
 		b.WriteString(m.Value().String())
 		b.WriteRune(' ')
 		b.WriteString(m.ID().String())
 		b.WriteRune(';')
-		if i != len(cp.MemberList())-1 {
+		if i != len(cp.MemberSlice())-1 {
 			b.WriteRune('\n')
 		}
 		i++

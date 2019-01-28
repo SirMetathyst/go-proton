@@ -9,7 +9,7 @@ func componentID(c *entitas.C, cp *entitas.CP) entitas.String {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
-	if len(cp.ContextList()) > 1 {
+	if len(cp.ContextSlice()) > 1 {
 		optionalContextID = c.ID().String()
 	}
 	componentID := optionalContextID + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener"
@@ -29,27 +29,27 @@ func methodID(cp *entitas.CP) entitas.String {
 // filter ...
 func filter(c *entitas.C, cp *entitas.CP) string {
 	filter := ""
-	if len(cp.MemberList()) == 0 {
-		switch cp.EventType() {
-		case entitas.AddedEvent:
-			filter = "entity." + cp.FlagPrefixOrDefault().String() + cp.ID().WithoutComponentSuffix().ToUpperFirst().String()
-			break
-		case entitas.RemovedEvent:
-			filter = "!entity." + cp.FlagPrefixOrDefault().String() + cp.ID().WithoutComponentSuffix().ToUpperFirst().String()
-			break
-		}
+	if len(cp.MemberSlice()) == 0 {
+		//switch cp.EventType() {
+		//case entitas.AddedEvent:
+		//	filter = "entity." + cp.FlagPrefixOrDefault().String() + cp.ID().WithoutComponentSuffix().ToUpperFirst().String()
+		//	break
+		//case entitas.RemovedEvent:
+		//	filter = "!entity." + cp.FlagPrefixOrDefault().String() + cp.ID().WithoutComponentSuffix().ToUpperFirst().String()
+		//	break
+		//}
 	} else {
 		switch cp.EventType() {
 		case entitas.AddedEvent:
-			filter = "entity.has" + cp.ID().WithoutComponentSuffix().ToUpperFirst().String()
+			filter = "entity.has" + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + " && "
 			break
 		case entitas.RemovedEvent:
-			filter = "!entity.has" + cp.ID().WithoutComponentSuffix().ToUpperFirst().String()
+			filter = "!entity.has" + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + " && "
 			break
 		}
 	}
 	if cp.EventTarget() == entitas.SelfTarget {
-		filter += " && entity.has" + componentID(c, cp).ToUpperFirst().String()
+		filter += "entity.has" + componentID(c, cp).ToUpperFirst().String()
 	}
 	return filter
 }

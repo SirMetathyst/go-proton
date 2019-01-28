@@ -13,7 +13,7 @@ func eventComponentID(c *entitas.C, cp *entitas.CP) entitas.String {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
-	if len(cp.ContextList()) > 1 {
+	if len(cp.ContextSlice()) > 1 {
 		optionalContextID = c.ID().String()
 	}
 	return entitas.String(optionalContextID + entitas.String(cp.ID()).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener")
@@ -31,11 +31,11 @@ func eventComponentInterfaceID(cp *entitas.CP) entitas.String {
 // ComponentEntityGenerator_C_1_4_2 ...
 func ComponentEntityGenerator_C_1_4_2(m *entitas.MD) ([]entitas.FI, error) {
 	slice := make([]entitas.FI, 0)
-	for _, cp := range m.ComponentList() {
-		for _, c := range cp.ContextList() {
+	for _, cp := range m.ComponentSlice() {
+		for _, c := range cp.ContextSlice() {
 			b := new(bytes.Buffer)
 
-			if len(cp.MemberList()) == 0 {
+			if len(cp.MemberSlice()) == 0 {
 				ComponentEntityFlag_C_1_4_2(c, cp, b)
 			} else {
 				ComponentEntity_C_1_4_2(c, cp, false, b)

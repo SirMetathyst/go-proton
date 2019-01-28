@@ -112,7 +112,6 @@ func Setup(bb *blackboard.BB, p *proton.P) error {
 // Run ...
 func Run(bb *blackboard.BB, p *proton.P) error {
 	providers := make(map[string]func(string) (*entitas.MD, error))
-	providers[".json"] = JSON
 	providers[".proton"] = protonlang.Parse
 
 	f := filepath.Ext(File(bb))

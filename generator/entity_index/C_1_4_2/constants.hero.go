@@ -23,7 +23,7 @@ func EntityIndexConstants_C_1_4_2(cp []*entitas.CP, b *bytes.Buffer) string {
 			b.WriteString(`";`)
 			b.WriteString("\n")
 		} else if len(ccp.MembersWithEntityIndex()) > 1 {
-			for _, m := range ccp.MemberList() {
+			for _, m := range ccp.MemberSlice() {
 
 				b.WriteRune('\t')
 				b.WriteString(`public const string`)

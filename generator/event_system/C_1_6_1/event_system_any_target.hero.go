@@ -61,7 +61,18 @@ public sealed class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Matcher.`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`)
+	b.WriteString(`)`)
+
+	if len(cp.MemberSlice()) < 1 {
+		b.WriteString(", Entitas.TriggerOnEventMatcherExtension.Removed")
+		b.WriteRune('(')
+		b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+		b.WriteString("Matcher.")
+		b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+		b.WriteRune(')')
+		b.WriteRune('\n')
+	}
+	b.WriteString(`        );
         );
     }
     
@@ -82,7 +93,7 @@ public sealed class `)
         {
             `)
 
-	if len(cp.MemberList()) > 0 {
+	if len(cp.MemberSlice()) > 0 {
 		b.WriteString("var component = e.")
 		b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
 		b.WriteRune(';')

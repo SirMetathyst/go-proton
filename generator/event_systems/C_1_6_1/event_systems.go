@@ -9,7 +9,7 @@ import (
 // EventSystemsGenerator_C_1_6_1 ...
 func EventSystemsGenerator_C_1_6_1(md *entitas.MD) ([]entitas.FI, error) {
 	slice := make([]entitas.FI, 0)
-	for _, c := range md.ContextList() {
+	for _, c := range md.ContextSlice() {
 		ecplist := make([]*entitas.CP, 0)
 		cplist := md.ComponentsWithContextID(c.ID().String())
 		for _, cp := range cplist {

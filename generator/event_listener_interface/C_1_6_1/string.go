@@ -9,7 +9,7 @@ func componentID(c *entitas.C, cp *entitas.CP) entitas.String {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
-	if len(cp.ContextList()) > 1 {
+	if len(cp.ContextSlice()) > 1 {
 		optionalContextID = c.ID().String()
 	}
 	componentID := optionalContextID + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener"

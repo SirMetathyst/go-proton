@@ -17,7 +17,7 @@ func ComponentEntityAssignment_C_1_4_2(cp *entitas.CP, isEventComponent bool, b 
 		b.WriteString("newValue")
 		b.WriteRune(';')
 	} else {
-		ms := cp.MemberList()
+		ms := cp.MemberSlice()
 		for i, m := range ms {
 			b.WriteString("\t\tcomponent.")
 			b.WriteString(m.ID().ToLowerFirst().String())

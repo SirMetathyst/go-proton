@@ -15,7 +15,15 @@ public sealed class <%==s componentID(c, cp).ToUpperFirst().String()%>EventSyste
     protected override Entitas.ICollector<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> GetTrigger(Entitas.IContext<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> context)
     {
         return Entitas.CollectorContextExtension.CreateCollector(
-            context, Entitas.TriggerOnEventMatcherExtension.<%==s cp.EventType().String().String()%>(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Matcher.<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>)
+            context, Entitas.TriggerOnEventMatcherExtension.<%==s cp.EventType().String().String()%>(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Matcher.<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>)<%
+                if len(cp.MemberSlice()) < 1 {
+                b.WriteString(", Entitas.TriggerOnEventMatcherExtension.Removed")
+                b.WriteRune('(')
+                b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
+                b.WriteString("Matcher.")
+                b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
+                b.WriteRune(')')
+                b.WriteRune('\n') } %>        );
         );
     }
     
@@ -29,7 +37,7 @@ public sealed class <%==s componentID(c, cp).ToUpperFirst().String()%>EventSyste
         foreach (var e in entities)
         {
             <% 
-                if len(cp.MemberList()) > 0 {
+                if len(cp.MemberSlice()) > 0 {
                     b.WriteString("var component = e.")
                     b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
                     b.WriteRune(';')

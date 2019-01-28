@@ -1,7 +1,7 @@
 <%: func EntityIndexGetIndices_C_1_4_2(cp []*entitas.CP, b *bytes.Buffer) string %>
    <% for _, ccp := range cp { 
-        for _, c := range ccp.ContextList() { 
-        for _, m := range ccp.MemberList() {
+        for _, c := range ccp.ContextSlice() { 
+        for _, m := range ccp.MemberSlice() {
             if m.EntityIndex() > 0 { 
              ID := ccp.ID().WithoutComponentSuffix().ToUpperFirst().String()
              Type := m.Value().String()

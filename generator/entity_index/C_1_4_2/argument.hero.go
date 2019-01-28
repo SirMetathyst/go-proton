@@ -10,7 +10,7 @@ import (
 )
 
 func EntityIndexArgument_C_1_4_2(eim *entitas.EIM, b *bytes.Buffer) string {
-	ml := eim.MemberList()
+	ml := eim.MemberSlice()
 	for i, m := range ml {
 		b.WriteString(m.Value().String())
 		b.WriteRune(' ')

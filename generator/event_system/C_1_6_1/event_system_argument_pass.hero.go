@@ -10,7 +10,7 @@ import (
 )
 
 func EventSystemArgumentPass_1_6_1(cp *entitas.CP, b *bytes.Buffer) string {
-	ml := cp.MemberList()
+	ml := cp.MemberSlice()
 	if len(ml) > 0 && cp.EventType() == entitas.AddedEvent {
 		b.WriteString(", ")
 		for i, m := range ml {

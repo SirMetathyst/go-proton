@@ -17,7 +17,7 @@ func ComponentEntityArgument_C_1_4_2(cp *entitas.CP, isEventComponent bool, b *b
 		b.WriteString("> ")
 		b.WriteString("newValue")
 	} else {
-		ms := cp.MemberList()
+		ms := cp.MemberSlice()
 		for i, m := range ms {
 			b.WriteString(m.Value().String())
 			b.WriteRune(' ')

@@ -18,7 +18,7 @@ func eventComponentID(cp *entitas.CP) entitas.String {
 // ComponentGenerator_E_1_4_2 ...
 func ComponentGenerator_E_1_4_2(md *entitas.MD) ([]entitas.FI, error) {
 	slice := make([]entitas.FI, 0)
-	for _, cp := range md.ComponentList() {
+	for _, cp := range md.ComponentSlice() {
 		slice = append(slice, entitas.NewFileInfo("Components/"+cp.ID().WithComponentSuffix().ToUpperFirst().String()+".cs", Component_E_1_4_2(cp, new(bytes.Buffer)), "ComponentGenerator_E_1_4_2"))
 		if cp.EventTarget() != entitas.NoTarget {
 			slice = append(slice, entitas.NewFileInfo("Components/"+cp.ID().WithComponentSuffix().ToUpperFirst().String()+"Listener.cs", EventComponent_E_1_4_2(cp, new(bytes.Buffer)), "ComponentGenerator_E_1_4_2"))
