@@ -1,5 +1,9 @@
 package main
 
+/*
+ * Comment out the generators and post-processors you don't want in the build
+ */
+
 import (
 	_ "github.com/SirMetathyst/go-proton/code-generation/generator/component/E_1_4_2"
 	//_ "github.com/SirMetathyst/go-proton/code-generation/generator/component_context/C_1_4_2"
