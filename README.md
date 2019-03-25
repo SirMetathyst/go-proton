@@ -2,6 +2,10 @@
 
 Go-Entitas is a package for modeling contexts / aliases / components / entity-indexes for [entitas](https://github.com/sschmid/Entitas-CSharp) code generation.
 
+Immediate TODO:
+
+- Cleanup proton package and write tests
+
 TODO:
 
 - Rewrite documentation after project restructuring...
