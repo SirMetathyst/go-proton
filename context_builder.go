@@ -1,9 +1,7 @@
-package builder
+package proton
 
 import (
 	"fmt"
-
-	"github.com/SirMetathyst/go-proton"
 )
 
 var (
@@ -13,13 +11,13 @@ var (
 
 // CB ...
 type CB struct {
-	cl    *proton.CL
+	cl    *CL
 	built bool
 	id    string
 }
 
 // NewContextBuilder ...
-func NewContextBuilder(cl *proton.CL) *CB {
+func NewContextBuilder(cl *CL) *CB {
 	if cl == nil {
 		panic(ErrContextBuilderContextListShouldNotBeNil)
 	}
@@ -37,7 +35,7 @@ func (cb *CB) Build() error {
 	if cb.built {
 		return ErrContextBuilderContextAlreadyBuilt
 	}
-	c, err := proton.NewContext(cb.id)
+	c, err := NewContext(cb.id)
 	if err != nil {
 		return err
 	}

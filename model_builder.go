@@ -1,9 +1,7 @@
-package builder
+package proton
 
 import (
 	"fmt"
-
-	"github.com/SirMetathyst/go-proton"
 )
 
 var (
@@ -13,10 +11,10 @@ var (
 // MDB ...
 type MDB struct {
 	target, ns string
-	cl         *proton.CL
-	al         *proton.AL
-	cpl        *proton.CPL
-	eil        *proton.EIL
+	cl         *CL
+	al         *AL
+	cpl        *CPL
+	eil        *EIL
 	dctx       string
 	built      bool
 }
@@ -24,10 +22,10 @@ type MDB struct {
 // NewModelBuilder ...
 func NewModelBuilder() *MDB {
 	return &MDB{
-		cl:  proton.NewContextList(),
-		al:  proton.NewAliasList(),
-		cpl: proton.NewComponentList(),
-		eil: proton.NewEntityIndexList(),
+		cl:  NewContextList(),
+		al:  NewAliasList(),
+		cpl: NewComponentList(),
+		eil: NewEntityIndexList(),
 	}
 }
 
@@ -75,19 +73,19 @@ func (mdb *MDB) Reset() *MDB {
 	mdb.ns = ""
 	mdb.dctx = ""
 	mdb.built = false
-	mdb.cl = proton.NewContextList()
-	mdb.al = proton.NewAliasList()
-	mdb.cpl = proton.NewComponentList()
-	mdb.eil = proton.NewEntityIndexList()
+	mdb.cl = NewContextList()
+	mdb.al = NewAliasList()
+	mdb.cpl = NewComponentList()
+	mdb.eil = NewEntityIndexList()
 	return mdb
 }
 
 // Build ...
-func (mdb *MDB) Build() (*proton.MD, error) {
+func (mdb *MDB) Build() (*MD, error) {
 	if mdb.built {
 		return nil, ErrModelBuilderModelAlreadyBuilt
 	}
-	md, err := proton.NewModel(mdb.target, mdb.ns, mdb.cl, mdb.al, mdb.cpl, mdb.eil)
+	md, err := NewModel(mdb.target, mdb.ns, mdb.cl, mdb.al, mdb.cpl, mdb.eil)
 	mdb.built = true
 	return md, err
 }

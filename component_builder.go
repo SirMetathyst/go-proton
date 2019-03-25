@@ -1,9 +1,7 @@
-package builder
+package proton
 
 import (
 	"fmt"
-
-	proton "github.com/SirMetathyst/go-proton"
 )
 
 var (
@@ -16,23 +14,23 @@ var (
 
 // CPB ...
 type CPB struct {
-	cpl            *proton.CPL
-	tcl            *proton.CL
-	tcml           *proton.CML
-	cl             *proton.CL
-	al             *proton.AL
+	cpl            *CPL
+	tcl            *CL
+	tcml           *CML
+	cl             *CL
+	al             *AL
 	built          bool
 	dctx           string
 	id, flagPrefix string
 	unique         bool
-	eventTarget    proton.EventTarget
-	eventType      proton.EventType
+	eventTarget    EventTarget
+	eventType      EventType
 	eventPriority  int
-	cleanupMode    proton.CleanupMode
+	cleanupMode    CleanupMode
 }
 
 // NewComponentBuilder ...
-func NewComponentBuilder(cl *proton.CL, al *proton.AL, cpl *proton.CPL, dctx string) *CPB {
+func NewComponentBuilder(cl *CL, al *AL, cpl *CPL, dctx string) *CPB {
 	if cl == nil {
 		panic(ErrComponentBuilderContextListShouldNotBeNil)
 	}
@@ -46,8 +44,8 @@ func NewComponentBuilder(cl *proton.CL, al *proton.AL, cpl *proton.CPL, dctx str
 		cl:   cl,
 		al:   al,
 		cpl:  cpl,
-		tcl:  proton.NewContextList(),
-		tcml: proton.NewComponentMemberList(),
+		tcl:  NewContextList(),
+		tcml: NewComponentMemberList(),
 		dctx: dctx,
 	}
 }
@@ -71,13 +69,13 @@ func (cpb *CPB) SetUnique(u bool) *CPB {
 }
 
 // SetEventTarget ...
-func (cpb *CPB) SetEventTarget(t proton.EventTarget) *CPB {
+func (cpb *CPB) SetEventTarget(t EventTarget) *CPB {
 	cpb.eventTarget = t
 	return cpb
 }
 
 // SetEventType ...
-func (cpb *CPB) SetEventType(e proton.EventType) *CPB {
+func (cpb *CPB) SetEventType(e EventType) *CPB {
 	cpb.eventType = e
 	return cpb
 }
@@ -89,7 +87,7 @@ func (cpb *CPB) SetEventPriority(v int) *CPB {
 }
 
 // SetCleanupMode ...
-func (cpb *CPB) SetCleanupMode(m proton.CleanupMode) *CPB {
+func (cpb *CPB) SetCleanupMode(m CleanupMode) *CPB {
 	cpb.cleanupMode = m
 	return cpb
 }
@@ -118,7 +116,7 @@ func (cpb *CPB) Build() error {
 		}
 		cpb.tcl.AddContext(dctx)
 	}
-	cp, err := proton.NewComponent(cpb.id, cpb.flagPrefix, cpb.unique, cpb.eventTarget, cpb.eventType, cpb.eventPriority, cpb.cleanupMode, cpb.tcl, cpb.tcml)
+	cp, err := NewComponent(cpb.id, cpb.flagPrefix, cpb.unique, cpb.eventTarget, cpb.eventType, cpb.eventPriority, cpb.cleanupMode, cpb.tcl, cpb.tcml)
 	if err != nil {
 		return err
 	}

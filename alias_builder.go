@@ -1,9 +1,7 @@
-package builder
+package proton
 
 import (
 	"fmt"
-
-	"github.com/SirMetathyst/go-proton"
 )
 
 var (
@@ -13,13 +11,13 @@ var (
 
 // AB ...
 type AB struct {
-	al        *proton.AL
+	al        *AL
 	built     bool
 	id, value string
 }
 
 // NewAliasBuilder ...
-func NewAliasBuilder(al *proton.AL) *AB {
+func NewAliasBuilder(al *AL) *AB {
 	if al == nil {
 		panic(ErrAliasBuilderAliasListShouldNotBeNil)
 	}
@@ -43,7 +41,7 @@ func (ab *AB) Build() error {
 	if ab.built {
 		return ErrAliasBuilderAliasAlreadyBuilt
 	}
-	a, err := proton.NewAlias(ab.id, ab.value)
+	a, err := NewAlias(ab.id, ab.value)
 	if err != nil {
 		return err
 	}

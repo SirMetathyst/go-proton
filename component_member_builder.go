@@ -1,9 +1,7 @@
-package builder
+package proton
 
 import (
 	"fmt"
-
-	"github.com/SirMetathyst/go-proton"
 )
 
 var (
@@ -14,16 +12,16 @@ var (
 
 // CPMB ...
 type CPMB struct {
-	al          *proton.AL
-	cml         *proton.CML
-	a           *proton.A
+	al          *AL
+	cml         *CML
+	a           *A
 	built       bool
 	id, value   string
-	entityIndex proton.EntityIndex
+	entityIndex EntityIndex
 }
 
 // NewComponentMemberBuilder ...
-func NewComponentMemberBuilder(al *proton.AL, cml *proton.CML) *CPMB {
+func NewComponentMemberBuilder(al *AL, cml *CML) *CPMB {
 	if al == nil {
 		panic(ErrComponentMemberBuilderAliasShouldNotBeNil)
 	}
@@ -46,7 +44,7 @@ func (cpmb *CPMB) SetValue(value string) *CPMB {
 }
 
 // SetEntityIndex ...
-func (cpmb *CPMB) SetEntityIndex(value proton.EntityIndex) *CPMB {
+func (cpmb *CPMB) SetEntityIndex(value EntityIndex) *CPMB {
 	cpmb.entityIndex = value
 	return cpmb
 }
@@ -63,14 +61,14 @@ func (cpmb *CPMB) Build() error {
 		return ErrComponentMemberBuilderMemberAlreadyBuilt
 	}
 	if cpmb.a != nil {
-		m, err := proton.NewComponentMemberAlias(cpmb.id, cpmb.a, cpmb.entityIndex)
+		m, err := NewComponentMemberAlias(cpmb.id, cpmb.a, cpmb.entityIndex)
 		if err != nil {
 			return err
 		}
 		cpmb.cml.AddMember(m)
 		return nil
 	}
-	m, err := proton.NewComponentMember(cpmb.id, cpmb.value, cpmb.entityIndex)
+	m, err := NewComponentMember(cpmb.id, cpmb.value, cpmb.entityIndex)
 	if err != nil {
 		return err
 	}

@@ -8,8 +8,7 @@ import (
 
 	"github.com/gobuffalo/packr"
 
-	proton "github.com/SirMetathyst/go-proton"
-	"github.com/SirMetathyst/go-proton/builder"
+	"github.com/SirMetathyst/go-proton"
 	"github.com/SirMetathyst/go-proton/dsl/parser"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
@@ -65,7 +64,7 @@ func ASTToModel(RootAST *AST) (*proton.MD, error) {
 
 	ASTList := ASTList(RootAST)
 
-	mdb := builder.NewModelBuilder()
+	mdb := proton.NewModelBuilder()
 
 	mdb.SetTarget(RootAST.Target)
 	mdb.SetNamespace(RootAST.Namespace)

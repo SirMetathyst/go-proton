@@ -1,9 +1,7 @@
-package builder
+package proton
 
 import (
 	"fmt"
-
-	"github.com/SirMetathyst/go-proton"
 )
 
 var (
@@ -14,15 +12,15 @@ var (
 
 // EIMB ...
 type EIMB struct {
-	al     *proton.AL
-	teimml *proton.EIMML
-	eiml   *proton.EIML
+	al     *AL
+	teimml *EIMML
+	eiml   *EIML
 	id     string
 	built  bool
 }
 
 // NewEntityIndexMethodBuilder ...
-func NewEntityIndexMethodBuilder(al *proton.AL, eiml *proton.EIML) *EIMB {
+func NewEntityIndexMethodBuilder(al *AL, eiml *EIML) *EIMB {
 	if al == nil {
 		panic(ErrEntityIndexMethodBuilderAliasListShouldNotBeNil)
 	}
@@ -32,7 +30,7 @@ func NewEntityIndexMethodBuilder(al *proton.AL, eiml *proton.EIML) *EIMB {
 	return &EIMB{
 		al:     al,
 		eiml:   eiml,
-		teimml: proton.NewEntityIndexMethodMemberList(),
+		teimml: NewEntityIndexMethodMemberList(),
 	}
 }
 
@@ -52,7 +50,7 @@ func (eimb *EIMB) Build() error {
 	if eimb.built {
 		return ErrEntityIndexMethodBuilderEntityIndexMethodAlreadyBuilt
 	}
-	eim, err := proton.NewEntityIndexMethod(eimb.id, eimb.teimml)
+	eim, err := NewEntityIndexMethod(eimb.id, eimb.teimml)
 	if err != nil {
 		return err
 	}
