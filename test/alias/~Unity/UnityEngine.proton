@@ -1,0 +1,2 @@
+alias Vector3 = "UnityEngine.Vector3";
+alias Vector2 = "UnityEngine.Vector2";
