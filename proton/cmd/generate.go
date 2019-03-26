@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	. "github.com/SirMetathyst/go-proton/code-generation"
+	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 	dsl "github.com/SirMetathyst/go-proton/dsl"
 
 	"github.com/spf13/cobra"
@@ -22,20 +22,23 @@ output folder where code is written to and keep the generator alive.
 This will find any *.proton files in the project path, track them for changes 
 and re-generate the code.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		SetOptions(PO{ProjectPath, OutputFolder})
+		codegeneration.SetOptions(codegeneration.PO{
+			ProjectPath:  ProjectPath,
+			OutputFolder: OutputFolder,
+		})
 		if Daemonize {
-			Daemon(dsl.Parse)
+			codegeneration.Daemon(dsl.Parse)
 		} else {
-			ParseGenerate(dsl.Parse)
+			codegeneration.ParseGenerate(dsl.Parse)
 		}
 	},
 }
 
 func init() {
-	for _, generatorInfo := range GeneratorInfo() {
+	for _, generatorInfo := range codegeneration.GeneratorInfo() {
 		generateCmd.PersistentFlags().BoolVar(&generatorInfo.Enabled, generatorInfo.GeneratorVersion, generatorInfo.Enabled, "")
 	}
-	for _, postProcessorInfo := range PostProcessorInfo() {
+	for _, postProcessorInfo := range codegeneration.PostProcessorInfo() {
 		generateCmd.PersistentFlags().BoolVar(&postProcessorInfo.Enabled, postProcessorInfo.PostProcessorVersion, postProcessorInfo.Enabled, "")
 	}
 

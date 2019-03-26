@@ -1,6 +1,7 @@
 package main
 
 // comment out generators and post-processors you don't want in the build
+// the import order dictates the order it will generate/post-process in
 
 import (
 	_ "github.com/SirMetathyst/go-proton/code-generation/generator/component/E_1_4_2"
