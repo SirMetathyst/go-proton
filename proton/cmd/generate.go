@@ -22,7 +22,12 @@ output folder where code is written to and keep the generator alive.
 This will find any *.proton files in the project path, track them for changes 
 and re-generate the code.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		RunApplication(ProjectPath, OutputFolder, Daemonize, dsl.Parse)
+		SetOptions(PO{ProjectPath, OutputFolder})
+		if Daemonize {
+			Daemon(dsl.Parse)
+		} else {
+			ParseGenerate(dsl.Parse)
+		}
 	},
 }
 

@@ -2,9 +2,14 @@ package codegeneration
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 
 	proton "github.com/SirMetathyst/go-proton"
+	"github.com/fsnotify/fsnotify"
 )
 
 var (
@@ -12,26 +17,32 @@ var (
 	ErrProtonModelIsNil = fmt.Errorf("proton: model is nil")
 	// ErrProtonFileInfoIsNil is returned when a nil FileInfo is given
 	ErrProtonFileInfoIsNil = fmt.Errorf("proton: fileInfo is nil")
+	// ErrNoProtonFilesFound is returned when no *.proton files were found
+	ErrNoProtonFilesFound = fmt.Errorf("proton: no *.proton files were found")
 )
 
 // P ...
 type P struct {
 	generatorInfo     []*GI
 	postProcessorInfo []*PPI
-	projectPath       string
-	outputFolder      string
+	Options           PO
+}
+
+// PO ...
+type PO struct {
+	ProjectPath  string
+	OutputFolder string
 }
 
 // NewProton ...
-func NewProton(projectPath, outputFolder string) *P {
+func NewProton(options PO) *P {
 	proton := new(P)
-	proton.outputFolder = outputFolder
-	proton.SetProjectPath(projectPath)
+	proton.Options = options
 	return proton
 }
 
 var (
-	p = NewProton("./", "src-gen")
+	p = NewProton(PO{"./", "src-gen"})
 )
 
 // Singleton ...
@@ -61,7 +72,7 @@ func PostProcessorInfo() []*PPI {
 
 // ProjectPath ...
 func (p *P) ProjectPath() string {
-	return p.projectPath
+	return p.Options.ProjectPath
 }
 
 // ProjectPath ...
@@ -71,7 +82,7 @@ func ProjectPath() string {
 
 // OutputFolder ...
 func (p *P) OutputFolder() string {
-	return p.outputFolder
+	return p.Options.OutputFolder
 }
 
 // OutputFolder ...
@@ -79,27 +90,16 @@ func OutputFolder() string {
 	return Singleton().OutputFolder()
 }
 
-// SetProjectPath ...
-func (p *P) SetProjectPath(path string) {
-	p.projectPath = path
-	outputFolder := filepath.Join(p.projectPath, p.outputFolder)
-	p.outputFolder = outputFolder
+// SetOptions ...
+func (p *P) SetOptions(options PO) {
+	p.Options.ProjectPath = options.ProjectPath
+	outputFolder := filepath.Join(p.Options.ProjectPath, options.OutputFolder)
+	p.Options.OutputFolder = outputFolder
 }
 
-// SetProjectPath ...
-func SetProjectPath(path string) {
-	Singleton().SetProjectPath(path)
-}
-
-// SetOutputFolder ...
-func (p *P) SetOutputFolder(folder string) {
-	outputFolder := filepath.Join(p.projectPath, folder)
-	p.outputFolder = outputFolder
-}
-
-// SetOutputFolder ...
-func SetOutputFolder(folder string) {
-	Singleton().SetOutputFolder(folder)
+// SetOptions ...
+func SetOptions(options PO) {
+	Singleton().SetOptions(options)
 }
 
 // AddGenerator ...
@@ -150,8 +150,8 @@ func EnablePostProcessor(postProcessorVersion string, enabled bool) {
 	Singleton().EnablePostProcessor(postProcessorVersion, enabled)
 }
 
-// RunGenerator ...
-func (p *P) RunGenerator(md *proton.MD) ([]proton.FI, error) {
+// RunGenerators ...
+func (p *P) RunGenerators(md *proton.MD) ([]proton.FI, error) {
 	if md == nil {
 		return nil, ErrProtonModelIsNil
 	}
@@ -168,13 +168,13 @@ func (p *P) RunGenerator(md *proton.MD) ([]proton.FI, error) {
 	return r, nil
 }
 
-// RunGenerator ...
-func RunGenerator(md *proton.MD) ([]proton.FI, error) {
-	return Singleton().RunGenerator(md)
+// RunGenerators ...
+func RunGenerators(md *proton.MD) ([]proton.FI, error) {
+	return Singleton().RunGenerators(md)
 }
 
-// RunPostProcessor ...
-func (p *P) RunPostProcessor(fi []proton.FI) ([]proton.FI, error) {
+// RunPostProcessors ...
+func (p *P) RunPostProcessors(fi []proton.FI) ([]proton.FI, error) {
 	if fi == nil {
 		return nil, ErrProtonFileInfoIsNil
 	}
@@ -191,28 +191,109 @@ func (p *P) RunPostProcessor(fi []proton.FI) ([]proton.FI, error) {
 	return r, nil
 }
 
-// RunPostProcessor ...
-func RunPostProcessor(fi []proton.FI) ([]proton.FI, error) {
-	return Singleton().RunPostProcessor(fi)
+// RunPostProcessors ...
+func RunPostProcessors(fi []proton.FI) ([]proton.FI, error) {
+	return Singleton().RunPostProcessors(fi)
 }
 
-// Run ...
-func (p *P) Run(md *proton.MD) ([]proton.FI, error) {
+// Generate ...
+func (p *P) Generate(md *proton.MD) error {
 	if md == nil {
-		return nil, ErrProtonModelIsNil
+		return ErrProtonModelIsNil
 	}
-	gv, err := p.RunGenerator(md)
+	gv, err := p.RunGenerators(md)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	pv, err := p.RunPostProcessor(gv)
+	_, err = p.RunPostProcessors(gv)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return pv, nil
+	return nil
 }
 
-// Run ...
-func Run(md *proton.MD) ([]proton.FI, error) {
-	return Singleton().Run(md)
+// Generate ...
+func Generate(md *proton.MD) error {
+	return Singleton().Generate(md)
+}
+
+// ParseGenerate ...
+func (p *P) ParseGenerate(parser func(file string) (*proton.MD, error)) error {
+	md, err := parser("proton.proton")
+	if err != nil {
+		return err
+	}
+	return p.Generate(md)
+}
+
+// ParseGenerate ...
+func ParseGenerate(parser func(file string) (*proton.MD, error)) error {
+	return Singleton().ParseGenerate(parser)
+}
+
+// ProtonFilesList ...
+func ProtonFilesList(root string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if filepath.Ext(path) == ".proton" {
+			log.Printf("proton: %q: FOUND", path)
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
+}
+
+// Daemon ...
+func Daemon(parser func(file string) (*proton.MD, error)) error {
+	err := ParseGenerate(parser)
+	if err != nil {
+		return err
+	}
+	w, err := fsnotify.NewWatcher()
+	defer w.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	files, err := ProtonFilesList(ProjectPath())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if len(files) == 0 {
+		return ErrNoProtonFilesFound
+	}
+
+	for _, file := range files {
+		log.Printf("proton: %q: WATCH", file)
+		err := w.Add(file)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	go func() {
+		for {
+			select {
+			case ev := <-w.Events:
+				{
+					log.Printf("proton: %s\n", ev)
+					err := ParseGenerate(parser)
+					if err != nil {
+						log.Printf("proton: %s\n", err)
+					}
+					log.Println("proton: generated")
+				}
+			}
+		}
+	}()
+
+	Done := make(chan os.Signal)
+	signal.Notify(Done, os.Interrupt, syscall.SIGTERM)
+	<-Done
+	return nil
 }
