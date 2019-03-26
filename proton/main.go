@@ -22,10 +22,9 @@ import (
 	//_ "github.com/SirMetathyst/go-proton/code-generation/generator/event_system/C_1_6_1"
 	//_ "github.com/SirMetathyst/go-proton/code-generation/generator/event_systems/C_1_6_1"
 	//_ "github.com/SirMetathyst/go-proton/code-generation/generator/feature/C_1_4_2"
-	. "github.com/SirMetathyst/go-proton/code-generation"
-	"github.com/SirMetathyst/go-proton/dsl"
+	cmd "github.com/SirMetathyst/go-proton/proton/cmd"
 )
 
 func main() {
-	RunApplication(dsl.Parse)
+	cmd.Execute()
 }

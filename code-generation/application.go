@@ -1,30 +1,16 @@
 package codegeneration
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"path/filepath"
-	"strings"
 	"syscall"
 
 	proton "github.com/SirMetathyst/go-proton"
 
-	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/clean_target_directory/C_1_4_2"
-	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/file_header/C_1_4_2"
-	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/merge_content/C_1_4_2"
-	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/print_file/C_1_4_2"
-	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/print_file_content/C_1_4_2"
-	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/write_to_disk/C_1_4_2"
-
 	"github.com/fsnotify/fsnotify"
-)
-
-var (
-	ProjectDirectory = flag.String("p", "./", "Project Directory")
-	DaemonMode       = flag.Bool("d", false, "Daemon Mode")
 )
 
 var (
@@ -37,72 +23,6 @@ func Must(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-// Usage ...
-func Usage() {
-	fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n\n", os.Args[0])
-	fmt.Fprintf(flag.CommandLine.Output(), "[Flags]\n")
-	c := 0
-	flag.VisitAll(func(f *flag.Flag) {
-		l := len(fmt.Sprintf("  --%s", f.Name))
-		if l > c {
-			c = l
-		}
-	})
-	flag.VisitAll(func(f *flag.Flag) {
-		s := fmt.Sprintf("  --%s", f.Name)
-		name, _ := flag.UnquoteUsage(f)
-		if len(name) > 0 {
-			s += " " + name
-		}
-		diff := c - len(s)
-		if diff < 0 {
-			diff = 0
-		}
-		s += fmt.Sprintf(strings.Repeat(" ", diff)+"     (default %v)", f.DefValue)
-		fmt.Fprint(flag.CommandLine.Output(), s, "\n")
-	})
-}
-
-// SetupProton ...
-func SetupProton() error {
-
-	/* PostProcessor(s). */
-	AddPostProcessor("MergeContentPostProcessor_C_1_4_2", MergeContentPostProcessor_C_1_4_2, true)
-	AddPostProcessor("FileHeaderPostProcessor_C_1_4_2", FileHeaderPostProcessor_C_1_4_2, true)
-	AddPostProcessor("PrintFilePostProcessor_C_1_4_2", PrintFilePostProcessor_C_1_4_2, false)
-	AddPostProcessor("PrintFileContentPostProcessor_C_1_4_2", PrintFileContentPostProcessor_C_1_4_2, false)
-	AddPostProcessor("CleanTargetDirectoryPostProcessor_C_1_4_2", CleanTargetDirectoryPostProcessor_C_1_4_2, true)
-	AddPostProcessor("WriteToDiskPostProcessor_C_1_4_2", WriteToDiskPostProcessor_C_1_4_2, true)
-
-	return nil
-}
-
-// SetupConfiguration ...
-func SetupConfiguration() error {
-	for _, generatorInfo := range GeneratorInfo() {
-		flag.BoolVar(&generatorInfo.Enabled, generatorInfo.GeneratorVersion, generatorInfo.Enabled, "")
-	}
-	for _, postProcessorInfo := range PostProcessorInfo() {
-		flag.BoolVar(&postProcessorInfo.Enabled, postProcessorInfo.PostProcessorVersion, postProcessorInfo.Enabled, "")
-	}
-	return nil
-}
-
-// Setup ...
-func Setup() error {
-	err := SetupProton()
-	if err != nil {
-		return err
-	}
-	err = SetupConfiguration()
-	if err != nil {
-		return err
-	}
-	flag.Usage = Usage
-	flag.Parse()
-	return nil
 }
 
 // RunProton ...
@@ -136,12 +56,12 @@ func ProtonFiles(root string) ([]string, error) {
 }
 
 // Daemon ...
-func Daemon(parser func(file string) (*proton.MD, error)) error {
+func Daemon(path string, parser func(file string) (*proton.MD, error)) error {
 	w, err := fsnotify.NewWatcher()
 	defer w.Close()
 	Must(err)
 
-	files, err := ProtonFiles(*ProjectDirectory)
+	files, err := ProtonFiles(path)
 	Must(err)
 
 	if len(files) == 0 {
@@ -172,13 +92,13 @@ func Daemon(parser func(file string) (*proton.MD, error)) error {
 }
 
 // RunApplication ...
-func RunApplication(parser func(file string) (*proton.MD, error)) {
-
-	Must(Setup())
+func RunApplication(root string, daemon bool, parser func(file string) (*proton.MD, error)) {
 	Must(RunProton(parser))
 
-	if *DaemonMode == true {
-		Must(Daemon(parser))
+	SetProjectPath(root)
+
+	if daemon == true {
+		Must(Daemon(root, parser))
 		return
 	}
 }

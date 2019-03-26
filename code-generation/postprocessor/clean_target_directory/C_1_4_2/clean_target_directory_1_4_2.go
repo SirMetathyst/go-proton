@@ -4,14 +4,11 @@ import (
 	"os"
 
 	proton "github.com/SirMetathyst/go-proton"
-)
-
-var (
-	CleanTargetDirectory = "src-gen"
+	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 )
 
 // CleanTargetDirectoryPostProcessor_C_1_4_2 ...
-func CleanTargetDirectoryPostProcessor_C_1_4_2(fi []proton.FI) ([]proton.FI, error) {
-	os.RemoveAll(CleanTargetDirectory)
+func CleanTargetDirectoryPostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
+	os.RemoveAll(p.OutputFolder())
 	return fi, nil
 }

@@ -7,4 +7,5 @@ require (
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/gobuffalo/packr v1.24.0
 	github.com/smartystreets/goconvey v0.0.0-20190306220146-200a235640ff
+	github.com/spf13/cobra v0.0.3
 )

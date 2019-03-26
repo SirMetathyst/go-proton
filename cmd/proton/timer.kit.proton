@@ -1,3 +1,0 @@
-context Timer;
-
-component Tick in Timer;

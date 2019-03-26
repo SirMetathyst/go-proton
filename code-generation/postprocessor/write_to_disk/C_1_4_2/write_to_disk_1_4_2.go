@@ -6,10 +6,7 @@ import (
 	"path/filepath"
 
 	proton "github.com/SirMetathyst/go-proton"
-)
-
-var (
-	WriteToDiskDirectory = "src-gen"
+	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 )
 
 // file ...
@@ -19,9 +16,9 @@ type file interface {
 }
 
 // WriteToDiskPostProcessor_C_1_4_2 ...
-func WriteToDiskPostProcessor_C_1_4_2(fi []proton.FI) ([]proton.FI, error) {
+func WriteToDiskPostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
 	for _, f := range fi {
-		WriteFile(WriteToDiskDirectory+"/"+f.File(), []byte(f.FileContent()))
+		WriteFile(p.OutputFolder()+"/"+f.File(), []byte(f.FileContent()))
 	}
 	return fi, nil
 }

@@ -1,5 +1,0 @@
-#include "${PWD}/timer.kit";
-
-context core(default);
-
-component position;

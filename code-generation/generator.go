@@ -2,6 +2,7 @@ package codegeneration
 
 import (
 	"fmt"
+	"path/filepath"
 
 	proton "github.com/SirMetathyst/go-proton"
 )
@@ -17,15 +18,20 @@ var (
 type P struct {
 	generatorInfo     []*GI
 	postProcessorInfo []*PPI
+	projectPath       string
+	outputFolder      string
 }
 
 // NewProton ...
-func NewProton() *P {
-	return new(P)
+func NewProton(projectPath, outputFolder string) *P {
+	proton := new(P)
+	proton.outputFolder = outputFolder
+	proton.SetProjectPath(projectPath)
+	return proton
 }
 
 var (
-	p = NewProton()
+	p = NewProton("./", "src-gen")
 )
 
 // Singleton ...
@@ -40,7 +46,7 @@ func (p *P) GeneratorInfo() []*GI {
 
 // GeneratorInfo ...
 func GeneratorInfo() []*GI {
-	return p.generatorInfo
+	return Singleton().GeneratorInfo()
 }
 
 // PostProcessorInfo ...
@@ -50,7 +56,50 @@ func (p *P) PostProcessorInfo() []*PPI {
 
 // PostProcessorInfo ...
 func PostProcessorInfo() []*PPI {
-	return p.postProcessorInfo
+	return Singleton().PostProcessorInfo()
+}
+
+// ProjectPath ...
+func (p *P) ProjectPath() string {
+	return p.projectPath
+}
+
+// ProjectPath ...
+func ProjectPath() string {
+	return Singleton().ProjectPath()
+}
+
+// OutputFolder ...
+func (p *P) OutputFolder() string {
+	return p.outputFolder
+}
+
+// OutputFolder ...
+func OutputFolder() string {
+	return Singleton().OutputFolder()
+}
+
+// SetProjectPath ...
+func (p *P) SetProjectPath(path string) {
+	p.projectPath = path
+	outputFolder := filepath.Join(p.projectPath, p.outputFolder)
+	p.outputFolder = outputFolder
+}
+
+// SetProjectPath ...
+func SetProjectPath(path string) {
+	Singleton().SetProjectPath(path)
+}
+
+// SetOutputFolder ...
+func (p *P) SetOutputFolder(folder string) {
+	outputFolder := filepath.Join(p.projectPath, folder)
+	p.outputFolder = outputFolder
+}
+
+// SetOutputFolder ...
+func SetOutputFolder(folder string) {
+	Singleton().SetOutputFolder(folder)
 }
 
 // AddGenerator ...
@@ -60,7 +109,7 @@ func (p *P) AddGenerator(generatorVersion string, generator G, enabled bool) {
 
 // AddGenerator ...
 func AddGenerator(generatorVersion string, generator G, enabled bool) {
-	p.AddGenerator(generatorVersion, generator, enabled)
+	Singleton().AddGenerator(generatorVersion, generator, enabled)
 }
 
 // AddPostProcessor ...
@@ -70,7 +119,7 @@ func (p *P) AddPostProcessor(postProcessorVersion string, postProcessor PP, enab
 
 // AddPostProcessor ...
 func AddPostProcessor(postProcessorVersion string, postProcessor PP, enabled bool) {
-	p.AddPostProcessor(postProcessorVersion, postProcessor, enabled)
+	Singleton().AddPostProcessor(postProcessorVersion, postProcessor, enabled)
 }
 
 // EnableGenerator ...
@@ -84,7 +133,7 @@ func (p *P) EnableGenerator(generatorVersion string, enabled bool) {
 
 // EnableGenerator ...
 func EnableGenerator(generatorVersion string, enabled bool) {
-	p.EnableGenerator(generatorVersion, enabled)
+	Singleton().EnableGenerator(generatorVersion, enabled)
 }
 
 // EnablePostProcessor ...
@@ -98,7 +147,7 @@ func (p *P) EnablePostProcessor(postProcessorVersion string, enabled bool) {
 
 // EnablePostProcessor ...
 func EnablePostProcessor(postProcessorVersion string, enabled bool) {
-	p.EnablePostProcessor(postProcessorVersion, enabled)
+	Singleton().EnablePostProcessor(postProcessorVersion, enabled)
 }
 
 // RunGenerator ...
@@ -121,7 +170,7 @@ func (p *P) RunGenerator(md *proton.MD) ([]proton.FI, error) {
 
 // RunGenerator ...
 func RunGenerator(md *proton.MD) ([]proton.FI, error) {
-	return p.RunGenerator(md)
+	return Singleton().RunGenerator(md)
 }
 
 // RunPostProcessor ...
@@ -132,7 +181,7 @@ func (p *P) RunPostProcessor(fi []proton.FI) ([]proton.FI, error) {
 	r := fi
 	for _, postProcessorInfo := range p.postProcessorInfo {
 		if postProcessorInfo.Enabled {
-			pv, err := postProcessorInfo.PostProcessor(r)
+			pv, err := postProcessorInfo.PostProcessor(p, r)
 			if err != nil {
 				return nil, err
 			}
@@ -144,7 +193,7 @@ func (p *P) RunPostProcessor(fi []proton.FI) ([]proton.FI, error) {
 
 // RunPostProcessor ...
 func RunPostProcessor(fi []proton.FI) ([]proton.FI, error) {
-	return p.RunPostProcessor(fi)
+	return Singleton().RunPostProcessor(fi)
 }
 
 // Run ...
@@ -165,5 +214,5 @@ func (p *P) Run(md *proton.MD) ([]proton.FI, error) {
 
 // Run ...
 func Run(md *proton.MD) ([]proton.FI, error) {
-	return p.Run(md)
+	return Singleton().Run(md)
 }

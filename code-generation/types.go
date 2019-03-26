@@ -18,7 +18,7 @@ func NewGeneratorInfo(generatorVersion string, generator G, enabled bool) *GI {
 }
 
 // PP ...
-type PP func([]proton.FI) ([]proton.FI, error)
+type PP func(*P, []proton.FI) ([]proton.FI, error)
 
 // PPI ...
 type PPI struct {

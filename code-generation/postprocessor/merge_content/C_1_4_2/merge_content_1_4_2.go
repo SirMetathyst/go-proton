@@ -1,9 +1,12 @@
 package postprocessor
 
-import proton "github.com/SirMetathyst/go-proton"
+import (
+	proton "github.com/SirMetathyst/go-proton"
+	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
+)
 
 // MergeContentPostProcessor_C_1_4_2 ...
-func MergeContentPostProcessor_C_1_4_2(fi []proton.FI) ([]proton.FI, error) {
+func MergeContentPostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
 	fl := make(map[string][]proton.FI)
 	inl := make([]proton.FI, 0)
 

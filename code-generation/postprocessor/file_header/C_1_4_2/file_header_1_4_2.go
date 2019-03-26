@@ -4,10 +4,11 @@ import (
 	"bytes"
 
 	proton "github.com/SirMetathyst/go-proton"
+	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 )
 
 // FileHeaderPostProcessor_C_1_4_2 ...
-func FileHeaderPostProcessor_C_1_4_2(fi []proton.FI) ([]proton.FI, error) {
+func FileHeaderPostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
 	slice := make([]proton.FI, 0)
 	for _, f := range fi {
 		b := new(bytes.Buffer)
