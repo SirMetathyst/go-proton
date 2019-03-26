@@ -1,16 +1,16 @@
 package codegeneration
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strings"
 	"syscall"
 
-	"github.com/SirMetathyst/go-blackboard"
+	proton "github.com/SirMetathyst/go-proton"
 
 	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/clean_target_directory/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/file_header/C_1_4_2"
@@ -18,47 +18,25 @@ import (
 	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/print_file/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/print_file_content/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/code-generation/postprocessor/write_to_disk/C_1_4_2"
-	"github.com/SirMetathyst/go-proton/dsl"
+
 	"github.com/fsnotify/fsnotify"
 )
 
 var (
-	File            = flag.String("File", "proton.proton", "")
-	OutputDirectory = flag.String("OutputDirectory", "Generated", "")
-	WatchFileEnable = flag.Bool("WatchFileEnable", false, "")
-	WatchFile       = []string{}
+	ProjectDirectory = flag.String("p", "./", "Project Directory")
+	DaemonMode       = flag.Bool("d", false, "Daemon Mode")
+)
+
+var (
+	// ErrNoProtonFilesFound is returned when no *.proton files were found
+	ErrNoProtonFilesFound = fmt.Errorf("proton: no *.proton files were found")
 )
 
 // Must ...
 func Must(err error) {
 	if err != nil {
-		log.Fatalf("Proton: %s", err)
+		log.Fatal(err)
 	}
-}
-
-// StringSlice ...
-type StringSlice []string
-
-// String ...
-func (s *StringSlice) String() string {
-	return fmt.Sprint(*s)
-}
-
-// Set ...
-func (s *StringSlice) Set(value string) error {
-	if len(*s) > 0 {
-		return errors.New("string slice flag already set")
-	}
-	for _, v := range strings.Split(value, ",") {
-		*s = append(*s, v)
-	}
-	return nil
-}
-
-// NewStringSlice ...
-func NewStringSlice(value []string, p *[]string) *StringSlice {
-	*p = value
-	return (*StringSlice)(p)
 }
 
 // Usage ...
@@ -87,26 +65,6 @@ func Usage() {
 	})
 }
 
-// Flag ...
-func Flag() error {
-
-	for _, opt := range blackboard.AllBool() {
-		flag.BoolVar(opt.Value, opt.Key, *opt.Value, "")
-	}
-
-	for _, opt := range blackboard.AllStringSlice() {
-		flag.Var(NewStringSlice(*opt.Value, opt.Value), opt.Key, "")
-	}
-
-	for _, opt := range blackboard.AllString() {
-		flag.StringVar(opt.Value, opt.Key, *opt.Value, "")
-	}
-
-	flag.Usage = Usage
-	flag.Parse()
-	return nil
-}
-
 // SetupProton ...
 func SetupProton() error {
 
@@ -123,47 +81,76 @@ func SetupProton() error {
 
 // SetupConfiguration ...
 func SetupConfiguration() error {
-
 	for _, generatorInfo := range GeneratorInfo() {
-		blackboard.SetBoolP(generatorInfo.GeneratorVersion, &generatorInfo.Enabled)
+		flag.BoolVar(&generatorInfo.Enabled, generatorInfo.GeneratorVersion, generatorInfo.Enabled, "")
 	}
-
 	for _, postProcessorInfo := range PostProcessorInfo() {
-		blackboard.SetBoolP(postProcessorInfo.PostProcessorVersion, &postProcessorInfo.Enabled)
+		flag.BoolVar(&postProcessorInfo.Enabled, postProcessorInfo.PostProcessorVersion, postProcessorInfo.Enabled, "")
 	}
-
-	CleanTargetDirectory = *OutputDirectory
-	WriteToDiskDirectory = *OutputDirectory
-
 	return nil
 }
 
 // Setup ...
 func Setup() error {
-	Must(SetupProton())
-	Must(SetupConfiguration())
-	Must(Flag())
+	err := SetupProton()
+	if err != nil {
+		return err
+	}
+	err = SetupConfiguration()
+	if err != nil {
+		return err
+	}
+	flag.Usage = Usage
+	flag.Parse()
 	return nil
 }
 
 // RunProton ...
-func RunProton() error {
-	md, err := dsl.Parse(*File)
+func RunProton(parser func(file string) (*proton.MD, error)) error {
+	md, err := parser("proton.proton")
 	if err != nil {
 		return err
 	}
 	_, err = Run(md)
-	return err
+	if err != nil {
+		return err
+	}
+	log.Println("proton: generated")
+	return nil
 }
 
-// Watcher ...
-func Watcher(File ...string) error {
+// ProtonFiles ...
+func ProtonFiles(root string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if filepath.Ext(path) == ".proton" {
+			log.Printf("proton: %q: FOUND", path)
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
+}
+
+// Daemon ...
+func Daemon(parser func(file string) (*proton.MD, error)) error {
 	w, err := fsnotify.NewWatcher()
 	defer w.Close()
 	Must(err)
 
-	for _, File := range File {
-		Must(w.Add(File))
+	files, err := ProtonFiles(*ProjectDirectory)
+	Must(err)
+
+	if len(files) == 0 {
+		return ErrNoProtonFilesFound
+	}
+
+	for _, file := range files {
+		log.Printf("proton: %q: WATCH", file)
+		Must(w.Add(file))
 	}
 
 	go func() {
@@ -171,13 +158,8 @@ func Watcher(File ...string) error {
 			select {
 			case ev := <-w.Events:
 				{
-					log.Printf("Proton: %s\n", ev)
-					err := RunProton()
-					if err != nil {
-						log.Printf("Proton: %s\n", err)
-					} else {
-						log.Printf("Proton: Generated\n")
-					}
+					log.Printf("proton: %s\n", ev)
+					RunProton(parser)
 				}
 			}
 		}
@@ -190,19 +172,13 @@ func Watcher(File ...string) error {
 }
 
 // RunApplication ...
-func RunApplication() {
-	flag.Var(NewStringSlice(WatchFile, &WatchFile), "WatchFile", "")
+func RunApplication(parser func(file string) (*proton.MD, error)) {
+
 	Must(Setup())
+	Must(RunProton(parser))
 
-	err := RunProton()
-	if err != nil {
-		log.Printf("Proton: %s", err)
-	} else {
-		log.Printf("Proton: Generated")
-	}
-
-	if *WatchFileEnable && len(WatchFile) >= 1 {
-		Must(Watcher(WatchFile...))
+	if *DaemonMode == true {
+		Must(Daemon(parser))
 		return
 	}
 }

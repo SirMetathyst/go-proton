@@ -4,10 +4,12 @@ OUTPUT="./proton.exe"
 
 build:
 	packr.exe build -ldflags=$(LDFLAGS) -o $(OUTPUT) $(INPUT)
+
+buildfinal: build
 	upx.exe --brute $(OUTPUT)
 
-install: build
+install: buildfinal
 	cp ./proton.exe ../../../../../bin/proton.exe
 
-install_clean: install
+install_clean: buildfinal
 	rm ./proton.exe

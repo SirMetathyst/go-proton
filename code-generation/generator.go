@@ -7,8 +7,10 @@ import (
 )
 
 var (
-	ErrProtonModelUndefined    = fmt.Errorf("Proton: `Model` Undefined.")
-	ErrProtonFileInfoUndefined = fmt.Errorf("Proton: `FileInfo` Undefined.")
+	// ErrProtonModelIsNil is returned when the a nil model is given
+	ErrProtonModelIsNil = fmt.Errorf("proton: model is nil")
+	// ErrProtonFileInfoIsNil is returned when a nil FileInfo is given
+	ErrProtonFileInfoIsNil = fmt.Errorf("proton: fileInfo is nil")
 )
 
 // P ...
@@ -102,7 +104,7 @@ func EnablePostProcessor(postProcessorVersion string, enabled bool) {
 // RunGenerator ...
 func (p *P) RunGenerator(md *proton.MD) ([]proton.FI, error) {
 	if md == nil {
-		return nil, ErrProtonModelUndefined
+		return nil, ErrProtonModelIsNil
 	}
 	r := make([]proton.FI, 0)
 	for _, generatorInfo := range p.generatorInfo {
@@ -125,7 +127,7 @@ func RunGenerator(md *proton.MD) ([]proton.FI, error) {
 // RunPostProcessor ...
 func (p *P) RunPostProcessor(fi []proton.FI) ([]proton.FI, error) {
 	if fi == nil {
-		return nil, ErrProtonFileInfoUndefined
+		return nil, ErrProtonFileInfoIsNil
 	}
 	r := fi
 	for _, postProcessorInfo := range p.postProcessorInfo {
@@ -148,7 +150,7 @@ func RunPostProcessor(fi []proton.FI) ([]proton.FI, error) {
 // Run ...
 func (p *P) Run(md *proton.MD) ([]proton.FI, error) {
 	if md == nil {
-		return nil, ErrProtonModelUndefined
+		return nil, ErrProtonModelIsNil
 	}
 	gv, err := p.RunGenerator(md)
 	if err != nil {

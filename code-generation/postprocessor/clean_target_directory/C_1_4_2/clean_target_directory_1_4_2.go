@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	CleanTargetDirectory = "Generated"
+	CleanTargetDirectory = "src-gen"
 )
 
 // CleanTargetDirectoryPostProcessor_C_1_4_2 ...

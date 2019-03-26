@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	WriteToDiskDirectory = "Generated"
+	WriteToDiskDirectory = "src-gen"
 )
 
 // file ...

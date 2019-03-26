@@ -1,8 +1,6 @@
 package main
 
-/*
- * Comment out the generators and post-processors you don't want in the build
- */
+// comment out generators and post-processors you don't want in the build
 
 import (
 	_ "github.com/SirMetathyst/go-proton/code-generation/generator/component/E_1_4_2"
@@ -25,8 +23,9 @@ import (
 	//_ "github.com/SirMetathyst/go-proton/code-generation/generator/event_systems/C_1_6_1"
 	//_ "github.com/SirMetathyst/go-proton/code-generation/generator/feature/C_1_4_2"
 	. "github.com/SirMetathyst/go-proton/code-generation"
+	"github.com/SirMetathyst/go-proton/dsl"
 )
 
 func main() {
-	RunApplication()
+	RunApplication(dsl.Parse)
 }
