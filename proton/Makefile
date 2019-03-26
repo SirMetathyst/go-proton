@@ -3,13 +3,16 @@ INPUT="./main.go"
 OUTPUT="./proton.exe"
 
 build:
+	go.exe build -ldflags=$(LDFLAGS) -o $(OUTPUT) $(INPUT)
+
+buildadv:
 	packr.exe build -ldflags=$(LDFLAGS) -o $(OUTPUT) $(INPUT)
 
-buildfinal: build
+buildadvfinal: build
 	upx.exe --brute $(OUTPUT)
 
-install: buildfinal
+install: buildadvfinal
 	cp ./proton.exe ../../../../../bin/proton.exe
 
-install_clean: buildfinal
+install_clean: buildadvfinal
 	rm ./proton.exe
