@@ -7,6 +7,10 @@ import (
 	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 )
 
+func init() {
+	codegeneration.AddPostProcessor("FileHeaderPostProcessor_C_1_4_2", FileHeaderPostProcessor_C_1_4_2, true)
+}
+
 // FileHeaderPostProcessor_C_1_4_2 ...
 func FileHeaderPostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
 	slice := make([]proton.FI, 0)

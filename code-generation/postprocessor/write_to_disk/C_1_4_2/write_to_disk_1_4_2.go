@@ -9,6 +9,10 @@ import (
 	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 )
 
+func init() {
+	codegeneration.AddPostProcessor("WriteToDiskPostProcessor_C_1_4_2", WriteToDiskPostProcessor_C_1_4_2, true)
+}
+
 // file ...
 type file interface {
 	File() string

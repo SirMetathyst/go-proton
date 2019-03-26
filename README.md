@@ -9,7 +9,8 @@ Immediate TODO:
 TODO:
 
 - Rewrite documentation after project restructuring...
-- Write generator/post-processor dependency system for resolving "RunAfter" map. e.g. PostProcessorA "RunAfter" PostProcessorB and do the same for generators. Currently all generators are off by default.
+- Currently all generators are off by default, create system to find newest version
+and enable the latest generators/post-processors
 
 
 

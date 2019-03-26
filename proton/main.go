@@ -22,7 +22,14 @@ import (
 	//_ "github.com/SirMetathyst/go-proton/code-generation/generator/event_system/C_1_6_1"
 	//_ "github.com/SirMetathyst/go-proton/code-generation/generator/event_systems/C_1_6_1"
 	//_ "github.com/SirMetathyst/go-proton/code-generation/generator/feature/C_1_4_2"
-	cmd "github.com/SirMetathyst/go-proton/proton/cmd"
+	_ "github.com/SirMetathyst/go-proton/code-generation/postprocessor/clean_target_directory/C_1_4_2"
+	_ "github.com/SirMetathyst/go-proton/code-generation/postprocessor/file_header/C_1_4_2"
+	_ "github.com/SirMetathyst/go-proton/code-generation/postprocessor/merge_content/C_1_4_2"
+	_ "github.com/SirMetathyst/go-proton/code-generation/postprocessor/print_file/C_1_4_2"
+	_ "github.com/SirMetathyst/go-proton/code-generation/postprocessor/print_file_content/C_1_4_2"
+	_ "github.com/SirMetathyst/go-proton/code-generation/postprocessor/write_to_disk/C_1_4_2"
+
+	"github.com/SirMetathyst/go-proton/proton/cmd"
 )
 
 func main() {

@@ -5,6 +5,10 @@ import (
 	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 )
 
+func init() {
+	codegeneration.AddPostProcessor("MergeContentPostProcessor_C_1_4_2", MergeContentPostProcessor_C_1_4_2, true)
+}
+
 // MergeContentPostProcessor_C_1_4_2 ...
 func MergeContentPostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
 	fl := make(map[string][]proton.FI)

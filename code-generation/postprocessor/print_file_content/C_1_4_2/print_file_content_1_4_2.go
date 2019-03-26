@@ -7,6 +7,10 @@ import (
 	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 )
 
+func init() {
+	codegeneration.AddPostProcessor("PrintFileContentPostProcessor_C_1_4_2", PrintFileContentPostProcessor_C_1_4_2, false)
+}
+
 // fileContent ...
 type fileContent interface {
 	FileContent() string
