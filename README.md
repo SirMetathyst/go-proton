@@ -1,6 +1,5 @@
 # Overview
-Proton is an [Entitas](https://github.com/sschmid/Entitas-CSharp) Code-Generator written in golang. Distributed as a single executable you are able to compose contexts, components and entity index's in a custom DSL ([Proton-Lang](https://github.com/SirMetathyst/go-proton/dsl/)
-) inspired from [Entitas-Lang](https://github.com/sschmid/Entitas-CSharp/wiki/Tutorial-%E2%80%90-Entitas%E2%80%90lang).
+Proton is an [Entitas](https://github.com/sschmid/Entitas-CSharp) Code-Generator written in golang. Distributed as a single executable you are able to compose contexts, components and entity index's in a custom DSL [Proton-Lang](https://github.com/SirMetathyst/go-proton/dsl/) inspired by [Entitas-Lang](https://github.com/sschmid/Entitas-CSharp/wiki/Tutorial-%E2%80%90-Entitas%E2%80%90lang).
 
 ```
 // CSharp.

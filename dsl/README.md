@@ -1,6 +1,6 @@
 # Overview
-([Proton-Lang](https://github.com/SirMetathyst/go-proton-lang)
-) is a custom DSL inspired from [Entitas-Lang](https://github.com/sschmid/Entitas-CSharp/wiki/Tutorial-%E2%80%90-Entitas%E2%80%90lang).
+[Proton-Lang](https://github.com/SirMetathyst/go-proton-lang)
+ is a custom DSL inspired by [Entitas-Lang](https://github.com/sschmid/Entitas-CSharp/wiki/Tutorial-%E2%80%90-Entitas%E2%80%90lang).
 
 # Proton-Lang
 
