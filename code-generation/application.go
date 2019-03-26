@@ -25,8 +25,8 @@ func Must(err error) {
 	}
 }
 
-// RunProton ...
-func RunProton(parser func(file string) (*proton.MD, error)) error {
+// runProton ...
+func runProton(parser func(file string) (*proton.MD, error)) error {
 	md, err := parser("proton.proton")
 	if err != nil {
 		return err
@@ -39,8 +39,8 @@ func RunProton(parser func(file string) (*proton.MD, error)) error {
 	return nil
 }
 
-// ProtonFiles ...
-func ProtonFiles(root string) ([]string, error) {
+// protonFiles ...
+func protonFiles(root string) ([]string, error) {
 	var files []string
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if filepath.Ext(path) == ".proton" {
@@ -55,13 +55,13 @@ func ProtonFiles(root string) ([]string, error) {
 	return files, nil
 }
 
-// Daemon ...
-func Daemon(path string, parser func(file string) (*proton.MD, error)) error {
+// runDaemon ...
+func runDaemon(projectPath string, parser func(file string) (*proton.MD, error)) error {
 	w, err := fsnotify.NewWatcher()
 	defer w.Close()
 	Must(err)
 
-	files, err := ProtonFiles(path)
+	files, err := protonFiles(projectPath)
 	Must(err)
 
 	if len(files) == 0 {
@@ -79,7 +79,7 @@ func Daemon(path string, parser func(file string) (*proton.MD, error)) error {
 			case ev := <-w.Events:
 				{
 					log.Printf("proton: %s\n", ev)
-					RunProton(parser)
+					runProton(parser)
 				}
 			}
 		}
@@ -92,13 +92,15 @@ func Daemon(path string, parser func(file string) (*proton.MD, error)) error {
 }
 
 // RunApplication ...
-func RunApplication(root string, daemon bool, parser func(file string) (*proton.MD, error)) {
-	Must(RunProton(parser))
+func RunApplication(projectPath, outputFolder string, daemon bool, parser func(file string) (*proton.MD, error)) {
 
-	SetProjectPath(root)
+	SetProjectPath(projectPath)
+	SetOutputFolder(outputFolder)
+
+	Must(runProton(parser))
 
 	if daemon == true {
-		Must(Daemon(root, parser))
+		Must(runDaemon(projectPath, parser))
 		return
 	}
 }

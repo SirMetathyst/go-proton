@@ -12,11 +12,12 @@ var rootCmd = &cobra.Command{
 	Short: "proton is a tool to generate entitas source code",
 }
 
+func init() {
+	rootCmd.AddCommand(generateCmd)
+}
+
 // Execute ...
 func Execute() {
-
-	rootCmd.AddCommand(generateCmd)
-
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

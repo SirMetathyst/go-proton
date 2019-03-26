@@ -15,15 +15,21 @@ import (
 )
 
 var (
-	Directory = "./"
-	Daemonize = false
+	ProjectPath  = "./"
+	OutputFolder = "src-gen"
+	Daemonize    = false
 )
 
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "generate entitas source code",
+	Long: `you can enable/disable generators and post-processors with flags, 
+change the project path (which is based on excuting directory by default), 
+output folder where code is written to and keep the generator alive. 
+This will find any *.proton files in the project path, track them for changes 
+and re-generate the code.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		RunApplication(Directory, Daemonize, dsl.Parse)
+		RunApplication(ProjectPath, OutputFolder, Daemonize, dsl.Parse)
 	},
 }
 
@@ -35,8 +41,9 @@ func init() {
 		generateCmd.PersistentFlags().BoolVar(&postProcessorInfo.Enabled, postProcessorInfo.PostProcessorVersion, postProcessorInfo.Enabled, "")
 	}
 
-	generateCmd.PersistentFlags().StringVarP(&Directory, "project", "p", Directory, "")
-	generateCmd.PersistentFlags().BoolVarP(&Daemonize, "daemonize", "d", Daemonize, "")
+	generateCmd.PersistentFlags().StringVarP(&ProjectPath, "project-path", "p", ProjectPath, "project path")
+	generateCmd.PersistentFlags().StringVarP(&OutputFolder, "output-folder", "o", OutputFolder, "output folder")
+	generateCmd.PersistentFlags().BoolVarP(&Daemonize, "daemonize", "d", Daemonize, "daemonize application")
 
 	AddPostProcessor("MergeContentPostProcessor_C_1_4_2", MergeContentPostProcessor_C_1_4_2, true)
 	AddPostProcessor("FileHeaderPostProcessor_C_1_4_2", FileHeaderPostProcessor_C_1_4_2, true)
@@ -44,5 +51,4 @@ func init() {
 	AddPostProcessor("PrintFileContentPostProcessor_C_1_4_2", PrintFileContentPostProcessor_C_1_4_2, false)
 	AddPostProcessor("CleanTargetDirectoryPostProcessor_C_1_4_2", CleanTargetDirectoryPostProcessor_C_1_4_2, true)
 	AddPostProcessor("WriteToDiskPostProcessor_C_1_4_2", WriteToDiskPostProcessor_C_1_4_2, true)
-
 }
