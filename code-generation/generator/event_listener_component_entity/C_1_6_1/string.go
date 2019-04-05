@@ -1,11 +1,11 @@
 package generator
 
-import "github.com/SirMetathyst/go-entitas"
+import proton "github.com/SirMetathyst/go-proton"
 
 // componentID ...
-func componentID(c *entitas.C, cp *entitas.CP) entitas.String {
+func componentID(c *proton.C, cp *proton.CP) proton.String {
 	var eventTypeSuffix = ""
-	if cp.EventType() == entitas.RemovedEvent {
+	if cp.EventType() == proton.RemovedEvent {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
@@ -13,5 +13,5 @@ func componentID(c *entitas.C, cp *entitas.CP) entitas.String {
 		optionalContextID = c.ID().String()
 	}
 	componentID := optionalContextID + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener"
-	return entitas.String(componentID)
+	return proton.String(componentID)
 }

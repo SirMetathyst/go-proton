@@ -1,4 +1,4 @@
-<%: func EventSystems_C_1_6_1(c *entitas.C, cp []*entitas.CP, b *bytes.Buffer) string %>
+<%: func EventSystems_C_1_6_1(c *proton.C, cp []*proton.CP, b *bytes.Buffer) string %>
 public sealed partial class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>EventSystems : Feature
 {
     public <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>EventSystems(Contexts contexts) 

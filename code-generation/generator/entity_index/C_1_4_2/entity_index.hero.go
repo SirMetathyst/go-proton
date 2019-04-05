@@ -6,10 +6,10 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EntityIndex_C_1_4_2(cp []*entitas.CP, ei []*entitas.EI, b *bytes.Buffer) string {
+func EntityIndex_C_1_4_2(cp []*proton.CP, ei []*proton.EI, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class Contexts
 {

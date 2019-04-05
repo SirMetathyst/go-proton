@@ -1,15 +1,14 @@
 package proton
 
 import (
-	"fmt"
-	"unicode"
+	"errors"
 )
 
 var (
-	ErrAliasIDUndefined             = fmt.Errorf("entitas(alias): id undefined")
-	ErrAliasIDContainsWhitespace    = fmt.Errorf("entitas(alias): id contains whitespace")
-	ErrAliasValueUndefined          = fmt.Errorf("entitas(alias): value undefined")
-	ErrAliasValueContainsWhitespace = fmt.Errorf("entitas(alias): value contains whitespace")
+	ErrAliasIDUndefined             = errors.New("proton: alias: id undefined")
+	ErrAliasIDContainsWhitespace    = errors.New("proton: alias: id contains whitespace")
+	ErrAliasValueUndefined          = errors.New("proton: alias: value undefined")
+	ErrAliasValueContainsWhitespace = errors.New("proton: alias: value contains whitespace")
 )
 
 // A ...
@@ -22,18 +21,14 @@ func NewAlias(id, value string) (*A, error) {
 	if id == "" {
 		return nil, ErrAliasIDUndefined
 	}
-	for _, v := range id {
-		if unicode.IsSpace(v) {
-			return nil, ErrAliasIDContainsWhitespace
-		}
+	if ContainsWhitespace(id) {
+		return nil, ErrAliasIDContainsWhitespace
 	}
 	if value == "" {
 		return nil, ErrAliasValueUndefined
 	}
-	for _, v := range value {
-		if unicode.IsSpace(v) {
-			return nil, ErrAliasValueContainsWhitespace
-		}
+	if ContainsWhitespace(value) {
+		return nil, ErrAliasValueContainsWhitespace
 	}
 	return &A{id, value}, nil
 }

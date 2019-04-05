@@ -1,11 +1,11 @@
 package generator
 
-import "github.com/SirMetathyst/go-entitas"
+import proton "github.com/SirMetathyst/go-proton"
 
 // componentID ...
-func componentID(c *entitas.C, cp *entitas.CP) entitas.String {
+func componentID(c *proton.C, cp *proton.CP) proton.String {
 	var eventTypeSuffix = ""
-	if cp.EventType() == entitas.RemovedEvent {
+	if cp.EventType() == proton.RemovedEvent {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
@@ -13,42 +13,42 @@ func componentID(c *entitas.C, cp *entitas.CP) entitas.String {
 		optionalContextID = c.ID().String()
 	}
 	componentID := optionalContextID + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener"
-	return entitas.String(componentID)
+	return proton.String(componentID)
 }
 
 // methodID ...
-func methodID(cp *entitas.CP) entitas.String {
+func methodID(cp *proton.CP) proton.String {
 	var eventTypeSuffix = ""
-	if cp.EventType() == entitas.RemovedEvent {
+	if cp.EventType() == proton.RemovedEvent {
 		eventTypeSuffix = "Removed"
 	}
 	componentID := cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix
-	return entitas.String(componentID)
+	return proton.String(componentID)
 }
 
 // filter ...
-func filter(c *entitas.C, cp *entitas.CP) string {
+func filter(c *proton.C, cp *proton.CP) string {
 	filter := ""
 	if len(cp.MemberSlice()) == 0 {
 		//switch cp.EventType() {
-		//case entitas.AddedEvent:
+		//case proton.AddedEvent:
 		//	filter = "entity." + cp.FlagPrefixOrDefault().String() + cp.ID().WithoutComponentSuffix().ToUpperFirst().String()
 		//	break
-		//case entitas.RemovedEvent:
+		//case proton.RemovedEvent:
 		//	filter = "!entity." + cp.FlagPrefixOrDefault().String() + cp.ID().WithoutComponentSuffix().ToUpperFirst().String()
 		//	break
 		//}
 	} else {
 		switch cp.EventType() {
-		case entitas.AddedEvent:
+		case proton.AddedEvent:
 			filter = "entity.has" + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + " && "
 			break
-		case entitas.RemovedEvent:
+		case proton.RemovedEvent:
 			filter = "!entity.has" + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + " && "
 			break
 		}
 	}
-	if cp.EventTarget() == entitas.SelfTarget {
+	if cp.EventTarget() == proton.SelfTarget {
 		filter += "entity.has" + componentID(c, cp).ToUpperFirst().String()
 	}
 	return filter

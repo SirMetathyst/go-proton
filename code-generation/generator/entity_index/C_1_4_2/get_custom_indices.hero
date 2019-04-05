@@ -1,4 +1,4 @@
-<%: func EntityIndexGetCustomIndices_C_1_4_2(ei []*entitas.EI, b *bytes.Buffer) string %>
+<%: func EntityIndexGetCustomIndices_C_1_4_2(ei []*proton.EI, b *bytes.Buffer) string %>
 <% for _, cei := range ei { 
     IndexType := cei.ID().String()
     ReturnType := ""

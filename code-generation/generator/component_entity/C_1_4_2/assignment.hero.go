@@ -6,10 +6,10 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentEntityAssignment_C_1_4_2(cp *entitas.CP, isEventComponent bool, b *bytes.Buffer) string {
+func ComponentEntityAssignment_C_1_4_2(cp *proton.CP, isEventComponent bool, b *bytes.Buffer) string {
 
 	if isEventComponent {
 		b.WriteString("\t\tcomponent.value")

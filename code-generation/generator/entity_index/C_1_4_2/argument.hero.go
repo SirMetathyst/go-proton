@@ -6,10 +6,10 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EntityIndexArgument_C_1_4_2(eim *entitas.EIM, b *bytes.Buffer) string {
+func EntityIndexArgument_C_1_4_2(eim *proton.EIM, b *bytes.Buffer) string {
 	ml := eim.MemberSlice()
 	for i, m := range ml {
 		b.WriteString(m.Value().String())

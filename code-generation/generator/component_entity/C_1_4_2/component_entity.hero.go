@@ -6,12 +6,12 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentEntity_C_1_4_2(c *entitas.C, cp *entitas.CP, isEventComponent bool, b *bytes.Buffer) string {
+func ComponentEntity_C_1_4_2(c *proton.C, cp *proton.CP, isEventComponent bool, b *bytes.Buffer) string {
 
-	ID := entitas.String("")
+	ID := proton.String("")
 
 	if isEventComponent {
 		ID = eventComponentID(c, cp)

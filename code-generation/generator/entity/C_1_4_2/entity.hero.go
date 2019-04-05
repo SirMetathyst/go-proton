@@ -6,10 +6,10 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func Entity_C_1_4_2(c *entitas.C, b *bytes.Buffer) string {
+func Entity_C_1_4_2(c *proton.C, b *bytes.Buffer) string {
 	b.WriteString(`
 public sealed partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())

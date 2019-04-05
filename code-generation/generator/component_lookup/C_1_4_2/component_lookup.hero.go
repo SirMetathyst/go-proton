@@ -7,10 +7,10 @@ import (
 	"bytes"
 	"strconv"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentLookup_C_1_4_2(c *entitas.C, cp []*entitas.CP, b *bytes.Buffer) string {
+func ComponentLookup_C_1_4_2(c *proton.C, cp []*proton.CP, b *bytes.Buffer) string {
 	b.WriteString(`
 public static class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
@@ -29,7 +29,7 @@ public static class `)
 		i++
 		ci++
 
-		if ccp.EventTarget() != entitas.NoTarget {
+		if ccp.EventTarget() != proton.NoTarget {
 			b.WriteString("\tpublic const int ")
 			b.WriteString(eventComponentID(c, ccp).String())
 			b.WriteString(" = ")
@@ -57,7 +57,7 @@ public static class `)
 			b.WriteString(",\n")
 		}
 		i++
-		if ccp.EventTarget() != entitas.NoTarget {
+		if ccp.EventTarget() != proton.NoTarget {
 			b.WriteString("\t\t\"")
 			b.WriteString(eventComponentID(c, ccp).String())
 			b.WriteString("\"")
@@ -85,7 +85,7 @@ public static class `)
 		}
 		i++
 
-		if ccp.EventTarget() != entitas.NoTarget {
+		if ccp.EventTarget() != proton.NoTarget {
 			b.WriteString("\t\ttypeof(")
 			b.WriteString(eventComponentID(c, ccp).WithComponentSuffix().String())
 			b.WriteRune(')')

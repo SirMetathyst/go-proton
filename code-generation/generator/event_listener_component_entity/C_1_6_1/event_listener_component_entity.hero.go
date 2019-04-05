@@ -6,10 +6,10 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EventListenerComponentEntity_C_1_6_1(c *entitas.C, cp *entitas.CP, b *bytes.Buffer) string {
+func EventListenerComponentEntity_C_1_6_1(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())

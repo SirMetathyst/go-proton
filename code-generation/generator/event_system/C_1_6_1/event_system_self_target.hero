@@ -1,4 +1,4 @@
-<%: func EventSystemSelfTarget_C_1_6_1(c *entitas.C, cp *entitas.CP, b *bytes.Buffer) string %>
+<%: func EventSystemSelfTarget_C_1_6_1(c *proton.C, cp *proton.CP, b *bytes.Buffer) string %>
 public sealed class <%==s componentID(c, cp).ToUpperFirst().String()%>EventSystem : Entitas.ReactiveSystem<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> 
 {
     readonly System.Collections.Generic.List<I<%==s componentID(c, cp).ToUpperFirst().String()%>> _listenerBuffer;

@@ -1,4 +1,4 @@
-<%: func ComponentEntityInterface_C_1_4_2(cp *entitas.CP, b *bytes.Buffer) string %>
+<%: func ComponentEntityInterface_C_1_4_2(cp *proton.CP, b *bytes.Buffer) string %>
 public interface I<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %>Entity 
 {
     <%==s cp.ID().WithComponentSuffix().ToUpperFirst().String() %><% b.WriteRune(' ')%><%==s cp.ID().WithoutComponentSuffix().ToLowerFirst().String() %> 

@@ -6,10 +6,10 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EntityIndexGetIndices_C_1_4_2(cp []*entitas.CP, b *bytes.Buffer) string {
+func EntityIndexGetIndices_C_1_4_2(cp []*proton.CP, b *bytes.Buffer) string {
 	for _, ccp := range cp {
 		for _, c := range ccp.ContextSlice() {
 			for _, m := range ccp.MemberSlice() {

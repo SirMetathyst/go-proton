@@ -6,10 +6,10 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EntityIndexAddCustomIndices_C_1_4_2(ei []*entitas.EI, b *bytes.Buffer) string {
+func EntityIndexAddCustomIndices_C_1_4_2(ei []*proton.EI, b *bytes.Buffer) string {
 
 	for _, cei := range ei {
 		if cei.Context() != nil {

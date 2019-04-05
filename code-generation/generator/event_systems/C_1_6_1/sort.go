@@ -1,8 +1,8 @@
 package generator
 
-import "github.com/SirMetathyst/go-entitas"
+import proton "github.com/SirMetathyst/go-proton"
 
-type byPriority []*entitas.CP
+type byPriority []*proton.CP
 
 func (p byPriority) Len() int {
 	return len(p)

@@ -6,12 +6,12 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EventSystemArgumentPass_1_6_1(cp *entitas.CP, b *bytes.Buffer) string {
+func EventSystemArgumentPass_1_6_1(cp *proton.CP, b *bytes.Buffer) string {
 	ml := cp.MemberSlice()
-	if len(ml) > 0 && cp.EventType() == entitas.AddedEvent {
+	if len(ml) > 0 && cp.EventType() == proton.AddedEvent {
 		b.WriteString(", ")
 		for i, m := range ml {
 			b.WriteString("component.")

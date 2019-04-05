@@ -1,4 +1,4 @@
-package dsl
+package language
 
 import (
 	"errors"
@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/SirMetathyst/go-proton/dsl/ast"
-	"github.com/SirMetathyst/go-proton/dsl/parser"
+	"github.com/SirMetathyst/go-proton/language/ast"
+	"github.com/SirMetathyst/go-proton/language/parser"
 )
 
 // Error ...

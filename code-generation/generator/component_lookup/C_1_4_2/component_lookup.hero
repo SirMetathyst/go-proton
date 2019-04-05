@@ -1,4 +1,4 @@
-<%: func ComponentLookup_C_1_4_2(c *entitas.C, cp []*entitas.CP, b *bytes.Buffer) string %>
+<%: func ComponentLookup_C_1_4_2(c *proton.C, cp []*proton.CP, b *bytes.Buffer) string %>
 public static class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup 
 {
 <% 
@@ -13,7 +13,7 @@ for _, ccp := range cp {
     i++
     ci++
 
-    if ccp.EventTarget() != entitas.NoTarget {
+    if ccp.EventTarget() != proton.NoTarget {
         b.WriteString("\tpublic const int ")
         b.WriteString(eventComponentID(c, ccp).String())
         b.WriteString(" = ")
@@ -37,7 +37,7 @@ for _, ccp := range cp {
         b.WriteString(",\n")
     }
     i++
-    if ccp.EventTarget() != entitas.NoTarget {
+    if ccp.EventTarget() != proton.NoTarget {
         b.WriteString("\t\t\"")
         b.WriteString(eventComponentID(c, ccp).String())
         b.WriteString("\"")
@@ -63,7 +63,7 @@ for _, ccp := range cp {
     }
     i++
 
-    if ccp.EventTarget() != entitas.NoTarget {
+    if ccp.EventTarget() != proton.NoTarget {
         b.WriteString("\t\ttypeof(")
         b.WriteString(eventComponentID(c, ccp).WithComponentSuffix().String())
         b.WriteRune(')')

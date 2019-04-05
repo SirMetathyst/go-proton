@@ -1,4 +1,4 @@
-<%: func ContextObserver_C_1_4_2(c []*entitas.C, b *bytes.Buffer) string %>
+<%: func ContextObserver_C_1_4_2(c []*proton.C, b *bytes.Buffer) string %>
 public partial class Contexts 
 {
 

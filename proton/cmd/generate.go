@@ -2,7 +2,7 @@ package cmd
 
 import (
 	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
-	dsl "github.com/SirMetathyst/go-proton/dsl"
+	language "github.com/SirMetathyst/go-proton/language"
 
 	"github.com/spf13/cobra"
 )
@@ -27,9 +27,9 @@ and re-generate the code.`,
 			OutputFolder: OutputFolder,
 		})
 		if Daemonize {
-			codegeneration.Daemon(dsl.Parse)
+			codegeneration.Daemon(language.Parse)
 		} else {
-			codegeneration.ParseGenerate(dsl.Parse)
+			codegeneration.ParseGenerate(language.Parse)
 		}
 	},
 }

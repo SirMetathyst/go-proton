@@ -1,4 +1,4 @@
-package dsl
+package language
 
 import (
 	"io/ioutil"
@@ -8,8 +8,8 @@ import (
 
 	"github.com/gobuffalo/packr"
 
-	"github.com/SirMetathyst/go-proton"
-	"github.com/SirMetathyst/go-proton/dsl/parser"
+	proton "github.com/SirMetathyst/go-proton"
+	"github.com/SirMetathyst/go-proton/language/parser"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 

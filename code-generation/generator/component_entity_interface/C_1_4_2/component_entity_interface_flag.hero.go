@@ -6,10 +6,10 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentEntityInterfaceFlag_C_1_4_2(cp *entitas.CP, b *bytes.Buffer) string {
+func ComponentEntityInterfaceFlag_C_1_4_2(cp *proton.CP, b *bytes.Buffer) string {
 	b.WriteString(`
 public interface I`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())

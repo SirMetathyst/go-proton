@@ -1,4 +1,4 @@
-<%: func ComponentEntityInterfaceLink_C_1_4_2(c *entitas.C, cp *entitas.CP, b *bytes.Buffer) string %>
+<%: func ComponentEntityInterfaceLink_C_1_4_2(c *proton.C, cp *proton.CP, b *bytes.Buffer) string %>
 public partial class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity : I<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>Entity 
 { 
 }

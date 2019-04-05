@@ -1,4 +1,4 @@
-<%: func ComponentEntityFlag_C_1_4_2(c *entitas.C, cp *entitas.CP, b *bytes.Buffer) string %>
+<%: func ComponentEntityFlag_C_1_4_2(c *proton.C, cp *proton.CP, b *bytes.Buffer) string %>
 public partial class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity 
 {
     static readonly <%==s cp.ID().WithComponentSuffix().ToUpperFirst().String()%><% b.WriteRune(' ') %><%==s cp.ID().WithComponentSuffix().ToLowerFirst().String()%> = new <%==s cp.ID().WithComponentSuffix().ToUpperFirst().String()%>();

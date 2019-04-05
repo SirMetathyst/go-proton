@@ -6,10 +6,10 @@ package generator
 import (
 	"bytes"
 
-	entitas "github.com/SirMetathyst/go-entitas"
+	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentContext_C_1_4_2(c *entitas.C, cp *entitas.CP, b *bytes.Buffer) string {
+func ComponentContext_C_1_4_2(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class `)
 	b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
