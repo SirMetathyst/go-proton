@@ -1,3 +1,4 @@
 *.html
 *.out
 *.json
+*.code-workspace

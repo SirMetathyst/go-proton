@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/SirMetathyst/go-proton.svg?branch=develop)](https://travis-ci.org/SirMetathyst/go-proton)  [![Coverage Status](https://coveralls.io/repos/github/SirMetathyst/go-proton/badge.svg?branch=develop)](https://coveralls.io/github/SirMetathyst/go-proton?branch=develop)
 
 # Overview
-Proton is an [Entitas](https://github.com/sschmid/Entitas-CSharp) Code-Generator written in golang. Distributed as a single executable you are able to compose contexts, components and entity index's in a custom DSL [Proton-Lang](https://github.com/SirMetathyst/go-proton/dsl/) inspired by [Entitas-Lang](https://github.com/sschmid/Entitas-CSharp/wiki/Tutorial-%E2%80%90-Entitas%E2%80%90lang).
+Proton is an [Entitas](https://github.com/sschmid/Entitas-CSharp) Code-Generator written in golang. Distributed as a single executable you are able to compose contexts, components and entity index's in a custom DSL([Proton-Lang](https://github.com/SirMetathyst/go-proton/language/)) inspired by [Entitas-Lang](https://github.com/sschmid/Entitas-CSharp/wiki/Tutorial-%E2%80%90-Entitas%E2%80%90lang).
 
 ```
 // CSharp.
@@ -101,11 +101,13 @@ Flags:
 
 # TODO
 
-- Cleanup proton package and write tests
-- Rewrite documentation after project restructuring...
+- Cleanup packages and write tests, coverage: at least 80%
+- Rewrite documentation
 - Currently all generators are off by default, create system to find newest version
-and enable the latest generators/post-processors
-
+and enable the latest generators/post-processors. Default would be set to latest but allow change of generator/post-processor through command line flag. Only one be allowed to be set per "set" under generator name
+- Add system syntax (cleanup, reactive, initialize etc) to DSL
+- Add context divert syntax back e.g. "context PhysicsKit : Game" for project modules.
+- Add "init" command for proton file generation. Tutorial of dsl syntax and project quickstart
 
 ## Compiling
 
