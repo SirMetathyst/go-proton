@@ -19,6 +19,6 @@ notifications:
   email: false
 
 script:
-  - go test -v -race -covermode=count -coverprofile=coverage.out ./...
+  - go test -v -covermode=count -coverprofile=coverage.out ./...
   - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
   - go build -v ./proton
