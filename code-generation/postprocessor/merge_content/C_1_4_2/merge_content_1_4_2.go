@@ -10,11 +10,11 @@ func init() {
 }
 
 // MergeContentPostProcessor_C_1_4_2 ...
-func MergeContentPostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
-	fl := make(map[string][]proton.FI)
-	inl := make([]proton.FI, 0)
+func MergeContentPostProcessor_C_1_4_2(p *codegeneration.P, fileInfo []proton.FileInfo) ([]proton.FileInfo, error) {
+	fl := make(map[string][]proton.FileInfo)
+	inl := make([]proton.FileInfo, 0)
 
-	for _, f := range fi {
+	for _, f := range fileInfo {
 		fl[f.File()] = append(fl[f.File()], proton.NewFileInfo(f.File(), f.FileContent(), f.Generator()))
 	}
 

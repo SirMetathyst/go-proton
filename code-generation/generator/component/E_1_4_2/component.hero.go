@@ -9,11 +9,11 @@ import (
 	"github.com/SirMetathyst/go-proton"
 )
 
-func Component_E_1_4_2(cp *proton.CP, b *bytes.Buffer) string {
+func Component_E_1_4_2(cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public sealed partial class `)
 	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` : Entitas.IComponent 
+	b.WriteString(` : Entitas.IComponent
 {
 `)
 

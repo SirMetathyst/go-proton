@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/SirMetathyst/go-proton"
-	"github.com/SirMetathyst/go-proton/code-generation"
+	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 )
 
 func init() {
@@ -12,20 +12,20 @@ func init() {
 }
 
 // eventComponentID ...
-func eventComponentID(cp *proton.CP) proton.String {
+func eventComponentID(cp *proton.Component) proton.String {
 	var eventTypeSuffix = ""
-	if cp.EventType() == proton.RemovedEvent {
+	if cp.EventType() == proton.EventTypeRemoved {
 		eventTypeSuffix = "Removed"
 	}
 	return proton.String(proton.String(cp.ID()).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener")
 }
 
 // ComponentGenerator_E_1_4_2 ...
-func ComponentGenerator_E_1_4_2(md *proton.MD) ([]proton.FI, error) {
-	slice := make([]proton.FI, 0)
+func ComponentGenerator_E_1_4_2(md *proton.Model) ([]proton.FileInfo, error) {
+	slice := make([]proton.FileInfo, 0)
 	for _, cp := range md.ComponentSlice() {
 		slice = append(slice, proton.NewFileInfo("Components/"+cp.ID().WithComponentSuffix().ToUpperFirst().String()+".cs", Component_E_1_4_2(cp, new(bytes.Buffer)), "ComponentGenerator_E_1_4_2"))
-		if cp.EventTarget() != proton.NoTarget {
+		if cp.EventTarget() != proton.EventTargetNone {
 			slice = append(slice, proton.NewFileInfo("Components/"+cp.ID().WithComponentSuffix().ToUpperFirst().String()+"Listener.cs", EventComponent_E_1_4_2(cp, new(bytes.Buffer)), "ComponentGenerator_E_1_4_2"))
 		}
 	}

@@ -1,33 +1,28 @@
 package proton
 
-// FII ...
-type FII interface {
-	File() string
-	FileContent() string
-	Generator() string
-}
-
-// FI ...
-type FI struct {
-	f, fc, g string
+// FileInfo ...
+type FileInfo struct {
+	file        string
+	fileContent string
+	generator   string
 }
 
 // File ...
-func (fi FI) File() string {
-	return fi.f
+func (fi FileInfo) File() string {
+	return fi.file
 }
 
 // FileContent ...
-func (fi FI) FileContent() string {
-	return fi.fc
+func (fi FileInfo) FileContent() string {
+	return fi.fileContent
 }
 
 // Generator ...
-func (fi FI) Generator() string {
-	return fi.g
+func (fi FileInfo) Generator() string {
+	return fi.generator
 }
 
 // NewFileInfo ...
-func NewFileInfo(file, fileContent, generator string) FI {
-	return FI{file, fileContent, generator}
+func NewFileInfo(file, fileContent, generator string) FileInfo {
+	return FileInfo{file, fileContent, generator}
 }

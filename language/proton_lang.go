@@ -27,40 +27,48 @@ func ASTList(RootAST *AST) []*AST {
 
 func getEventTarget(b string) proton.EventTarget {
 	if b == "self" {
-		return proton.SelfTarget
+		return proton.EventTargetSelf
 	} else if b == "any" {
-		return proton.AnyTarget
+		return proton.EventTargetAny
 	}
-	return proton.NoTarget
+	return proton.EventTargetNone
 }
 
 func getEventType(e string) proton.EventType {
-	if e == "removed" {
-		return proton.RemovedEvent
+	switch e {
+	case "addedOrRemoved":
+		return proton.EventTypeAddedOrRemoved
+	case "removed":
+		return proton.EventTypeRemoved
+	default:
+		return proton.EventTypeAdded
 	}
-	return proton.AddedEvent
 }
 
 func getCleanupMode(m string) proton.CleanupMode {
-	if m == "destroy_entity" {
-		return proton.DestroyEntity
-	} else if m == "remove_component" {
-		return proton.RemoveComponent
+	switch m {
+	case "destroyEntity":
+		return proton.CleanupModeEntity
+	case "destroyComponent":
+		return proton.CleanupModeComponent
+	default:
+		return proton.CleanupModeNone
 	}
-	return proton.NoCleanup
 }
 
-func getEntityIndex(e string) proton.EntityIndex {
-	if e == "multiple" {
-		return proton.MultipleEntityIndex
-	} else if e == "single" {
-		return proton.SingleEntityIndex
+func getEntityIndexType(e string) proton.EntityIndexType {
+	switch e {
+	case "single":
+		return proton.EntityIndexTypeSingle
+	case "multiple":
+		return proton.EntityIndexTypeMultiple
+	default:
+		return proton.EntityIndexTypeNone
 	}
-	return proton.NoEntityIndex
 }
 
 // ASTToModel ...
-func ASTToModel(RootAST *AST) (*proton.MD, error) {
+func ASTToModel(RootAST *AST) (*proton.Model, error) {
 
 	ASTList := ASTList(RootAST)
 
@@ -135,7 +143,7 @@ func ASTToModel(RootAST *AST) (*proton.MD, error) {
 							for _, attribute := range property.AttributeList {
 								switch attribute.Key {
 								case "entityIndex":
-									m.SetEntityIndex(getEntityIndex(attribute.Value))
+									m.SetEntityIndexType(getEntityIndexType(attribute.Value))
 								}
 							}
 
@@ -151,7 +159,7 @@ func ASTToModel(RootAST *AST) (*proton.MD, error) {
 							for _, attribute := range property.AttributeList {
 								switch attribute.Key {
 								case "entityIndex":
-									m.SetEntityIndex(getEntityIndex(attribute.Value))
+									m.SetEntityIndexType(getEntityIndexType(attribute.Value))
 								}
 							}
 
@@ -275,7 +283,7 @@ func parseInclude(include string, includeList *ASTIncludeList) (*AST, error) {
 }
 
 // Parse ...
-func Parse(pkg string) (*proton.MD, error) {
+func Parse(pkg string) (*proton.Model, error) {
 	file, err := os.Open(pkg)
 	defer file.Close()
 	if err != nil {

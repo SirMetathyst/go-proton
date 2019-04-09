@@ -47,12 +47,12 @@ func (e EventTarget) String() String {
 type EventType int
 
 const (
-	// EventAdded ...
-	EventAdded EventType = iota
-	// EventAddedOrRemoved ...
-	EventAddedOrRemoved
-	// EventRemoved ...
-	EventRemoved
+	// EventTypeAdded ...
+	EventTypeAdded EventType = iota
+	// EventTypeAddedOrRemoved ...
+	EventTypeAddedOrRemoved
+	// EventTypeRemoved ...
+	EventTypeRemoved
 )
 
 // IsValid ...
@@ -63,11 +63,11 @@ func (t EventType) IsValid() bool {
 // String ...
 func (t EventType) String() String {
 	switch t {
-	case EventAdded:
+	case EventTypeAdded:
 		return String("Added")
-	case EventAddedOrRemoved:
+	case EventTypeAddedOrRemoved:
 		return String("AddedOrRemoved")
-	case EventRemoved:
+	case EventTypeRemoved:
 		return String("Removed")
 
 	}

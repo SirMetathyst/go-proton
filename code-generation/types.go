@@ -2,32 +2,32 @@ package codegeneration
 
 import proton "github.com/SirMetathyst/go-proton"
 
-// G ...
-type G func(md *proton.MD) ([]proton.FI, error)
+// GeneratorFunc ...
+type GeneratorFunc func(md *proton.Model) ([]proton.FileInfo, error)
 
-// GI ...
-type GI struct {
+// GeneratorInfo ...
+type GeneratorInfo struct {
 	GeneratorVersion string
-	Generator        G
+	GeneratorFunc    GeneratorFunc
 	Enabled          bool
 }
 
 // NewGeneratorInfo ...
-func NewGeneratorInfo(generatorVersion string, generator G, enabled bool) *GI {
-	return &GI{generatorVersion, generator, enabled}
+func NewGeneratorInfo(generatorVersion string, generatorFunc GeneratorFunc, enabled bool) *GeneratorInfo {
+	return &GeneratorInfo{generatorVersion, generatorFunc, enabled}
 }
 
-// PP ...
-type PP func(*P, []proton.FI) ([]proton.FI, error)
+// PostProcessorFunc ...
+type PostProcessorFunc func(*P, []proton.FileInfo) ([]proton.FileInfo, error)
 
-// PPI ...
-type PPI struct {
+// PostProcessorInfo ...
+type PostProcessorInfo struct {
 	PostProcessorVersion string
-	PostProcessor        PP
+	PostProcessorFunc    PostProcessorFunc
 	Enabled              bool
 }
 
 // NewPostProcessorInfo ...
-func NewPostProcessorInfo(postProcessorVersion string, postProcessor PP, enabled bool) *PPI {
-	return &PPI{postProcessorVersion, postProcessor, enabled}
+func NewPostProcessorInfo(postProcessorVersion string, postProcessorFunc PostProcessorFunc, enabled bool) *PostProcessorInfo {
+	return &PostProcessorInfo{postProcessorVersion, postProcessorFunc, enabled}
 }

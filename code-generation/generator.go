@@ -23,9 +23,9 @@ var (
 
 // P ...
 type P struct {
-	generatorInfo     []*GI
-	postProcessorInfo []*PPI
-	Options           PO
+	generatorInfoSlice     []*GeneratorInfo
+	postProcessorInfoSlice []*PostProcessorInfo
+	Options                PO
 }
 
 // PO ...
@@ -50,24 +50,24 @@ func Singleton() *P {
 	return p
 }
 
-// GeneratorInfo ...
-func (p *P) GeneratorInfo() []*GI {
-	return p.generatorInfo
+// GeneratorInfoSlice ...
+func (p *P) GeneratorInfoSlice() []*GeneratorInfo {
+	return p.generatorInfoSlice
 }
 
-// GeneratorInfo ...
-func GeneratorInfo() []*GI {
-	return Singleton().GeneratorInfo()
+// GeneratorInfoSlice ...
+func GeneratorInfoSlice() []*GeneratorInfo {
+	return Singleton().GeneratorInfoSlice()
 }
 
-// PostProcessorInfo ...
-func (p *P) PostProcessorInfo() []*PPI {
-	return p.postProcessorInfo
+// PostProcessorInfoSlice ...
+func (p *P) PostProcessorInfoSlice() []*PostProcessorInfo {
+	return p.postProcessorInfoSlice
 }
 
-// PostProcessorInfo ...
-func PostProcessorInfo() []*PPI {
-	return Singleton().PostProcessorInfo()
+// PostProcessorInfoSlice ...
+func PostProcessorInfoSlice() []*PostProcessorInfo {
+	return Singleton().PostProcessorInfoSlice()
 }
 
 // ProjectPath ...
@@ -103,28 +103,28 @@ func SetOptions(options PO) {
 }
 
 // AddGenerator ...
-func (p *P) AddGenerator(generatorVersion string, generator G, enabled bool) {
-	p.generatorInfo = append(p.generatorInfo, NewGeneratorInfo(generatorVersion, generator, enabled))
+func (p *P) AddGenerator(generatorVersion string, generatorFunc GeneratorFunc, enabled bool) {
+	p.generatorInfoSlice = append(p.generatorInfoSlice, NewGeneratorInfo(generatorVersion, generatorFunc, enabled))
 }
 
 // AddGenerator ...
-func AddGenerator(generatorVersion string, generator G, enabled bool) {
-	Singleton().AddGenerator(generatorVersion, generator, enabled)
+func AddGenerator(generatorVersion string, generatorFunc GeneratorFunc, enabled bool) {
+	Singleton().AddGenerator(generatorVersion, generatorFunc, enabled)
 }
 
 // AddPostProcessor ...
-func (p *P) AddPostProcessor(postProcessorVersion string, postProcessor PP, enabled bool) {
-	p.postProcessorInfo = append(p.postProcessorInfo, NewPostProcessorInfo(postProcessorVersion, postProcessor, enabled))
+func (p *P) AddPostProcessor(postProcessorVersion string, postProcessorFunc PostProcessorFunc, enabled bool) {
+	p.postProcessorInfoSlice = append(p.postProcessorInfoSlice, NewPostProcessorInfo(postProcessorVersion, postProcessorFunc, enabled))
 }
 
 // AddPostProcessor ...
-func AddPostProcessor(postProcessorVersion string, postProcessor PP, enabled bool) {
-	Singleton().AddPostProcessor(postProcessorVersion, postProcessor, enabled)
+func AddPostProcessor(postProcessorVersion string, postProcessorFunc PostProcessorFunc, enabled bool) {
+	Singleton().AddPostProcessor(postProcessorVersion, postProcessorFunc, enabled)
 }
 
 // EnableGenerator ...
 func (p *P) EnableGenerator(generatorVersion string, enabled bool) {
-	for _, generatorInfo := range p.generatorInfo {
+	for _, generatorInfo := range p.generatorInfoSlice {
 		if generatorInfo.GeneratorVersion == generatorVersion {
 			generatorInfo.Enabled = enabled
 		}
@@ -138,7 +138,7 @@ func EnableGenerator(generatorVersion string, enabled bool) {
 
 // EnablePostProcessor ...
 func (p *P) EnablePostProcessor(postProcessorVersion string, enabled bool) {
-	for _, postProcessorInfo := range p.postProcessorInfo {
+	for _, postProcessorInfo := range p.postProcessorInfoSlice {
 		if postProcessorInfo.PostProcessorVersion == postProcessorVersion {
 			postProcessorInfo.Enabled = enabled
 		}
@@ -151,14 +151,14 @@ func EnablePostProcessor(postProcessorVersion string, enabled bool) {
 }
 
 // RunGenerators ...
-func (p *P) RunGenerators(md *proton.MD) ([]proton.FI, error) {
+func (p *P) RunGenerators(md *proton.Model) ([]proton.FileInfo, error) {
 	if md == nil {
 		return nil, ErrProtonModelIsNil
 	}
-	r := make([]proton.FI, 0)
-	for _, generatorInfo := range p.generatorInfo {
+	r := make([]proton.FileInfo, 0)
+	for _, generatorInfo := range p.generatorInfoSlice {
 		if generatorInfo.Enabled {
-			gv, err := generatorInfo.Generator(md)
+			gv, err := generatorInfo.GeneratorFunc(md)
 			if err != nil {
 				return nil, err
 			}
@@ -169,19 +169,19 @@ func (p *P) RunGenerators(md *proton.MD) ([]proton.FI, error) {
 }
 
 // RunGenerators ...
-func RunGenerators(md *proton.MD) ([]proton.FI, error) {
+func RunGenerators(md *proton.Model) ([]proton.FileInfo, error) {
 	return Singleton().RunGenerators(md)
 }
 
 // RunPostProcessors ...
-func (p *P) RunPostProcessors(fi []proton.FI) ([]proton.FI, error) {
+func (p *P) RunPostProcessors(fi []proton.FileInfo) ([]proton.FileInfo, error) {
 	if fi == nil {
 		return nil, ErrProtonFileInfoIsNil
 	}
 	r := fi
-	for _, postProcessorInfo := range p.postProcessorInfo {
+	for _, postProcessorInfo := range p.postProcessorInfoSlice {
 		if postProcessorInfo.Enabled {
-			pv, err := postProcessorInfo.PostProcessor(p, r)
+			pv, err := postProcessorInfo.PostProcessorFunc(p, r)
 			if err != nil {
 				return nil, err
 			}
@@ -192,12 +192,12 @@ func (p *P) RunPostProcessors(fi []proton.FI) ([]proton.FI, error) {
 }
 
 // RunPostProcessors ...
-func RunPostProcessors(fi []proton.FI) ([]proton.FI, error) {
+func RunPostProcessors(fi []proton.FileInfo) ([]proton.FileInfo, error) {
 	return Singleton().RunPostProcessors(fi)
 }
 
 // Generate ...
-func (p *P) Generate(md *proton.MD) error {
+func (p *P) Generate(md *proton.Model) error {
 	if md == nil {
 		return ErrProtonModelIsNil
 	}
@@ -213,12 +213,12 @@ func (p *P) Generate(md *proton.MD) error {
 }
 
 // Generate ...
-func Generate(md *proton.MD) error {
+func Generate(md *proton.Model) error {
 	return Singleton().Generate(md)
 }
 
 // ParseGenerate ...
-func (p *P) ParseGenerate(parser func(file string) (*proton.MD, error)) error {
+func (p *P) ParseGenerate(parser func(file string) (*proton.Model, error)) error {
 	md, err := parser("proton.proton")
 	if err != nil {
 		return err
@@ -227,7 +227,7 @@ func (p *P) ParseGenerate(parser func(file string) (*proton.MD, error)) error {
 }
 
 // ParseGenerate ...
-func ParseGenerate(parser func(file string) (*proton.MD, error)) error {
+func ParseGenerate(parser func(file string) (*proton.Model, error)) error {
 	return Singleton().ParseGenerate(parser)
 }
 
@@ -248,7 +248,7 @@ func ProtonFilesList(root string) ([]string, error) {
 }
 
 // Daemon ...
-func Daemon(parser func(file string) (*proton.MD, error)) error {
+func Daemon(parser func(file string) (*proton.Model, error)) error {
 	err := ParseGenerate(parser)
 	if err != nil {
 		return err

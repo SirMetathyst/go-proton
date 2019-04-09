@@ -15,12 +15,12 @@ var (
 type EntityIndexType int
 
 const (
-	// EntityIndexNone ...
-	EntityIndexNone EntityIndexType = iota
-	// EntityIndexSingle ...
-	EntityIndexSingle
-	// EntityIndexMultiple ...
-	EntityIndexMultiple
+	// EntityIndexTypeNone ...
+	EntityIndexTypeNone EntityIndexType = iota
+	// EntityIndexTypeSingle ...
+	EntityIndexTypeSingle
+	// EntityIndexTypeMultiple ...
+	EntityIndexTypeMultiple
 )
 
 // IsValid ...
@@ -31,11 +31,11 @@ func (i EntityIndexType) IsValid() bool {
 // String ...
 func (i EntityIndexType) String() string {
 	switch i {
-	case EntityIndexNone:
+	case EntityIndexTypeNone:
 		return ""
-	case EntityIndexSingle:
+	case EntityIndexTypeSingle:
 		return "PrimaryEntityIndex"
-	case EntityIndexMultiple:
+	case EntityIndexTypeMultiple:
 		return "EntityIndex"
 	}
 	return "UNKNOWN"

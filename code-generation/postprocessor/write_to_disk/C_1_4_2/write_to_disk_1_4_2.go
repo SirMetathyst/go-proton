@@ -13,18 +13,12 @@ func init() {
 	codegeneration.AddPostProcessor("WriteToDiskPostProcessor_C_1_4_2", WriteToDiskPostProcessor_C_1_4_2, true)
 }
 
-// file ...
-type file interface {
-	File() string
-	FileContent() string
-}
-
 // WriteToDiskPostProcessor_C_1_4_2 ...
-func WriteToDiskPostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
-	for _, f := range fi {
+func WriteToDiskPostProcessor_C_1_4_2(p *codegeneration.P, fileInfo []proton.FileInfo) ([]proton.FileInfo, error) {
+	for _, f := range fileInfo {
 		WriteFile(p.OutputFolder()+"/"+f.File(), []byte(f.FileContent()))
 	}
-	return fi, nil
+	return fileInfo, nil
 }
 
 // CreateDirectory ...

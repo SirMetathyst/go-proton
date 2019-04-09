@@ -11,14 +11,16 @@ go:
 git:
   depth: 1
 
-install: 
+install:
   - go get golang.org/x/tools/cmd/cover
   - go get github.com/mattn/goveralls
+  - go get github.com/lawrencewoodman/roveralls
 
 notifications:
   email: false
 
 script:
-  - go test -v -covermode=count -coverprofile=coverage.out ./...
-  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+  - go test -v
+  - $HOME/gopath/bin/roveralls
+  - $HOME/gopath/bin/goveralls -coverprofile=roveralls.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN
   - go build -v

@@ -49,7 +49,7 @@ func (cpmb *ComponentMemberBuilder) SetValue(value string) *ComponentMemberBuild
 	return cpmb
 }
 
-// SetEntityIndex ...
+// SetEntityIndexType ...
 func (cpmb *ComponentMemberBuilder) SetEntityIndexType(value EntityIndexType) *ComponentMemberBuilder {
 	cpmb.entityIndexType = value
 	return cpmb

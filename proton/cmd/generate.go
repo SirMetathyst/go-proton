@@ -16,10 +16,10 @@ var (
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "generate entitas source code",
-	Long: `you can enable/disable generators and post-processors with flags, 
-change the project path (which is based on excuting directory by default), 
-output folder where code is written to and keep the generator alive. 
-This will find any *.proton files in the project path, track them for changes 
+	Long: `you can enable/disable generators and post-processors with flags,
+change the project path (which is based on excuting directory by default),
+output folder where code is written to and keep the generator alive.
+This will find any *.proton files in the project path, track them for changes
 and re-generate the code.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		codegeneration.SetOptions(codegeneration.PO{
@@ -35,10 +35,10 @@ and re-generate the code.`,
 }
 
 func init() {
-	for _, generatorInfo := range codegeneration.GeneratorInfo() {
+	for _, generatorInfo := range codegeneration.GeneratorInfoSlice() {
 		generateCmd.PersistentFlags().BoolVar(&generatorInfo.Enabled, generatorInfo.GeneratorVersion, generatorInfo.Enabled, "")
 	}
-	for _, postProcessorInfo := range codegeneration.PostProcessorInfo() {
+	for _, postProcessorInfo := range codegeneration.PostProcessorInfoSlice() {
 		generateCmd.PersistentFlags().BoolVar(&postProcessorInfo.Enabled, postProcessorInfo.PostProcessorVersion, postProcessorInfo.Enabled, "")
 	}
 

@@ -12,7 +12,7 @@ func init() {
 }
 
 // CleanTargetDirectoryPostProcessor_C_1_4_2 ...
-func CleanTargetDirectoryPostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
+func CleanTargetDirectoryPostProcessor_C_1_4_2(p *codegeneration.P, fileInfo []proton.FileInfo) ([]proton.FileInfo, error) {
 	os.RemoveAll(p.OutputFolder())
-	return fi, nil
+	return fileInfo, nil
 }

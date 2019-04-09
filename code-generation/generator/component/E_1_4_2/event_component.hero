@@ -1,5 +1,5 @@
-<%: func EventComponent_E_1_4_2(cp *proton.CP, b *bytes.Buffer) string %>
-public sealed partial class <%==s eventComponentID(cp).WithoutComponentSuffix().ToUpperFirst().String()%>Component : Entitas.IComponent 
+<%: func EventComponent_E_1_4_2(cp *proton.Component, b *bytes.Buffer) string %>
+public sealed partial class <%==s eventComponentID(cp).WithoutComponentSuffix().ToUpperFirst().String()%>Component : Entitas.IComponent
 {
     public System.Collections.Generic.List<I<%==s eventComponentID(cp).WithoutComponentSuffix().ToUpperFirst().String()%>> value;
 }

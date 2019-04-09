@@ -1,5 +1,5 @@
-<%: func Component_E_1_4_2(cp *proton.CP, b *bytes.Buffer) string %>
-public sealed partial class <%==s cp.ID().WithComponentSuffix().ToUpperFirst().String()%> : Entitas.IComponent 
+<%: func Component_E_1_4_2(cp *proton.Component, b *bytes.Buffer) string %>
+public sealed partial class <%==s cp.ID().WithComponentSuffix().ToUpperFirst().String()%> : Entitas.IComponent
 {
 <%+ "member.hero" %>
 }

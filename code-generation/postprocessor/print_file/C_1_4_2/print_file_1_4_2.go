@@ -17,9 +17,9 @@ type file interface {
 }
 
 // PrintFilePostProcessor_C_1_4_2 ...
-func PrintFilePostProcessor_C_1_4_2(p *codegeneration.P, fi []proton.FI) ([]proton.FI, error) {
-	for _, f := range fi {
+func PrintFilePostProcessor_C_1_4_2(p *codegeneration.P, fileInfo []proton.FileInfo) ([]proton.FileInfo, error) {
+	for _, f := range fileInfo {
 		fmt.Println(f.File())
 	}
-	return fi, nil
+	return fileInfo, nil
 }

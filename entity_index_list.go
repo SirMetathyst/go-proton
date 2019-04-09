@@ -41,7 +41,7 @@ func (eil *EntityIndexList) EntityIndexWithID(id string) *EntityIndex {
 	return nil
 }
 
-// EntityIndexList ...
+// EntityIndexSlice ...
 func (eil *EntityIndexList) EntityIndexSlice() []*EntityIndex {
 	return eil.entityIndexSlice
 }
