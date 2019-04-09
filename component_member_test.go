@@ -1,11 +1,17 @@
-package proton
+package proton_test
 
 import (
-	"testing"
-
-	goconvey "github.com/smartystreets/goconvey/convey"
+	//proton "github.com/SirMetathyst/go-proton"
+	. "github.com/onsi/ginkgo"
+	//. "github.com/onsi/gomega"
 )
 
+// Describe Component Member ...
+var _ = Describe("Component Member", func() {
+
+})
+
+/*
 func TestComponentMemberList(t *testing.T) {
 	goconvey.Convey("when creating a new component member list", t, func() {
 		componentMemberList := NewComponentMemberList()
@@ -68,4 +74,4 @@ func TestComponentMemberList(t *testing.T) {
 			})
 		})
 	})
-}
+}*/

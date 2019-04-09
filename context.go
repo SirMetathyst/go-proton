@@ -1,34 +1,33 @@
 package proton
 
 import (
-	"fmt"
-	"unicode"
+	"errors"
 )
 
 var (
-	ErrContextIDUndefined          = fmt.Errorf("entitas(context): id undefined")
-	ErrContextIDContainsWhitespace = fmt.Errorf("entitas(context): id contains whitespace")
+	// ErrContextIDUndefined ...
+	ErrContextIDUndefined = errors.New("proton: context: id undefined")
+	// ErrContextIDContainsWhitespace ...
+	ErrContextIDContainsWhitespace = errors.New("proton: context: id contains whitespace")
 )
 
-// C ...
-type C struct {
+// Context ...
+type Context struct {
 	id string
 }
 
 // NewContext ...
-func NewContext(id string) (*C, error) {
+func NewContext(id string) (*Context, error) {
 	if id == "" {
 		return nil, ErrContextIDUndefined
 	}
-	for _, v := range id {
-		if unicode.IsSpace(v) {
-			return nil, ErrContextIDContainsWhitespace
-		}
+	if ContainsWhitespace(id) {
+		return nil, ErrContextIDContainsWhitespace
 	}
-	return &C{id}, nil
+	return &Context{id}, nil
 }
 
 // ID ...
-func (c *C) ID() String {
+func (c *Context) ID() String {
 	return String(c.id)
 }

@@ -1,11 +1,17 @@
-package proton
+package proton_test
 
 import (
-	"testing"
-
-	goconvey "github.com/smartystreets/goconvey/convey"
+	//proton "github.com/SirMetathyst/go-proton"
+	. "github.com/onsi/ginkgo"
+	//. "github.com/onsi/gomega"
 )
 
+// Describe Context ...
+var _ = Describe("Context", func() {
+
+})
+
+/*
 func TestContext(t *testing.T) {
 	goconvey.Convey("when creating a new context", t, func() {
 		goconvey.Convey("without an id", func() {
@@ -64,4 +70,4 @@ func TestContext(t *testing.T) {
 			})
 		})
 	})
-}
+}*/

@@ -1,46 +1,48 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrContextListTriedToAddNilContext         = fmt.Errorf("entitas(context list): tried to add nil context")
-	ErrContextListTriedToAddDuplicateContextID = fmt.Errorf("entitas(context list): tried to add context with duplicate id")
+	// ErrContextListTriedToAddNilContext ...
+	ErrContextListTriedToAddNilContext = errors.New("proton: context list: tried to add nil context")
+	// ErrContextListTriedToAddDuplicateContextID ...
+	ErrContextListTriedToAddDuplicateContextID = errors.New("proton: context list: tried to add context with duplicate id")
 )
 
-// CL ...
-type CL struct {
-	l []*C
+// ContextList ...
+type ContextList struct {
+	contextSlice []*Context
 }
 
 // NewContextList ...
-func NewContextList() *CL {
-	return &CL{}
+func NewContextList() *ContextList {
+	return &ContextList{}
 }
 
 // AddContext ...
-func (cl *CL) AddContext(c *C) error {
-	if c == nil {
-		return ErrContextListTriedToAddNilContext
+func (cl *ContextList) AddContext(context *Context) error {
+	if context == nil {
+		panic(ErrContextListTriedToAddNilContext)
 	}
-	if cl.ContextWithID(c.ID().String()) != nil {
+	if cl.ContextWithID(context.ID().String()) != nil {
 		return ErrContextListTriedToAddDuplicateContextID
 	}
 
-	cl.l = append(cl.l, c)
+	cl.contextSlice = append(cl.contextSlice, context)
 	return nil
 }
 
 // ContextWithID ...
-func (cl *CL) ContextWithID(id string) *C {
-	for _, c := range cl.l {
-		if c.ID().EqualTo(id) {
-			return c
+func (cl *ContextList) ContextWithID(id string) *Context {
+	for _, context := range cl.contextSlice {
+		if context.ID().EqualTo(id) {
+			return context
 		}
 	}
 	return nil
 }
 
 // ContextSlice ...
-func (cl *CL) ContextSlice() []*C {
-	return cl.l
+func (cl *ContextList) ContextSlice() []*Context {
+	return cl.contextSlice
 }

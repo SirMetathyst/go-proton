@@ -1,60 +1,63 @@
 package proton
 
-import (
-	"fmt"
-)
+import "errors"
 
 var (
-	ErrEntityIndexMethodBuilderAliasListShouldNotBeNil             = fmt.Errorf("EntityIndexMethodBuilder: `AliasList` should not be nil.")
-	ErrEntityIndexMethodBuilderEntityIndexMethodListShouldNotBeNil = fmt.Errorf("EntityIndexMethodBuilder: `EntityIndexMethodList` should not be nil.")
-	ErrEntityIndexMethodBuilderEntityIndexMethodAlreadyBuilt       = fmt.Errorf("EntityIndexMethodBuilder: `EntityIndexMethod` already built.")
+	// ErrEntityIndexMethodBuilderAliasListShouldNotBeNil ...
+	ErrEntityIndexMethodBuilderAliasListShouldNotBeNil = errors.New("proton: entity index method builder: alias list should not be nil")
+	// ErrEntityIndexMethodBuilderEntityIndexMethodListShouldNotBeNil ...
+	ErrEntityIndexMethodBuilderEntityIndexMethodListShouldNotBeNil = errors.New("proton: entity index method builder: entity index method list should not be nil")
+	// ErrEntityIndexMethodBuilderEntityIndexMethodAlreadyBuilt ...
+	ErrEntityIndexMethodBuilderEntityIndexMethodAlreadyBuilt = errors.New("proton: entity index method builder: entity index method is already built")
 )
 
-// EIMB ...
-type EIMB struct {
-	al     *AL
-	teimml *EIMML
-	eiml   *EIML
-	id     string
-	built  bool
+// EntityIndexMethodBuilder ...
+type EntityIndexMethodBuilder struct {
+	aliasList                         *AliasList
+	targetEntityIndexMethodMemberList *EntityIndexMethodMemberList
+	entityIndexMethodList             *EntityIndexMethodList
+	id                                string
+	built                             bool
 }
 
 // NewEntityIndexMethodBuilder ...
-func NewEntityIndexMethodBuilder(al *AL, eiml *EIML) *EIMB {
-	if al == nil {
+func NewEntityIndexMethodBuilder(
+	aliasList *AliasList,
+	entityIndexMethodList *EntityIndexMethodList) *EntityIndexMethodBuilder {
+	if aliasList == nil {
 		panic(ErrEntityIndexMethodBuilderAliasListShouldNotBeNil)
 	}
-	if eiml == nil {
+	if entityIndexMethodList == nil {
 		panic(ErrEntityIndexMethodBuilderEntityIndexMethodListShouldNotBeNil)
 	}
-	return &EIMB{
-		al:     al,
-		eiml:   eiml,
-		teimml: NewEntityIndexMethodMemberList(),
+	return &EntityIndexMethodBuilder{
+		aliasList:                         aliasList,
+		entityIndexMethodList:             entityIndexMethodList,
+		targetEntityIndexMethodMemberList: NewEntityIndexMethodMemberList(),
 	}
 }
 
 // SetID ...
-func (eimb *EIMB) SetID(id string) *EIMB {
+func (eimb *EntityIndexMethodBuilder) SetID(id string) *EntityIndexMethodBuilder {
 	eimb.id = id
 	return eimb
 }
 
 // NewMember ...
-func (eimb *EIMB) NewMember() *EIMMB {
-	return NewEntityIndexMethodMemberBuilder(eimb.al, eimb.teimml)
+func (eimb *EntityIndexMethodBuilder) NewMember() *EntityIndexMethodMemberBuilder {
+	return NewEntityIndexMethodMemberBuilder(eimb.aliasList, eimb.targetEntityIndexMethodMemberList)
 }
 
 // Build ...
-func (eimb *EIMB) Build() error {
+func (eimb *EntityIndexMethodBuilder) Build() error {
 	if eimb.built {
 		return ErrEntityIndexMethodBuilderEntityIndexMethodAlreadyBuilt
 	}
-	eim, err := NewEntityIndexMethod(eimb.id, eimb.teimml)
+	entityIndexMethod, err := NewEntityIndexMethod(eimb.id, eimb.targetEntityIndexMethodMemberList)
 	if err != nil {
 		return err
 	}
-	err = eimb.eiml.AddEntityIndexMethod(eim)
+	err = eimb.entityIndexMethodList.AddEntityIndexMethod(entityIndexMethod)
 	if err != nil {
 		return err
 	}

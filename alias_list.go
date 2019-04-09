@@ -1,42 +1,41 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrAliasListTriedToAddNilAlias         = fmt.Errorf("entitas(alias list): tried to add nil alias")
-	ErrAliasListTriedToAddDuplicateAliasID = fmt.Errorf("entitas(alias list): tried to add alias with duplicate id")
+	// ErrAliasListTriedToAddNilAlias ...
+	ErrAliasListTriedToAddNilAlias = errors.New("proton: alias list: tried to add nil alias")
+	// ErrAliasListTriedToAddDuplicateAliasID ...
+	ErrAliasListTriedToAddDuplicateAliasID = errors.New("proton: alias list: tried to add alias with duplicate id")
 )
 
-// AL ...
-type AL struct {
-	l []*A
-	m map[string]*A
+// AliasList ...
+type AliasList struct {
+	aliasSlice []*Alias
+	aliasMap   map[string]*Alias
 }
 
 // NewAliasList ...
-func NewAliasList() *AL {
-	return &AL{
-		l: make([]*A, 0),
-		m: make(map[string]*A),
-	}
+func NewAliasList() *AliasList {
+	return &AliasList{make([]*Alias, 0), make(map[string]*Alias)}
 }
 
 // AddAlias ...
-func (al *AL) AddAlias(a *A) error {
-	if a == nil {
-		return ErrAliasListTriedToAddNilAlias
+func (al *AliasList) AddAlias(alias *Alias) error {
+	if alias == nil {
+		panic(ErrAliasListTriedToAddNilAlias)
 	}
-	if al.AliasWithID(a.ID().String()) != nil {
+	if al.AliasWithID(alias.ID().String()) != nil {
 		return ErrAliasListTriedToAddDuplicateAliasID
 	}
-	al.l = append(al.l, a)
-	al.m[a.ID().String()] = a
+	al.aliasSlice = append(al.aliasSlice, alias)
+	al.aliasMap[alias.ID().String()] = alias
 	return nil
 }
 
 // AliasWithID ...
-func (al *AL) AliasWithID(id string) *A {
-	v, ok := al.m[id]
+func (al *AliasList) AliasWithID(id string) *Alias {
+	v, ok := al.aliasMap[id]
 	if ok {
 		return v
 	}
@@ -44,6 +43,6 @@ func (al *AL) AliasWithID(id string) *A {
 }
 
 // AliasSlice ...
-func (al *AL) AliasSlice() []*A {
-	return al.l
+func (al *AliasList) AliasSlice() []*Alias {
+	return al.aliasSlice
 }

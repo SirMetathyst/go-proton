@@ -1,91 +1,102 @@
 package proton
 
-import (
-	"fmt"
-)
+import "errors"
 
 var (
-	ErrModelBuilderModelAlreadyBuilt = fmt.Errorf("ModelBuilder: `Model` already built.")
+	// ErrModelBuilderModelAlreadyBuilt ...
+	ErrModelBuilderModelAlreadyBuilt = errors.New("proton: model builder: model is already built")
 )
 
-// MDB ...
-type MDB struct {
-	target, ns string
-	cl         *CL
-	al         *AL
-	cpl        *CPL
-	eil        *EIL
-	dctx       string
-	built      bool
+// ModelBuilder ...
+type ModelBuilder struct {
+	target          string
+	namespace       string
+	contextList     *ContextList
+	aliasList       *AliasList
+	componentList   *ComponentList
+	entityIndexList *EntityIndexList
+	defaultContext  string
+	built           bool
 }
 
 // NewModelBuilder ...
-func NewModelBuilder() *MDB {
-	return &MDB{
-		cl:  NewContextList(),
-		al:  NewAliasList(),
-		cpl: NewComponentList(),
-		eil: NewEntityIndexList(),
+func NewModelBuilder() *ModelBuilder {
+	return &ModelBuilder{
+		target:          "",
+		namespace:       "",
+		contextList:     NewContextList(),
+		aliasList:       NewAliasList(),
+		componentList:   NewComponentList(),
+		entityIndexList: NewEntityIndexList(),
+		defaultContext:  "",
+		built:           false,
 	}
 }
 
 // SetTarget ...
-func (mdb *MDB) SetTarget(v string) *MDB {
-	mdb.target = v
+func (mdb *ModelBuilder) SetTarget(target string) *ModelBuilder {
+	mdb.target = target
 	return mdb
 }
 
 // SetNamespace ...
-func (mdb *MDB) SetNamespace(v string) *MDB {
-	mdb.ns = v
+func (mdb *ModelBuilder) SetNamespace(namespace string) *ModelBuilder {
+	mdb.namespace = namespace
 	return mdb
 }
 
 // NewContext ...
-func (mdb *MDB) NewContext() *CB {
-	return NewContextBuilder(mdb.cl)
+func (mdb *ModelBuilder) NewContext() *ContextBuilder {
+	return NewContextBuilder(mdb.contextList)
 }
 
 // SetDefaultContext ...
-func (mdb *MDB) SetDefaultContext(id string) *MDB {
-	mdb.dctx = id
+func (mdb *ModelBuilder) SetDefaultContext(id string) *ModelBuilder {
+	mdb.defaultContext = id
 	return mdb
 }
 
 // NewAlias ...
-func (mdb *MDB) NewAlias() *AB {
-	return NewAliasBuilder(mdb.al)
+func (mdb *ModelBuilder) NewAlias() *AliasBuilder {
+	return NewAliasBuilder(mdb.aliasList)
 }
 
 // NewComponent ...
-func (mdb *MDB) NewComponent() *CPB {
-	return NewComponentBuilder(mdb.cl, mdb.al, mdb.cpl, mdb.dctx)
+func (mdb *ModelBuilder) NewComponent() *ComponentBuilder {
+	return NewComponentBuilder(mdb.contextList, mdb.aliasList, mdb.componentList, mdb.defaultContext)
 }
 
 // NewEntityIndex ...
-func (mdb *MDB) NewEntityIndex() *EIB {
-	return NewEntityIndexBuilder(mdb.cl, mdb.al, mdb.eil)
+func (mdb *ModelBuilder) NewEntityIndex() *EntityIndexBuilder {
+	return NewEntityIndexBuilder(mdb.contextList, mdb.aliasList, mdb.entityIndexList)
 }
 
 // Reset ...
-func (mdb *MDB) Reset() *MDB {
+func (mdb *ModelBuilder) Reset() *ModelBuilder {
 	mdb.target = ""
-	mdb.ns = ""
-	mdb.dctx = ""
+	mdb.namespace = ""
+	mdb.defaultContext = ""
 	mdb.built = false
-	mdb.cl = NewContextList()
-	mdb.al = NewAliasList()
-	mdb.cpl = NewComponentList()
-	mdb.eil = NewEntityIndexList()
+	mdb.contextList = NewContextList()
+	mdb.aliasList = NewAliasList()
+	mdb.componentList = NewComponentList()
+	mdb.entityIndexList = NewEntityIndexList()
 	return mdb
 }
 
 // Build ...
-func (mdb *MDB) Build() (*MD, error) {
+func (mdb *ModelBuilder) Build() (*Model, error) {
 	if mdb.built {
 		return nil, ErrModelBuilderModelAlreadyBuilt
 	}
-	md, err := NewModel(mdb.target, mdb.ns, mdb.cl, mdb.al, mdb.cpl, mdb.eil)
+	md, err := NewModel(
+		mdb.target,
+		mdb.namespace,
+		mdb.contextList,
+		mdb.aliasList,
+		mdb.componentList,
+		mdb.entityIndexList,
+	)
 	mdb.built = true
 	return md, err
 }

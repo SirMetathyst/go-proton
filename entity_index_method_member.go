@@ -1,32 +1,39 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrEntityIndexMethodMemberIDUndefined    = fmt.Errorf("entitas(entity index method member): id undefined")
-	ErrEntityIndexMethodMemberValueUndefined = fmt.Errorf("entitas(entity index method member): value undefined")
-	ErrEntityIndexMethodMemberAliasUndefined = fmt.Errorf("entitas(entity index method member): alias undefined")
+	// ErrEntityIndexMethodMemberIDUndefined ...
+	ErrEntityIndexMethodMemberIDUndefined = errors.New("proton: entity index method member: id undefined")
+	// ErrEntityIndexMethodMemberValueUndefined ...
+	ErrEntityIndexMethodMemberValueUndefined = errors.New("proton: entity index method member: value undefined")
+	// ErrEntityIndexMethodMemberAliasUndefined ...
+	ErrEntityIndexMethodMemberAliasUndefined = errors.New("proton: entity index method member: alias undefined")
 )
 
-// EIMM ...
-type EIMM struct {
-	id, value string
-	alias     *A
+// EntityIndexMethodMember ...
+type EntityIndexMethodMember struct {
+	id    string
+	value string
+	alias *Alias
 }
 
 // NewEntityIndexMethodMemberAlias ...
-func NewEntityIndexMethodMemberAlias(id string, alias *A) (*EIMM, error) {
+func NewEntityIndexMethodMemberAlias(id string, alias *Alias) (*EntityIndexMethodMember, error) {
 	if id == "" {
 		return nil, ErrEntityIndexMethodMemberIDUndefined
 	}
 	if alias == nil {
-		return nil, ErrEntityIndexMethodMemberValueUndefined
+		panic(ErrEntityIndexMethodMemberValueUndefined)
 	}
-	return &EIMM{id, "", alias}, nil
+	return &EntityIndexMethodMember{
+		id:    id,
+		value: "",
+		alias: alias}, nil
 }
 
 // NewEntityIndexMethodMember ...
-func NewEntityIndexMethodMember(id, value string) (*EIMM, error) {
+func NewEntityIndexMethodMember(id, value string) (*EntityIndexMethodMember, error) {
 	if id == "" {
 		return nil, ErrEntityIndexMethodMemberIDUndefined
 	}
@@ -36,16 +43,19 @@ func NewEntityIndexMethodMember(id, value string) (*EIMM, error) {
 
 	sid := String(id).ToLowerFirst().String()
 
-	return &EIMM{sid, value, nil}, nil
+	return &EntityIndexMethodMember{
+		id:    sid,
+		value: value,
+		alias: nil}, nil
 }
 
 // ID ...
-func (eimm *EIMM) ID() String {
+func (eimm *EntityIndexMethodMember) ID() String {
 	return String(eimm.id)
 }
 
 // Value ...
-func (eimm *EIMM) Value() String {
+func (eimm *EntityIndexMethodMember) Value() String {
 	if eimm.alias != nil {
 		return eimm.alias.Value()
 	}
@@ -53,6 +63,6 @@ func (eimm *EIMM) Value() String {
 }
 
 // Alias ...
-func (eimm *EIMM) Alias() *A {
+func (eimm *EntityIndexMethodMember) Alias() *Alias {
 	return eimm.alias
 }

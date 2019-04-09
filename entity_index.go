@@ -1,76 +1,92 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrEntityIndexIDUndefined     = fmt.Errorf("EntityIndex: `ID` Undefined.")
-	ErrEntityIndexMustHaveContext = fmt.Errorf("EntityIndex: EntityIndex does not have a `Context`.")
-	ErrEntityIndexMustHaveMethod  = fmt.Errorf("EntityIndex: EntityIndex does not have a `Method`.")
+	// ErrEntityIndexIDUndefined ...
+	ErrEntityIndexIDUndefined = errors.New("proton: entity index: id undefined")
+	// ErrEntityIndexMustHaveContext ...
+	ErrEntityIndexMustHaveContext = errors.New("proton: entity index: entity index does not have a context")
+	// ErrEntityIndexMustHaveMethod ...
+	ErrEntityIndexMustHaveMethod = errors.New("proton: entity index: entity index does not have a method")
 )
 
-// EntityIndex ...
-type EntityIndex int
+// EntityIndexType ...
+type EntityIndexType int
 
 const (
-	NoEntityIndex EntityIndex = iota
-	SingleEntityIndex
-	MultipleEntityIndex
+	// EntityIndexNone ...
+	EntityIndexNone EntityIndexType = iota
+	// EntityIndexSingle ...
+	EntityIndexSingle
+	// EntityIndexMultiple ...
+	EntityIndexMultiple
 )
 
 // IsValid ...
-func (i EntityIndex) IsValid() bool {
+func (i EntityIndexType) IsValid() bool {
 	return i >= 0 || i <= 2
 }
 
 // String ...
-func (i EntityIndex) String() string {
+func (i EntityIndexType) String() string {
 	switch i {
-	case SingleEntityIndex:
+	case EntityIndexNone:
+		return ""
+	case EntityIndexSingle:
 		return "PrimaryEntityIndex"
-	case MultipleEntityIndex:
+	case EntityIndexMultiple:
 		return "EntityIndex"
 	}
-	return ""
+	return "UNKNOWN"
 }
 
-// EI ...
-type EI struct {
-	id        string
-	isPrimary bool
-	c         *C
-	eiml      *EIML
+// EntityIndex ...
+type EntityIndex struct {
+	id                    string
+	isPrimary             bool
+	context               *Context
+	entityIndexMethodList *EntityIndexMethodList
 }
 
 // NewEntityIndex ...
-func NewEntityIndex(id string, isPrimary bool, c *C, eiml *EIML) (*EI, error) {
+func NewEntityIndex(
+	id string,
+	isPrimary bool,
+	context *Context,
+	entityIndexMethodList *EntityIndexMethodList) (*EntityIndex, error) {
 	if id == "" {
 		return nil, ErrEntityIndexIDUndefined
 	}
-	if c == nil {
-		return nil, ErrEntityIndexMustHaveContext
+	if context == nil {
+		panic(ErrEntityIndexMustHaveContext)
 	}
-	if len(eiml.EntityIndexMethodList()) == 0 {
+	if len(entityIndexMethodList.EntityIndexMethodSlice()) == 0 {
 		return nil, ErrEntityIndexMustHaveMethod
 	}
-	return &EI{id, isPrimary, c, eiml}, nil
+	return &EntityIndex{
+		id:                    id,
+		isPrimary:             isPrimary,
+		context:               context,
+		entityIndexMethodList: entityIndexMethodList}, nil
 }
 
 // ID ...
-func (ei *EI) ID() String {
+func (ei *EntityIndex) ID() String {
 	return String(ei.id)
 }
 
 // IsPrimary ...
-func (ei *EI) IsPrimary() bool {
+func (ei *EntityIndex) IsPrimary() bool {
 	return ei.isPrimary
 }
 
 // Context ...
-func (ei *EI) Context() *C {
-	return ei.c
+func (ei *EntityIndex) Context() *Context {
+	return ei.context
 }
 
-// EntityIndexMethodList ...
-func (ei *EI) EntityIndexMethodList() []*EIM {
-	return ei.eiml.EntityIndexMethodList()
+// EntityIndexMethodSlice ...
+func (ei *EntityIndex) EntityIndexMethodSlice() []*EntityIndexMethod {
+	return ei.entityIndexMethodList.EntityIndexMethodSlice()
 }

@@ -5,19 +5,23 @@ import (
 )
 
 var (
-	ErrAliasIDUndefined             = errors.New("proton: alias: id undefined")
-	ErrAliasIDContainsWhitespace    = errors.New("proton: alias: id contains whitespace")
-	ErrAliasValueUndefined          = errors.New("proton: alias: value undefined")
+	// ErrAliasIDUndefined ...
+	ErrAliasIDUndefined = errors.New("proton: alias: id undefined")
+	// ErrAliasIDContainsWhitespace ...
+	ErrAliasIDContainsWhitespace = errors.New("proton: alias: id contains whitespace")
+	// ErrAliasValueUndefined ...
+	ErrAliasValueUndefined = errors.New("proton: alias: value undefined")
+	// ErrAliasValueContainsWhitespace ...
 	ErrAliasValueContainsWhitespace = errors.New("proton: alias: value contains whitespace")
 )
 
-// A ...
-type A struct {
+// Alias ...
+type Alias struct {
 	id, value string
 }
 
 // NewAlias ...
-func NewAlias(id, value string) (*A, error) {
+func NewAlias(id, value string) (*Alias, error) {
 	if id == "" {
 		return nil, ErrAliasIDUndefined
 	}
@@ -30,15 +34,15 @@ func NewAlias(id, value string) (*A, error) {
 	if ContainsWhitespace(value) {
 		return nil, ErrAliasValueContainsWhitespace
 	}
-	return &A{id, value}, nil
+	return &Alias{id, value}, nil
 }
 
 // ID ...
-func (a *A) ID() String {
+func (a *Alias) ID() String {
 	return String(a.id)
 }
 
 // Value ...
-func (a *A) Value() String {
+func (a *Alias) Value() String {
 	return String(a.value)
 }

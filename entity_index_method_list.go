@@ -1,31 +1,33 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrEntityIndexMethodListTriedToAddNilEntityIndexMethod         = fmt.Errorf("EntityIndexMethodList: Tried to add nil `EntityIndexMethod`")
-	ErrEntityIndexMethodListTriedToAddDuplicateEntityIndexMethodID = fmt.Errorf("EntityIndexMethodList: Tried to add `EntityIndexMethod` with duplicate `ID`")
+	// ErrEntityIndexMethodListTriedToAddNilEntityIndexMethod ...
+	ErrEntityIndexMethodListTriedToAddNilEntityIndexMethod = errors.New("proton: entity index method list: tried to add nil entity index method")
+	// ErrEntityIndexMethodListTriedToAddDuplicateEntityIndexMethodID ...
+	ErrEntityIndexMethodListTriedToAddDuplicateEntityIndexMethodID = errors.New("proton: entity index method list: tried to add entity index method with duplicate id")
 )
 
-// EIML ...
-type EIML struct {
-	l []*EIM
+// EntityIndexMethodList ...
+type EntityIndexMethodList struct {
+	entityIndexMethodSlice []*EntityIndexMethod
 }
 
 // NewEntityIndexMethodList ...
-func NewEntityIndexMethodList() *EIML {
-	return &EIML{}
+func NewEntityIndexMethodList() *EntityIndexMethodList {
+	return &EntityIndexMethodList{}
 }
 
 // AddEntityIndexMethod ...
-func (eiml *EIML) AddEntityIndexMethod(eim *EIM) error {
-	if eim == nil {
-		return ErrEntityIndexMethodListTriedToAddNilEntityIndexMethod
+func (eiml *EntityIndexMethodList) AddEntityIndexMethod(entityIndexMethod *EntityIndexMethod) error {
+	if entityIndexMethod == nil {
+		panic(ErrEntityIndexMethodListTriedToAddNilEntityIndexMethod)
 	}
 	//if eiml.EntityIndexMethodWithID(eim.ID().String()) != nil {
 	//	return ErrEntityIndexMethodListTriedToAddDuplicateEntityIndexMethodID
 	//}
-	eiml.l = append(eiml.l, eim)
+	eiml.entityIndexMethodSlice = append(eiml.entityIndexMethodSlice, entityIndexMethod)
 	return nil
 }
 
@@ -39,7 +41,7 @@ func (eiml *EIML) AddEntityIndexMethod(eim *EIM) error {
 //	return nil
 //}
 
-// EntityIndexMethodList ...
-func (eiml *EIML) EntityIndexMethodList() []*EIM {
-	return eiml.l
+// EntityIndexMethodSlice ...
+func (eiml *EntityIndexMethodList) EntityIndexMethodSlice() []*EntityIndexMethod {
+	return eiml.entityIndexMethodSlice
 }

@@ -1,78 +1,84 @@
 package proton
 
-import (
-	"fmt"
-)
+import "errors"
 
 var (
-	ErrComponentMemberBuilderMemberAlreadyBuilt   = fmt.Errorf("proton(component member builder): component member already built")
-	ErrComponentMemberBuilderAliasShouldNotBeNil  = fmt.Errorf("proton(component member builder): alias list should not be nil")
-	ErrComponentMemberBuilderMemberShouldNotBeNil = fmt.Errorf("proton(component member builder): component member list should not be nil")
+	// ErrComponentMemberBuilderMemberAlreadyBuilt ...
+	ErrComponentMemberBuilderMemberAlreadyBuilt = errors.New("proton: component member builder: component member is already built")
+	// ErrComponentMemberBuilderAliasListShouldNotBeNil ...
+	ErrComponentMemberBuilderAliasListShouldNotBeNil = errors.New("proton: component member builder: alias list should not be nil")
+	// ErrComponentMemberBuilderMemberShouldNotBeNil ...
+	ErrComponentMemberBuilderMemberShouldNotBeNil = errors.New("proton: component member builder: component member list should not be nil")
 )
 
-// CPMB ...
-type CPMB struct {
-	al          *AL
-	cml         *CML
-	a           *A
-	built       bool
-	id, value   string
-	entityIndex EntityIndex
+// ComponentMemberBuilder ...
+type ComponentMemberBuilder struct {
+	aliasList           *AliasList
+	componentMemberList *ComponentMemberList
+	alias               *Alias
+	built               bool
+	id                  string
+	value               string
+	entityIndexType     EntityIndexType
 }
 
 // NewComponentMemberBuilder ...
-func NewComponentMemberBuilder(al *AL, cml *CML) *CPMB {
-	if al == nil {
-		panic(ErrComponentMemberBuilderAliasShouldNotBeNil)
+func NewComponentMemberBuilder(
+	aliasList *AliasList,
+	componentMemberList *ComponentMemberList) *ComponentMemberBuilder {
+	if aliasList == nil {
+		panic(ErrComponentMemberBuilderAliasListShouldNotBeNil)
 	}
-	if cml == nil {
+	if componentMemberList == nil {
 		panic(ErrComponentMemberBuilderMemberShouldNotBeNil)
 	}
-	return &CPMB{al: al, cml: cml}
+	return &ComponentMemberBuilder{
+		aliasList:           aliasList,
+		componentMemberList: componentMemberList}
 }
 
 // SetID ...
-func (cpmb *CPMB) SetID(id string) *CPMB {
+func (cpmb *ComponentMemberBuilder) SetID(id string) *ComponentMemberBuilder {
 	cpmb.id = id
 	return cpmb
 }
 
 // SetValue ...
-func (cpmb *CPMB) SetValue(value string) *CPMB {
+func (cpmb *ComponentMemberBuilder) SetValue(value string) *ComponentMemberBuilder {
 	cpmb.value = value
 	return cpmb
 }
 
 // SetEntityIndex ...
-func (cpmb *CPMB) SetEntityIndex(value EntityIndex) *CPMB {
-	cpmb.entityIndex = value
+func (cpmb *ComponentMemberBuilder) SetEntityIndexType(value EntityIndexType) *ComponentMemberBuilder {
+	cpmb.entityIndexType = value
 	return cpmb
 }
 
 // SetAlias ...
-func (cpmb *CPMB) SetAlias(id string) *CPMB {
-	cpmb.a = cpmb.al.AliasWithID(id)
+func (cpmb *ComponentMemberBuilder) SetAlias(id string) *ComponentMemberBuilder {
+	cpmb.alias = cpmb.aliasList.AliasWithID(id)
 	return cpmb
 }
 
 // Build ...
-func (cpmb *CPMB) Build() error {
+func (cpmb *ComponentMemberBuilder) Build() error {
 	if cpmb.built {
 		return ErrComponentMemberBuilderMemberAlreadyBuilt
 	}
-	if cpmb.a != nil {
-		m, err := NewComponentMemberAlias(cpmb.id, cpmb.a, cpmb.entityIndex)
+	if cpmb.alias != nil {
+		componentMember, err := NewComponentMemberAlias(cpmb.id, cpmb.alias, cpmb.entityIndexType)
 		if err != nil {
 			return err
 		}
-		cpmb.cml.AddMember(m)
+		cpmb.componentMemberList.AddMember(componentMember)
 		return nil
 	}
-	m, err := NewComponentMember(cpmb.id, cpmb.value, cpmb.entityIndex)
+	componentMember, err := NewComponentMember(cpmb.id, cpmb.value, cpmb.entityIndexType)
 	if err != nil {
 		return err
 	}
-	err = cpmb.cml.AddMember(m)
+	err = cpmb.componentMemberList.AddMember(componentMember)
 	if err != nil {
 		return err
 	}

@@ -1,126 +1,135 @@
 package proton
 
-import (
-	"fmt"
-)
+import "errors"
 
 var (
-	ErrComponentBuilderContextListShouldNotBeNil   = fmt.Errorf("ComponentBuilder: `ContextList` should not be nil.")
-	ErrComponentBuilderAliasListShouldNotBeNil     = fmt.Errorf("ComponentBuilder: `AliasList` should not be nil.")
-	ErrComponentBuilderComponentListShouldNotBeNil = fmt.Errorf("ComponentBuilder: `ComponentList` should not be nil.")
-	ErrComponentBuilderComponentAlreadyBuilt       = fmt.Errorf("ComponentBuilder: `Component` already built.")
-	ErrComponentBuilderComponentMustHaveContext    = fmt.Errorf("ComponentBuilder: `Component` does not have a context.")
+	// ErrComponentBuilderContextListShouldNotBeNil ...
+	ErrComponentBuilderContextListShouldNotBeNil = errors.New("proton: component builder: context list should not be nil")
+	// ErrComponentBuilderAliasListShouldNotBeNil ...
+	ErrComponentBuilderAliasListShouldNotBeNil = errors.New("proton: component builder: alias list should not be nil")
+	// ErrComponentBuilderComponentListShouldNotBeNil ...
+	ErrComponentBuilderComponentListShouldNotBeNil = errors.New("proton: component builder: component list should not be nil")
+	// ErrComponentBuilderComponentAlreadyBuilt ...
+	ErrComponentBuilderComponentAlreadyBuilt = errors.New("proton: component builder: component is already built")
+	// ErrComponentBuilderComponentMustHaveContext ...
+	ErrComponentBuilderComponentMustHaveContext = errors.New("proton: component builder: component does not have a context")
 )
 
-// CPB ...
-type CPB struct {
-	cpl            *CPL
-	tcl            *CL
-	tcml           *CML
-	cl             *CL
-	al             *AL
-	built          bool
-	dctx           string
-	id, flagPrefix string
-	unique         bool
-	eventTarget    EventTarget
-	eventType      EventType
-	eventPriority  int
-	cleanupMode    CleanupMode
+// ComponentBuilder ...
+type ComponentBuilder struct {
+	componentList             *ComponentList
+	targetContextList         *ContextList
+	targetComponentMemberList *ComponentMemberList
+	contextList               *ContextList
+	aliasList                 *AliasList
+	built                     bool
+	defaultContext            string
+	id                        string
+	flagPrefix                string
+	unique                    bool
+	eventTarget               EventTarget
+	eventType                 EventType
+	eventPriority             int
+	cleanupMode               CleanupMode
 }
 
 // NewComponentBuilder ...
-func NewComponentBuilder(cl *CL, al *AL, cpl *CPL, dctx string) *CPB {
-	if cl == nil {
+func NewComponentBuilder(
+	contextList *ContextList,
+	aliasList *AliasList,
+	componentList *ComponentList,
+	defaultContext string) *ComponentBuilder {
+
+	if contextList == nil {
 		panic(ErrComponentBuilderContextListShouldNotBeNil)
 	}
-	if al == nil {
+	if aliasList == nil {
 		panic(ErrComponentBuilderAliasListShouldNotBeNil)
 	}
-	if cpl == nil {
+	if componentList == nil {
 		panic(ErrComponentBuilderComponentListShouldNotBeNil)
 	}
-	return &CPB{
-		cl:   cl,
-		al:   al,
-		cpl:  cpl,
-		tcl:  NewContextList(),
-		tcml: NewComponentMemberList(),
-		dctx: dctx,
+	return &ComponentBuilder{
+		contextList:               contextList,
+		aliasList:                 aliasList,
+		componentList:             componentList,
+		targetContextList:         NewContextList(),
+		targetComponentMemberList: NewComponentMemberList(),
+		defaultContext:            defaultContext,
 	}
 }
 
 // SetID ...
-func (cpb *CPB) SetID(id string) *CPB {
+func (cpb *ComponentBuilder) SetID(id string) *ComponentBuilder {
 	cpb.id = id
 	return cpb
 }
 
 // SetFlagPrefix ...
-func (cpb *CPB) SetFlagPrefix(p string) *CPB {
+func (cpb *ComponentBuilder) SetFlagPrefix(p string) *ComponentBuilder {
 	cpb.flagPrefix = p
 	return cpb
 }
 
 // SetUnique ...
-func (cpb *CPB) SetUnique(u bool) *CPB {
+func (cpb *ComponentBuilder) SetUnique(u bool) *ComponentBuilder {
 	cpb.unique = u
 	return cpb
 }
 
 // SetEventTarget ...
-func (cpb *CPB) SetEventTarget(t EventTarget) *CPB {
+func (cpb *ComponentBuilder) SetEventTarget(t EventTarget) *ComponentBuilder {
 	cpb.eventTarget = t
 	return cpb
 }
 
 // SetEventType ...
-func (cpb *CPB) SetEventType(e EventType) *CPB {
+func (cpb *ComponentBuilder) SetEventType(e EventType) *ComponentBuilder {
 	cpb.eventType = e
 	return cpb
 }
 
 // SetEventPriority ...
-func (cpb *CPB) SetEventPriority(v int) *CPB {
+func (cpb *ComponentBuilder) SetEventPriority(v int) *ComponentBuilder {
 	cpb.eventPriority = v
 	return cpb
 }
 
 // SetCleanupMode ...
-func (cpb *CPB) SetCleanupMode(m CleanupMode) *CPB {
+func (cpb *ComponentBuilder) SetCleanupMode(m CleanupMode) *ComponentBuilder {
 	cpb.cleanupMode = m
 	return cpb
 }
 
 // AddContext ...
-func (cpb *CPB) AddContext(id string) *CPB {
-	ctx := cpb.cl.ContextWithID(id)
-	cpb.tcl.AddContext(ctx)
+func (cpb *ComponentBuilder) AddContext(id string) *ComponentBuilder {
+	ctx := cpb.contextList.ContextWithID(id)
+	cpb.targetContextList.AddContext(ctx)
 	return cpb
 }
 
 // NewMember ...
-func (cpb *CPB) NewMember() *CPMB {
-	return NewComponentMemberBuilder(cpb.al, cpb.tcml)
+func (cpb *ComponentBuilder) NewMember() *ComponentMemberBuilder {
+	return NewComponentMemberBuilder(cpb.aliasList, cpb.targetComponentMemberList)
 }
 
 // Build ...
-func (cpb *CPB) Build() error {
+func (cpb *ComponentBuilder) Build() error {
 	if cpb.built {
 		return ErrComponentBuilderComponentAlreadyBuilt
 	}
-	if len(cpb.tcl.ContextSlice()) == 0 {
-		dctx := cpb.cl.ContextWithID(cpb.dctx)
-		if dctx == nil {
+	if len(cpb.targetContextList.ContextSlice()) == 0 {
+		defaultContext := cpb.contextList.ContextWithID(cpb.defaultContext)
+		if defaultContext == nil {
 			return ErrComponentBuilderComponentMustHaveContext
 		}
-		cpb.tcl.AddContext(dctx)
+		cpb.targetContextList.AddContext(defaultContext)
 	}
-	cp, err := NewComponent(cpb.id, cpb.flagPrefix, cpb.unique, cpb.eventTarget, cpb.eventType, cpb.eventPriority, cpb.cleanupMode, cpb.tcl, cpb.tcml)
+	component, err := NewComponent(cpb.id, cpb.flagPrefix, cpb.unique, cpb.eventTarget, cpb.eventType, cpb.eventPriority, cpb.cleanupMode, cpb.targetContextList, cpb.targetComponentMemberList)
 	if err != nil {
 		return err
 	}
-	err = cpb.cpl.AddComponent(cp)
+	err = cpb.componentList.AddComponent(component)
 	if err != nil {
 		return err
 	}

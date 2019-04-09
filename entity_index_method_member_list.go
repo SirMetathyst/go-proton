@@ -1,45 +1,47 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrEntityIndexMethodMemberListTriedToAddNilMember         = fmt.Errorf("entitas(entity index method member list): tried to add nil entity index method member")
-	ErrEntityIndexMethodMemberListTriedToAddDuplicateMemberID = fmt.Errorf("entitas(entity index method member list): tried to add entity index method member with duplicate id")
+	// ErrEntityIndexMethodMemberListTriedToAddNilMember ...
+	ErrEntityIndexMethodMemberListTriedToAddNilMember = errors.New("proton: entity index method member list: tried to add nil entity index method member")
+	// ErrEntityIndexMethodMemberListTriedToAddDuplicateMemberID ...
+	ErrEntityIndexMethodMemberListTriedToAddDuplicateMemberID = errors.New("proton: entity index method member list: tried to add entity index method member with duplicate id")
 )
 
-// EIMML ...
-type EIMML struct {
-	l []*EIMM
+// EntityIndexMethodMemberList ...
+type EntityIndexMethodMemberList struct {
+	entityIndexMethodMemberSlice []*EntityIndexMethodMember
 }
 
 // NewEntityIndexMethodMemberList ...
-func NewEntityIndexMethodMemberList() *EIMML {
-	return &EIMML{}
+func NewEntityIndexMethodMemberList() *EntityIndexMethodMemberList {
+	return &EntityIndexMethodMemberList{}
 }
 
 // AddMember ...
-func (eimml *EIMML) AddMember(m *EIMM) error {
-	if m == nil {
-		return ErrEntityIndexMethodMemberListTriedToAddNilMember
+func (eimml *EntityIndexMethodMemberList) AddMember(entityIndexMethodMember *EntityIndexMethodMember) error {
+	if entityIndexMethodMember == nil {
+		panic(ErrEntityIndexMethodMemberListTriedToAddNilMember)
 	}
-	if eimml.MemberWithID(m.ID().String()) != nil {
+	if eimml.MemberWithID(entityIndexMethodMember.ID().String()) != nil {
 		return ErrEntityIndexMethodMemberListTriedToAddDuplicateMemberID
 	}
-	eimml.l = append(eimml.l, m)
+	eimml.entityIndexMethodMemberSlice = append(eimml.entityIndexMethodMemberSlice, entityIndexMethodMember)
 	return nil
 }
 
 // MemberWithID ...
-func (eimml *EIMML) MemberWithID(id string) *EIMM {
-	for _, m := range eimml.l {
-		if m.ID().EqualTo(id) {
-			return m
+func (eimml *EntityIndexMethodMemberList) MemberWithID(id string) *EntityIndexMethodMember {
+	for _, entityIndexMethodMember := range eimml.entityIndexMethodMemberSlice {
+		if entityIndexMethodMember.ID().EqualTo(id) {
+			return entityIndexMethodMember
 		}
 	}
 	return nil
 }
 
 // MemberSlice ...
-func (eimml *EIMML) MemberSlice() []*EIMM {
-	return eimml.l
+func (eimml *EntityIndexMethodMemberList) MemberSlice() []*EntityIndexMethodMember {
+	return eimml.entityIndexMethodMemberSlice
 }

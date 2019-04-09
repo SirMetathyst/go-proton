@@ -1,64 +1,87 @@
 package proton
 
-import "fmt"
-
-var (
-	ErrComponentMemberIDUndefined        = fmt.Errorf("entitas(component member): id undefined")
-	ErrComponentMemberValueUndefined     = fmt.Errorf("entitas(component member): value undefined")
-	ErrComponentMemberAliasUndefined     = fmt.Errorf("entitas(component member): alias undefined")
-	ErrComponentMemberEntityIndexInvalid = fmt.Errorf("entitas(component member): entity index is invalid")
+import (
+	"errors"
 )
 
-// CM ...
-type CM struct {
-	id, value   string
-	alias       *A
-	entityIndex EntityIndex
+var (
+	// ErrComponentMemberIDUndefined ...
+	ErrComponentMemberIDUndefined = errors.New("proton: component member: id undefined")
+	// ErrComponentMemberValueUndefined ...
+	ErrComponentMemberValueUndefined = errors.New("proton: component member: value undefined")
+	// ErrComponentMemberAliasUndefined ...
+	ErrComponentMemberAliasUndefined = errors.New("proton: component member: alias undefined")
+	// ErrComponentMemberEntityIndexInvalid ...
+	ErrComponentMemberEntityIndexInvalid = errors.New("proton: component member: entity index is invalid")
+)
+
+// ComponentMember ...
+type ComponentMember struct {
+	id              string
+	value           string
+	alias           *Alias
+	entityIndexType EntityIndexType
 }
 
 // NewComponentMemberAlias ...
-func NewComponentMemberAlias(id string, alias *A, entityIndex EntityIndex) (*CM, error) {
+func NewComponentMemberAlias(
+	id string,
+	alias *Alias,
+	entityIndexType EntityIndexType) (*ComponentMember, error) {
+
 	if id == "" {
 		return nil, ErrComponentMemberIDUndefined
 	}
 	if alias == nil {
 		return nil, ErrComponentMemberValueUndefined
 	}
-	if !entityIndex.IsValid() {
+	if !entityIndexType.IsValid() {
 		return nil, ErrComponentMemberEntityIndexInvalid
 	}
-	return &CM{id, "", alias, entityIndex}, nil
+	return &ComponentMember{
+		id:              id,
+		value:           "",
+		alias:           alias,
+		entityIndexType: entityIndexType}, nil
 }
 
 // NewComponentMember ...
-func NewComponentMember(id, value string, entityIndex EntityIndex) (*CM, error) {
+func NewComponentMember(
+	id string,
+	value string,
+	entityIndexType EntityIndexType) (*ComponentMember, error) {
+
 	if id == "" {
 		return nil, ErrComponentMemberIDUndefined
 	}
 	if value == "" {
 		return nil, ErrComponentMemberValueUndefined
 	}
-	if !entityIndex.IsValid() {
+	if !entityIndexType.IsValid() {
 		return nil, ErrComponentMemberEntityIndexInvalid
 	}
 
 	sid := String(id).ToLowerFirst().String()
 
-	return &CM{sid, value, nil, entityIndex}, nil
+	return &ComponentMember{
+		id:              sid,
+		value:           value,
+		alias:           nil,
+		entityIndexType: entityIndexType}, nil
 }
 
 // ID ...
-func (cm *CM) ID() String {
+func (cm *ComponentMember) ID() String {
 	return String(cm.id)
 }
 
-// EntityIndex ...
-func (cm *CM) EntityIndex() EntityIndex {
-	return cm.entityIndex
+// EntityIndexType ...
+func (cm *ComponentMember) EntityIndexType() EntityIndexType {
+	return cm.entityIndexType
 }
 
 // Value ...
-func (cm *CM) Value() String {
+func (cm *ComponentMember) Value() String {
 	if cm.alias != nil {
 		return cm.alias.Value()
 	}
@@ -66,6 +89,6 @@ func (cm *CM) Value() String {
 }
 
 // Alias ...
-func (cm *CM) Alias() *A {
+func (cm *ComponentMember) Alias() *Alias {
 	return cm.alias
 }

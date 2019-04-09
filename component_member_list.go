@@ -1,56 +1,58 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrComponentMemberListTriedToAddNilMember         = fmt.Errorf("entitas(component member list): tried to add nil component member")
-	ErrComponentMemberListTriedToAddDuplicateMemberID = fmt.Errorf("entitas(component member list): tried to add component member with duplicate id")
+	// ErrComponentMemberListTriedToAddNilMember ...
+	ErrComponentMemberListTriedToAddNilMember = errors.New("proton: component member list: tried to add nil component member")
+	// ErrComponentMemberListTriedToAddDuplicateMemberID ...
+	ErrComponentMemberListTriedToAddDuplicateMemberID = errors.New("proton: component member list: tried to add component member with duplicate id")
 )
 
-// CML ...
-type CML struct {
-	l []*CM
+// ComponentMemberList ...
+type ComponentMemberList struct {
+	componentMemberSlice []*ComponentMember
 }
 
 // NewComponentMemberList ...
-func NewComponentMemberList() *CML {
-	return &CML{}
+func NewComponentMemberList() *ComponentMemberList {
+	return &ComponentMemberList{}
 }
 
 // AddMember ...
-func (cml *CML) AddMember(m *CM) error {
-	if m == nil {
+func (cml *ComponentMemberList) AddMember(componentMember *ComponentMember) error {
+	if componentMember == nil {
 		return ErrComponentMemberListTriedToAddNilMember
 	}
-	if cml.MemberWithID(m.ID().String()) != nil {
+	if cml.MemberWithID(componentMember.ID().String()) != nil {
 		return ErrComponentMemberListTriedToAddDuplicateMemberID
 	}
-	cml.l = append(cml.l, m)
+	cml.componentMemberSlice = append(cml.componentMemberSlice, componentMember)
 	return nil
 }
 
 // MemberWithID ...
-func (cml *CML) MemberWithID(id string) *CM {
-	for _, m := range cml.l {
-		if m.ID().EqualTo(id) {
-			return m
+func (cml *ComponentMemberList) MemberWithID(id string) *ComponentMember {
+	for _, componentMember := range cml.componentMemberSlice {
+		if componentMember.ID().EqualTo(id) {
+			return componentMember
 		}
 	}
 	return nil
 }
 
 // MembersWithEntityIndex ...
-func (cml *CML) MembersWithEntityIndex() []*CM {
-	slice := make([]*CM, 0)
-	for _, m := range cml.l {
-		if m.EntityIndex() > 0 {
-			slice = append(slice, m)
+func (cml *ComponentMemberList) MembersWithEntityIndex() []*ComponentMember {
+	slice := make([]*ComponentMember, 0)
+	for _, componentMember := range cml.componentMemberSlice {
+		if componentMember.EntityIndexType() > 0 {
+			slice = append(slice, componentMember)
 		}
 	}
 	return slice
 }
 
 // MemberSlice ...
-func (cml *CML) MemberSlice() []*CM {
-	return cml.l
+func (cml *ComponentMemberList) MemberSlice() []*ComponentMember {
+	return cml.componentMemberSlice
 }

@@ -1,70 +1,83 @@
 package proton
 
-// MD ...
-type MD struct {
-	target, ns string
-	ctxList    *CL
-	aliasList  *AL
-	cpList     *CPL
-	eiList     *EIL
+// Model ...
+type Model struct {
+	target          string
+	namespace       string
+	contextList     *ContextList
+	aliasList       *AliasList
+	componentList   *ComponentList
+	entityIndexList *EntityIndexList
 }
 
 // NewModel ...
-func NewModel(target, ns string, ctxList *CL, aliasList *AL, cpList *CPL, eiList *EIL) (*MD, error) {
-	return &MD{target, ns, ctxList, aliasList, cpList, eiList}, nil
+func NewModel(target string,
+	namespace string,
+	contextList *ContextList,
+	aliasList *AliasList,
+	componentList *ComponentList,
+	entityIndexList *EntityIndexList) (*Model, error) {
+
+	return &Model{
+		target:          target,
+		namespace:       namespace,
+		contextList:     contextList,
+		aliasList:       aliasList,
+		componentList:   componentList,
+		entityIndexList: entityIndexList}, nil
 }
 
 // Target ...
-func (md *MD) Target() String {
+func (md *Model) Target() String {
 	return String(md.target)
 }
 
 // Namespace ...
-func (md *MD) Namespace() String {
-	return String(md.ns)
+func (md *Model) Namespace() String {
+	return String(md.namespace)
 }
 
 // ContextWithID ...
-func (md *MD) ContextWithID(id string) *C {
-	return md.ctxList.ContextWithID(id)
+func (md *Model) ContextWithID(id string) *Context {
+	return md.contextList.ContextWithID(id)
 }
 
 // ContextSlice ...
-func (md *MD) ContextSlice() []*C {
-	return md.ctxList.ContextSlice()
+func (md *Model) ContextSlice() []*Context {
+	return md.contextList.ContextSlice()
 }
 
 // AliasWithID ...
-func (md *MD) AliasWithID(id string) *A {
+func (md *Model) AliasWithID(id string) *Alias {
 	return md.aliasList.AliasWithID(id)
 }
 
 // AliasSlice ...
-func (md *MD) AliasSlice() []*A {
+func (md *Model) AliasSlice() []*Alias {
 	return md.aliasList.AliasSlice()
 }
 
 // ComponentsWithContextID ...
-func (md *MD) ComponentsWithContextID(id string) []*CP {
-	return md.cpList.ComponentsWithContextID(id)
+func (md *Model) ComponentsWithContextID(id string) []*Component {
+	return md.componentList.ComponentsWithContextID(id)
 }
 
 // ComponentWithID ...
-func (md *MD) ComponentWithID(id string) *CP {
-	return md.cpList.ComponentWithID(id)
+func (md *Model) ComponentWithID(id string) *Component {
+	return md.componentList.ComponentWithID(id)
 }
 
 // ComponentsWithEntityIndex ...
-func (md *MD) ComponentsWithEntityIndex() []*CP {
-	return md.cpList.ComponentsWithEntityIndex()
+func (md *Model) ComponentsWithEntityIndex() []*Component {
+	return md.componentList.ComponentsWithEntityIndex()
 }
 
 // ComponentSlice ...
-func (md *MD) ComponentSlice() []*CP {
-	return md.cpList.ComponentSlice()
+func (md *Model) ComponentSlice() []*Component {
+	return md.componentList.ComponentSlice()
 }
 
-// EntityIndexList ...
-func (md *MD) EntityIndexList() []*EI {
-	return md.eiList.EntityIndexList()
+// EntityIndexSlice ...
+func (md *Model) EntityIndexSlice() []*EntityIndex {
+	return md.entityIndexList.EntityIndexSlice()
 }

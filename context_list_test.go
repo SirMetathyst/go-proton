@@ -1,11 +1,17 @@
-package proton
+package proton_test
 
 import (
-	"testing"
-
-	goconvey "github.com/smartystreets/goconvey/convey"
+	//proton "github.com/SirMetathyst/go-proton"
+	. "github.com/onsi/ginkgo"
+	//. "github.com/onsi/gomega"
 )
 
+// Describe Context List ...
+var _ = Describe("Context List", func() {
+
+})
+
+/*
 func TestContextList(t *testing.T) {
 	goconvey.Convey("when creating a new context list", t, func() {
 		contextList := NewContextList()
@@ -46,4 +52,4 @@ func TestContextList(t *testing.T) {
 			})
 		})
 	})
-}
+}*/

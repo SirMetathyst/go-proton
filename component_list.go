@@ -1,69 +1,71 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrComponentListTriedToAddNilComponent         = fmt.Errorf("entitas(component list): tried to add nil component")
-	ErrComponentListTriedToAddDuplicateComponentID = fmt.Errorf("entitas(component list): tried to add component with duplicate id")
+	// ErrComponentListTriedToAddNilComponent ...
+	ErrComponentListTriedToAddNilComponent = errors.New("proton: component list: tried to add nil component")
+	// ErrComponentListTriedToAddDuplicateComponentID ...
+	ErrComponentListTriedToAddDuplicateComponentID = errors.New("proton: component list: tried to add component with duplicate id")
 )
 
-// CPL ...
-type CPL struct {
-	l []*CP
+// ComponentList ...
+type ComponentList struct {
+	componentSlice []*Component
 }
 
 // NewComponentList ...
-func NewComponentList() *CPL {
-	return &CPL{}
+func NewComponentList() *ComponentList {
+	return &ComponentList{}
 }
 
 // AddComponent ...
-func (cpl *CPL) AddComponent(cp *CP) error {
-	if cp == nil {
+func (cpl *ComponentList) AddComponent(component *Component) error {
+	if component == nil {
 		return ErrComponentListTriedToAddNilComponent
 	}
-	if cpl.ComponentWithID(cp.ID().String()) != nil {
+	if cpl.ComponentWithID(component.ID().String()) != nil {
 		return ErrComponentListTriedToAddDuplicateComponentID
 	}
-	cpl.l = append(cpl.l, cp)
+	cpl.componentSlice = append(cpl.componentSlice, component)
 	return nil
 }
 
 // ComponentWithID ...
-func (cpl *CPL) ComponentWithID(id string) *CP {
-	for _, cp := range cpl.l {
-		if cp.ID().EqualTo(id) {
-			return cp
+func (cpl *ComponentList) ComponentWithID(id string) *Component {
+	for _, component := range cpl.componentSlice {
+		if component.ID().EqualTo(id) {
+			return component
 		}
 	}
 	return nil
 }
 
 // ComponentsWithContextID ...
-func (cpl *CPL) ComponentsWithContextID(id string) []*CP {
-	slice := make([]*CP, 0)
-	for _, cp := range cpl.l {
-		c := cp.ContextWithID(id)
-		if c != nil {
-			slice = append(slice, cp)
+func (cpl *ComponentList) ComponentsWithContextID(id string) []*Component {
+	slice := make([]*Component, 0)
+	for _, component := range cpl.componentSlice {
+		context := component.ContextWithID(id)
+		if context != nil {
+			slice = append(slice, component)
 		}
 	}
 	return slice
 }
 
 // ComponentsWithEntityIndex ...
-func (cpl *CPL) ComponentsWithEntityIndex() []*CP {
-	slice := make([]*CP, 0)
-	for _, cp := range cpl.l {
-		m := cp.MembersWithEntityIndex()
-		if len(m) > 0 {
-			slice = append(slice, cp)
+func (cpl *ComponentList) ComponentsWithEntityIndex() []*Component {
+	slice := make([]*Component, 0)
+	for _, component := range cpl.componentSlice {
+		memberSlice := component.MembersWithEntityIndex()
+		if len(memberSlice) > 0 {
+			slice = append(slice, component)
 		}
 	}
 	return slice
 }
 
 // ComponentSlice ...
-func (cpl *CPL) ComponentSlice() []*CP {
-	return cpl.l
+func (cpl *ComponentList) ComponentSlice() []*Component {
+	return cpl.componentSlice
 }

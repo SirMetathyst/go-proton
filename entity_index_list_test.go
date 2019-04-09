@@ -6,7 +6,7 @@ import (
 	//. "github.com/onsi/gomega"
 )
 
-// Describe Alias ...
-var _ = Describe("Alias", func() {
+// Describe Entity Index List ...
+var _ = Describe("Entity Index List", func() {
 
 })

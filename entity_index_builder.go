@@ -1,89 +1,96 @@
 package proton
 
-import (
-	"fmt"
-)
+import "errors"
 
 var (
-	ErrEntityIndexBuilderContextListShouldNotBeNil     = fmt.Errorf("EntityIndexBuilder: `ContextList` should not be nil.")
-	ErrEntityIndexBuilderAliasListShouldNotBeNil       = fmt.Errorf("EntityIndexBuilder: `AliasList` should not be nil.")
-	ErrEntityIndexBuilderEntityIndexListShouldNotBeNil = fmt.Errorf("EntityIndexBuilder: `EntityIndexList` should not be nil.")
-	ErrEntityIndexBuilderEntityIndexAlreadyBuilt       = fmt.Errorf("EntityIndexBuilder: `EntityIndex` already built.")
-	ErrEntityIndexBuilderEntityIndexMustHaveContext    = fmt.Errorf("EntityIndexBuilder: `EntityIndex` does not have a `Context`.")
-	ErrEntityIndexBuilderEntityIndexMustHaveMethod     = fmt.Errorf("EntityIndexBuilder: `EntityIndex` does not have a `Method`.")
+	// ErrEntityIndexBuilderContextListShouldNotBeNil ...
+	ErrEntityIndexBuilderContextListShouldNotBeNil = errors.New("proton: entity index builder: context list should not be nil")
+	// ErrEntityIndexBuilderAliasListShouldNotBeNil ...
+	ErrEntityIndexBuilderAliasListShouldNotBeNil = errors.New("proton: entity index builder: alias list should not be nil")
+	// ErrEntityIndexBuilderEntityIndexListShouldNotBeNil ...
+	ErrEntityIndexBuilderEntityIndexListShouldNotBeNil = errors.New("proton: entity index builder: entity index list should not be nil")
+	// ErrEntityIndexBuilderEntityIndexAlreadyBuilt ...
+	ErrEntityIndexBuilderEntityIndexAlreadyBuilt = errors.New("proton: entity index builder: entity index is already built")
+	// ErrEntityIndexBuilderEntityIndexMustHaveContext ...
+	ErrEntityIndexBuilderEntityIndexMustHaveContext = errors.New("proton: entity index builder: entity index does not have a context")
+	// ErrEntityIndexBuilderEntityIndexMustHaveMethod ...
+	ErrEntityIndexBuilderEntityIndexMustHaveMethod = errors.New("proton: entity index builder: entity index does not have a method")
 )
 
-// EIB ...
-type EIB struct {
-	cl        *CL
-	al        *AL
-	eil       *EIL
-	ctx       *C
-	teiml     *EIML
-	id        string
-	isPrimary bool
-	built     bool
+// EntityIndexBuilder ...
+type EntityIndexBuilder struct {
+	contextList                 *ContextList
+	aliasList                   *AliasList
+	entityIndexList             *EntityIndexList
+	context                     *Context
+	targetEntityIndexMethodList *EntityIndexMethodList
+	id                          string
+	isPrimary                   bool
+	built                       bool
 }
 
 // NewEntityIndexBuilder ...
-func NewEntityIndexBuilder(cl *CL, al *AL, eil *EIL) *EIB {
-	if cl == nil {
+func NewEntityIndexBuilder(
+	contextList *ContextList,
+	aliasList *AliasList,
+	entityIndexList *EntityIndexList) *EntityIndexBuilder {
+	if contextList == nil {
 		panic(ErrEntityIndexBuilderContextListShouldNotBeNil)
 	}
-	if al == nil {
+	if aliasList == nil {
 		panic(ErrEntityIndexBuilderAliasListShouldNotBeNil)
 	}
-	if eil == nil {
+	if entityIndexList == nil {
 		panic(ErrEntityIndexBuilderEntityIndexListShouldNotBeNil)
 	}
-	return &EIB{
-		cl:    cl,
-		al:    al,
-		eil:   eil,
-		teiml: NewEntityIndexMethodList(),
+	return &EntityIndexBuilder{
+		contextList:                 contextList,
+		aliasList:                   aliasList,
+		entityIndexList:             entityIndexList,
+		targetEntityIndexMethodList: NewEntityIndexMethodList(),
 	}
 }
 
 // SetID ...
-func (eib *EIB) SetID(id string) *EIB {
+func (eib *EntityIndexBuilder) SetID(id string) *EntityIndexBuilder {
 	eib.id = id
 	return eib
 }
 
 // SetPrimary ...
-func (eib *EIB) SetPrimary(isPrimary bool) *EIB {
+func (eib *EntityIndexBuilder) SetPrimary(isPrimary bool) *EntityIndexBuilder {
 	eib.isPrimary = isPrimary
 	return eib
 }
 
 // AddContext ...
-func (eib *EIB) AddContext(id string) *EIB {
-	ctx := eib.cl.ContextWithID(id)
-	eib.ctx = ctx
+func (eib *EntityIndexBuilder) AddContext(id string) *EntityIndexBuilder {
+	context := eib.contextList.ContextWithID(id)
+	eib.context = context
 	return eib
 }
 
 // NewMethod ...
-func (eib *EIB) NewMethod() *EIMB {
-	return NewEntityIndexMethodBuilder(eib.al, eib.teiml)
+func (eib *EntityIndexBuilder) NewMethod() *EntityIndexMethodBuilder {
+	return NewEntityIndexMethodBuilder(eib.aliasList, eib.targetEntityIndexMethodList)
 }
 
 // Build ...
-func (eib *EIB) Build() error {
+func (eib *EntityIndexBuilder) Build() error {
 	if eib.built {
 		return ErrEntityIndexBuilderEntityIndexAlreadyBuilt
 	}
-	if eib.ctx == nil {
+	if eib.context == nil {
 		return ErrEntityIndexBuilderEntityIndexMustHaveContext
 	}
-	if len(eib.teiml.EntityIndexMethodList()) == 0 {
+	if len(eib.targetEntityIndexMethodList.EntityIndexMethodSlice()) == 0 {
 		return ErrEntityIndexBuilderEntityIndexMustHaveMethod
 	}
-	ei, err := NewEntityIndex(eib.id, eib.isPrimary, eib.ctx, eib.teiml)
+	entityIndex, err := NewEntityIndex(eib.id, eib.isPrimary, eib.context, eib.targetEntityIndexMethodList)
 	if err != nil {
 		return err
 	}
-	err = eib.eil.AddEntityIndex(ei)
+	err = eib.entityIndexList.AddEntityIndex(entityIndex)
 	if err != nil {
 		return err
 	}

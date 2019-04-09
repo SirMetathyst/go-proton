@@ -1,43 +1,43 @@
 package proton
 
-import (
-	"fmt"
-)
+import "errors"
 
 var (
-	ErrAliasBuilderAliasListShouldNotBeNil = fmt.Errorf("AliasBuilder: `AliasList` should not be nil.")
-	ErrAliasBuilderAliasAlreadyBuilt       = fmt.Errorf("AliasBuilder: `Alias` already built.")
+	// ErrAliasBuilderAliasListShouldNotBeNil ...
+	ErrAliasBuilderAliasListShouldNotBeNil = errors.New("proton: alias builder: alias list should not be nil")
+	// ErrAliasBuilderAliasAlreadyBuilt ...
+	ErrAliasBuilderAliasAlreadyBuilt = errors.New("proton: alias builder: alias is already built")
 )
 
-// AB ...
-type AB struct {
-	al        *AL
+// AliasBuilder ...
+type AliasBuilder struct {
+	aliasList *AliasList
 	built     bool
 	id, value string
 }
 
 // NewAliasBuilder ...
-func NewAliasBuilder(al *AL) *AB {
-	if al == nil {
+func NewAliasBuilder(aliasList *AliasList) *AliasBuilder {
+	if aliasList == nil {
 		panic(ErrAliasBuilderAliasListShouldNotBeNil)
 	}
-	return &AB{al: al}
+	return &AliasBuilder{aliasList: aliasList}
 }
 
 // SetID ...
-func (ab *AB) SetID(id string) *AB {
+func (ab *AliasBuilder) SetID(id string) *AliasBuilder {
 	ab.id = id
 	return ab
 }
 
 // SetValue ...
-func (ab *AB) SetValue(value string) *AB {
+func (ab *AliasBuilder) SetValue(value string) *AliasBuilder {
 	ab.value = value
 	return ab
 }
 
 // Build ...
-func (ab *AB) Build() error {
+func (ab *AliasBuilder) Build() error {
 	if ab.built {
 		return ErrAliasBuilderAliasAlreadyBuilt
 	}
@@ -45,7 +45,7 @@ func (ab *AB) Build() error {
 	if err != nil {
 		return err
 	}
-	err = ab.al.AddAlias(a)
+	err = ab.aliasList.AddAlias(a)
 	if err != nil {
 		return err
 	}

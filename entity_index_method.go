@@ -1,31 +1,36 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrEntityIndexMethodIDUndefined = fmt.Errorf("EntityIndexMethod: `ID` Undefined.")
+	// ErrEntityIndexMethodIDUndefined ...
+	ErrEntityIndexMethodIDUndefined = errors.New("proton: entity index method: id undefined")
 )
 
-// EIM ...
-type EIM struct {
-	id    string
-	eimml *EIMML
+// EntityIndexMethod ...
+type EntityIndexMethod struct {
+	id                          string
+	entityIndexMethodMemberList *EntityIndexMethodMemberList
 }
 
 // NewEntityIndexMethod ...
-func NewEntityIndexMethod(id string, eimml *EIMML) (*EIM, error) {
+func NewEntityIndexMethod(
+	id string,
+	entityIndexMethodMemberList *EntityIndexMethodMemberList) (*EntityIndexMethod, error) {
 	if id == "" {
 		return nil, ErrEntityIndexMethodIDUndefined
 	}
-	return &EIM{id, eimml}, nil
+	return &EntityIndexMethod{
+		id:                          id,
+		entityIndexMethodMemberList: entityIndexMethodMemberList}, nil
 }
 
 // ID ...
-func (eim *EIM) ID() String {
+func (eim *EntityIndexMethod) ID() String {
 	return String(eim.id)
 }
 
 // MemberSlice ...
-func (eim *EIM) MemberSlice() []*EIMM {
-	return eim.eimml.MemberSlice()
+func (eim *EntityIndexMethod) MemberSlice() []*EntityIndexMethodMember {
+	return eim.entityIndexMethodMemberList.MemberSlice()
 }

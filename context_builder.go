@@ -1,45 +1,45 @@
 package proton
 
-import (
-	"fmt"
-)
+import "errors"
 
 var (
-	ErrContextBuilderContextListShouldNotBeNil = fmt.Errorf("ContextBuilder: `ContextList` should not be nil.")
-	ErrContextBuilderContextAlreadyBuilt       = fmt.Errorf("ContextBuilder: `Context` already built.")
+	// ErrContextBuilderContextListShouldNotBeNil ...
+	ErrContextBuilderContextListShouldNotBeNil = errors.New("proton: context builder: context list should not be nil")
+	// ErrContextBuilderContextAlreadyBuilt ...
+	ErrContextBuilderContextAlreadyBuilt = errors.New("proton: context builder: context is already built")
 )
 
-// CB ...
-type CB struct {
-	cl    *CL
-	built bool
-	id    string
+// ContextBuilder ...
+type ContextBuilder struct {
+	contextList *ContextList
+	built       bool
+	id          string
 }
 
 // NewContextBuilder ...
-func NewContextBuilder(cl *CL) *CB {
-	if cl == nil {
+func NewContextBuilder(contextList *ContextList) *ContextBuilder {
+	if contextList == nil {
 		panic(ErrContextBuilderContextListShouldNotBeNil)
 	}
-	return &CB{cl: cl}
+	return &ContextBuilder{contextList: contextList}
 }
 
 // SetID ...
-func (cb *CB) SetID(id string) *CB {
+func (cb *ContextBuilder) SetID(id string) *ContextBuilder {
 	cb.id = id
 	return cb
 }
 
 // Build ...
-func (cb *CB) Build() error {
+func (cb *ContextBuilder) Build() error {
 	if cb.built {
 		return ErrContextBuilderContextAlreadyBuilt
 	}
-	c, err := NewContext(cb.id)
+	context, err := NewContext(cb.id)
 	if err != nil {
 		return err
 	}
-	err = cb.cl.AddContext(c)
+	err = cb.contextList.AddContext(context)
 	if err != nil {
 		return err
 	}

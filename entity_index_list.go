@@ -1,45 +1,47 @@
 package proton
 
-import "fmt"
+import "errors"
 
 var (
-	ErrEntityIndexListTriedToAddNilEntityIndex         = fmt.Errorf("EntityIndexList: Tried to add nil `EntityIndex`")
-	ErrEntityIndexListTriedToAddDuplicateEntityIndexID = fmt.Errorf("EntityIndexList: Tried to add `EntityIndex` with duplicate `ID`")
+	// ErrEntityIndexListTriedToAddNilEntityIndex ...
+	ErrEntityIndexListTriedToAddNilEntityIndex = errors.New("proton: entity index list: tried to add nil entity index")
+	// ErrEntityIndexListTriedToAddDuplicateEntityIndexID ...
+	ErrEntityIndexListTriedToAddDuplicateEntityIndexID = errors.New("proton: entity index list: tried to add entity index with duplicate id")
 )
 
-// EIL ...
-type EIL struct {
-	l []*EI
+// EntityIndexList ...
+type EntityIndexList struct {
+	entityIndexSlice []*EntityIndex
 }
 
 // NewEntityIndexList ...
-func NewEntityIndexList() *EIL {
-	return &EIL{}
+func NewEntityIndexList() *EntityIndexList {
+	return &EntityIndexList{}
 }
 
 // AddEntityIndex ...
-func (eil *EIL) AddEntityIndex(ei *EI) error {
-	if ei == nil {
-		return ErrEntityIndexListTriedToAddNilEntityIndex
+func (eil *EntityIndexList) AddEntityIndex(entityIndex *EntityIndex) error {
+	if entityIndex == nil {
+		panic(ErrEntityIndexListTriedToAddNilEntityIndex)
 	}
-	if eil.EntityIndexWithID(ei.ID().String()) != nil {
+	if eil.EntityIndexWithID(entityIndex.ID().String()) != nil {
 		return ErrEntityIndexListTriedToAddDuplicateEntityIndexID
 	}
-	eil.l = append(eil.l, ei)
+	eil.entityIndexSlice = append(eil.entityIndexSlice, entityIndex)
 	return nil
 }
 
 // EntityIndexWithID ...
-func (eil *EIL) EntityIndexWithID(id string) *EI {
-	for _, ei := range eil.l {
-		if ei.ID().EqualTo(id) {
-			return ei
+func (eil *EntityIndexList) EntityIndexWithID(id string) *EntityIndex {
+	for _, entityIndex := range eil.entityIndexSlice {
+		if entityIndex.ID().EqualTo(id) {
+			return entityIndex
 		}
 	}
 	return nil
 }
 
 // EntityIndexList ...
-func (eil *EIL) EntityIndexList() []*EI {
-	return eil.l
+func (eil *EntityIndexList) EntityIndexSlice() []*EntityIndex {
+	return eil.entityIndexSlice
 }

@@ -1,5 +1,17 @@
-package proton
+package proton_test
 
+import (
+	//proton "github.com/SirMetathyst/go-proton"
+	. "github.com/onsi/ginkgo"
+	//. "github.com/onsi/gomega"
+)
+
+// Describe Component List ...
+var _ = Describe("Component List", func() {
+
+})
+
+/*
 import (
 	"testing"
 
@@ -20,7 +32,6 @@ func TestComponentList(t *testing.T) {
 		contextList := NewContextList()
 		context, _ := NewContext("test")
 		contextList.AddContext(context)
-
 
 		componentMemberList := NewComponentMemberList()
 		componentMember, _ := NewComponentMember("id", "value", SingleEntityIndex)
@@ -46,7 +57,6 @@ func TestComponentList(t *testing.T) {
 					goconvey.So(len(slice), goconvey.ShouldEqual, 1)
 				})
 			})
-			
 
 			goconvey.Convey("and retrieving components with context id", func() {
 				slice := componentList.ComponentsWithContextID("test")
@@ -79,4 +89,4 @@ func TestComponentList(t *testing.T) {
 			})
 		})
 	})
-}
+}*/
