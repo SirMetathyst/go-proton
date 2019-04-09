@@ -36,13 +36,13 @@ and re-generate the code.`,
 
 func init() {
 	for _, generatorInfo := range codegeneration.GeneratorInfoSlice() {
-		generateCmd.PersistentFlags().BoolVar(&generatorInfo.Enabled, generatorInfo.GeneratorVersion, generatorInfo.Enabled, "")
+		generateCmd.Flags().BoolVar(&generatorInfo.Enabled, generatorInfo.GeneratorVersion, generatorInfo.Enabled, "")
 	}
 	for _, postProcessorInfo := range codegeneration.PostProcessorInfoSlice() {
-		generateCmd.PersistentFlags().BoolVar(&postProcessorInfo.Enabled, postProcessorInfo.PostProcessorVersion, postProcessorInfo.Enabled, "")
+		generateCmd.Flags().BoolVar(&postProcessorInfo.Enabled, postProcessorInfo.PostProcessorVersion, postProcessorInfo.Enabled, "")
 	}
 
-	generateCmd.PersistentFlags().StringVarP(&ProjectPath, "project-path", "p", ProjectPath, "project path")
-	generateCmd.PersistentFlags().StringVarP(&OutputFolder, "output-folder", "o", OutputFolder, "output folder")
-	generateCmd.PersistentFlags().BoolVarP(&Daemonize, "daemonize", "d", Daemonize, "daemonize application")
+	generateCmd.Flags().StringVarP(&ProjectPath, "project-path", "p", ProjectPath, "project path")
+	generateCmd.Flags().StringVarP(&OutputFolder, "output-folder", "o", OutputFolder, "output folder")
+	generateCmd.Flags().BoolVarP(&Daemonize, "daemonize", "d", Daemonize, "daemonize application")
 }

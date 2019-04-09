@@ -17,7 +17,8 @@ var (
 
 // Alias ...
 type Alias struct {
-	id, value string
+	id    string
+	value string
 }
 
 // NewAlias ...
