@@ -26,13 +26,13 @@ func NewAlias(id, value string) (*Alias, error) {
 	if id == "" {
 		return nil, ErrAliasIDUndefined
 	}
-	if ContainsWhitespace(id) {
+	if containsWhitespace(id) {
 		return nil, ErrAliasIDContainsWhitespace
 	}
 	if value == "" {
 		return nil, ErrAliasValueUndefined
 	}
-	if ContainsWhitespace(value) {
+	if containsWhitespace(value) {
 		return nil, ErrAliasValueContainsWhitespace
 	}
 	return &Alias{id, value}, nil

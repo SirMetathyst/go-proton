@@ -21,7 +21,7 @@ func NewContext(id string) (*Context, error) {
 	if id == "" {
 		return nil, ErrContextIDUndefined
 	}
-	if ContainsWhitespace(id) {
+	if containsWhitespace(id) {
 		return nil, ErrContextIDContainsWhitespace
 	}
 	return &Context{id}, nil

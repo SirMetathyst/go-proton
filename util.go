@@ -2,8 +2,8 @@ package proton
 
 import "unicode"
 
-// ContainsWhitespace ...
-func ContainsWhitespace(v string) bool {
+// containsWhitespace ...
+func containsWhitespace(v string) bool {
 	for _, vv := range v {
 		if unicode.IsSpace(vv) {
 			return true
