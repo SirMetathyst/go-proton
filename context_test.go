@@ -1,73 +1,61 @@
 package proton_test
 
 import (
-	//proton "github.com/SirMetathyst/go-proton"
+	proton "github.com/SirMetathyst/go-proton"
 	. "github.com/onsi/ginkgo"
-	//. "github.com/onsi/gomega"
+	. "github.com/onsi/ginkgo/extensions/table"
+	. "github.com/onsi/gomega"
+)
+
+// ContextData ...
+type ContextData struct {
+	id          string
+	expectedErr error
+}
+
+var (
+
+	// InvalidContextEntrySlice ...
+	InvalidContextEntrySlice = []TableEntry{
+		Entry("", ContextData{"", proton.ErrContextIDUndefined}),                // 0
+		Entry("", ContextData{"id ", proton.ErrContextIDContainsWhitespace}),    // 1
+		Entry("", ContextData{"\tid", proton.ErrContextIDContainsWhitespace}),   // 5
+		Entry("", ContextData{"\nid", proton.ErrContextIDContainsWhitespace}),   // 6
+		Entry("", ContextData{"\r\nid", proton.ErrContextIDContainsWhitespace}), // 7
+	}
+
+	// ValidContextEntrySlice ...
+	ValidContextEntrySlice = []TableEntry{
+		Entry("", ContextData{"id", nil}),                         // 0
+		Entry("", ContextData{"the_id", nil}),                     // 1
+		Entry("", ContextData{"ID", nil}),                         // 2
+		Entry("", ContextData{"the-id", nil}),                     // 3
+		Entry("", ContextData{"~@*^£*(", nil}),                    // 4
+		Entry("", ContextData{"F{^v@7Er4Fq&}CZ[", nil}),           // 5
+		Entry("", ContextData{"%&ROPEEGG#_JACKXBOX#tokyoZ", nil}), // 6
+	}
 )
 
 // Describe Context ...
 var _ = Describe("Context", func() {
 
+	// Creating an invalid context ...
+	DescribeTable("creating an invalid context",
+		func(contextData ContextData) {
+			context, err := proton.NewContext(contextData.id)
+			Expect(err).To(Equal(contextData.expectedErr))
+			Expect(context).To(BeNil())
+		}, InvalidContextEntrySlice...,
+	)
+
+	// Creating a valid context ...
+	DescribeTable("creating a valid context",
+		func(contextData ContextData) {
+			context, err := proton.NewContext(contextData.id)
+			Expect(err).To(BeNil())
+			Expect(context).ToNot(BeNil())
+			Expect(context.ID()).To(Equal(proton.String(contextData.id)))
+		}, ValidContextEntrySlice...,
+	)
+
 })
-
-/*
-func TestContext(t *testing.T) {
-	goconvey.Convey("when creating a new context", t, func() {
-		goconvey.Convey("without an id", func() {
-			context, err := NewContext("")
-			goconvey.Convey("context is nil", func() {
-				goconvey.So(context, goconvey.ShouldBeNil)
-			})
-			goconvey.Convey("error should be `"+ErrContextIDUndefined.Error()+"`", func() {
-				goconvey.So(err, goconvey.ShouldEqual, ErrContextIDUndefined)
-			})
-		})
-
-		goconvey.Convey("with an id of `test`", func() {
-			context, err := NewContext("test")
-			goconvey.Convey("context is not nil", func() {
-				goconvey.So(context, goconvey.ShouldNotBeNil)
-			})
-			goconvey.Convey("error be nil", func() {
-				goconvey.So(err, goconvey.ShouldBeNil)
-			})
-		})
-
-		goconvey.Convey("with id that contains spaces", func() {
-			context, err := NewContext("test  ")
-			goconvey.Convey("context is nil", func() {
-				goconvey.So(context, goconvey.ShouldBeNil)
-			})
-			goconvey.Convey("error should be `"+ErrContextIDContainsWhitespace.Error()+"`", func() {
-				goconvey.So(err, goconvey.ShouldEqual, ErrContextIDContainsWhitespace)
-			})
-		})
-
-		goconvey.Convey("with id that contains tabs", func() {
-			context, err := NewContext("test	")
-			goconvey.Convey("context is nil", func() {
-				goconvey.So(context, goconvey.ShouldBeNil)
-			})
-			goconvey.Convey("error should be `"+ErrContextIDContainsWhitespace.Error()+"`", func() {
-				goconvey.So(err, goconvey.ShouldEqual, ErrContextIDContainsWhitespace)
-			})
-		})
-	})
-
-	goconvey.Convey("when given a valid context", t, func() {
-		context, err := NewContext("test")
-		goconvey.Convey("context should not be nil", func() {
-			goconvey.So(context, goconvey.ShouldNotBeNil)
-		})
-		goconvey.Convey("error should be nil", func() {
-			goconvey.So(err, goconvey.ShouldBeNil)
-		})
-		goconvey.Convey("retrieving the id", func() {
-			id := context.ID()
-			goconvey.Convey("should equal `test`", func() {
-				goconvey.So(id, goconvey.ShouldEqual, String("test"))
-			})
-		})
-	})
-}*/

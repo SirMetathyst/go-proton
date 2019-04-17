@@ -10,13 +10,13 @@ import (
 // Describe Alias List ...
 var _ = Describe("Alias List", func() {
 
-	// Adding nil alias ...
+	// Adding a nil alias ...
 	It("will panic when a nil alias is added", func() {
 		aliasList := proton.NewAliasList()
 		Expect(func() { aliasList.AddAlias(nil) }).To(Panic())
 	})
 
-	// Adding valid alias ...
+	// Adding a valid alias ...
 	DescribeTable("adding a valid alias",
 		func(aliasData AliasData) {
 			aliasList := proton.NewAliasList()
@@ -25,7 +25,7 @@ var _ = Describe("Alias List", func() {
 		}, ValidAliasEntrySlice...,
 	)
 
-	// Adding duplicate alias ...
+	// Adding a duplicate alias ...
 	DescribeTable("adding a duplicate alias",
 		func(aliasData AliasData) {
 			aliasList := proton.NewAliasList()
@@ -35,8 +35,8 @@ var _ = Describe("Alias List", func() {
 		}, ValidAliasEntrySlice...,
 	)
 
-	// Return slice of alias
-	It("will return a slice of alias", func() {
+	// Returning a slice of alias's
+	It("will return a slice of alias's", func() {
 
 		// Add alias entries to AliasList
 		addAliasEntries := func(aliasList *proton.AliasList, entries []TableEntry) []*proton.Alias {

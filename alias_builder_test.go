@@ -67,7 +67,7 @@ var _ = Describe("Alias Builder", func() {
 			Expect(buildAlias(aliasData.value)).To(BeNil())
 			Expect(aliasList.AliasWithID(aliasData.id)).ToNot(BeNil())
 
-			// When duplicate has been added ...
+			// When trying to build a duplicate ...
 			Expect(buildAlias("value")).ToNot(BeNil())
 			Expect(aliasList.AliasWithID(aliasData.id).Value()).ToNot(Equal("value"))
 
