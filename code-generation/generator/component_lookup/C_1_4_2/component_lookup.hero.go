@@ -10,11 +10,11 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentLookup_C_1_4_2(c *proton.C, cp []*proton.CP, b *bytes.Buffer) string {
+func ComponentLookup_C_1_4_2(c *proton.Context, cp []*proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public static class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`ComponentsLookup 
+	b.WriteString(`ComponentsLookup
 {
 `)
 
@@ -29,7 +29,7 @@ public static class `)
 		i++
 		ci++
 
-		if ccp.EventTarget() != proton.NoTarget {
+		if ccp.EventTarget() != proton.EventTargetNone {
 			b.WriteString("\tpublic const int ")
 			b.WriteString(eventComponentID(c, ccp).String())
 			b.WriteString(" = ")
@@ -43,8 +43,8 @@ public static class `)
     public const int TotalComponents = `)
 	b.WriteString(strconv.Itoa(i))
 	b.WriteString(`;
-	
-	public static readonly string[] componentNames = 
+
+	public static readonly string[] componentNames =
     {
 `)
 
@@ -57,7 +57,7 @@ public static class `)
 			b.WriteString(",\n")
 		}
 		i++
-		if ccp.EventTarget() != proton.NoTarget {
+		if ccp.EventTarget() != proton.EventTargetNone {
 			b.WriteString("\t\t\"")
 			b.WriteString(eventComponentID(c, ccp).String())
 			b.WriteString("\"")
@@ -70,8 +70,8 @@ public static class `)
 
 	b.WriteString(`
 	};
-	
-	public static readonly System.Type[] componentTypes = 
+
+	public static readonly System.Type[] componentTypes =
     {
 `)
 
@@ -85,7 +85,7 @@ public static class `)
 		}
 		i++
 
-		if ccp.EventTarget() != proton.NoTarget {
+		if ccp.EventTarget() != proton.EventTargetNone {
 			b.WriteString("\t\ttypeof(")
 			b.WriteString(eventComponentID(c, ccp).WithComponentSuffix().String())
 			b.WriteRune(')')

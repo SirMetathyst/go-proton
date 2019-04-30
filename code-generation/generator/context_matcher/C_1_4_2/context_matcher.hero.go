@@ -9,11 +9,11 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ContextMatcher_C_1_4_2(c *proton.C, b *bytes.Buffer) string {
+func ContextMatcher_C_1_4_2(c *proton.Context, b *bytes.Buffer) string {
 	b.WriteString(`
 public sealed partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Matcher 
+	b.WriteString(`Matcher
 {
     public static Entitas.IAllOfMatcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())

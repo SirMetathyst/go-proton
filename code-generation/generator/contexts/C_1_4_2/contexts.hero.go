@@ -9,13 +9,13 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func Contexts_C_1_4_2(c []*proton.C, b *bytes.Buffer) string {
+func Contexts_C_1_4_2(c []*proton.Context, b *bytes.Buffer) string {
 	b.WriteString(`
-public partial class Contexts : Entitas.IContexts 
+public partial class Contexts : Entitas.IContexts
 {
-    public static Contexts sharedInstance 
+    public static Contexts sharedInstance
     {
-        get 
+        get
         {
 			if (_sharedInstance == null)
             {
@@ -23,12 +23,12 @@ public partial class Contexts : Entitas.IContexts
             }
             return _sharedInstance;
         }
-        set 
+        set
         {
-            _sharedInstance = value; 
+            _sharedInstance = value;
         }
     }
-  
+
     static Contexts _sharedInstance;
 
 `)
@@ -43,10 +43,10 @@ public partial class Contexts : Entitas.IContexts
 	}
 	b.WriteString(`
 
-    public Entitas.IContext[] allContexts 
+    public Entitas.IContext[] allContexts
     {
-        get 
-        { 
+        get
+        {
             return new Entitas.IContext [] { `)
 	for Index, cc := range c {
 		b.WriteString(cc.ID().WithoutContextSuffix().ToLowerFirst().String())
@@ -55,9 +55,9 @@ public partial class Contexts : Entitas.IContexts
 		}
 	}
 	b.WriteString(` };
-        } 
+        }
     }
-  
+
 	public Contexts()
     {
 `)
@@ -75,14 +75,14 @@ public partial class Contexts : Entitas.IContexts
             GetType().GetMethods(),
             method => System.Attribute.IsDefined(method, typeof(Entitas.CodeGeneration.Attributes.PostConstructorAttribute))
         );
-  
+
         foreach (var postConstructor in postConstructors)
         {
             postConstructor.Invoke(this, null);
         }
     }
-  
-    public void Reset() 
+
+    public void Reset()
     {
         var contexts = allContexts;
         for (int i = 0; i < contexts.Length; i++)

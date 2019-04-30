@@ -9,54 +9,54 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentContext_C_1_4_2(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
+func ComponentContext_C_1_4_2(c *proton.Context, cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class `)
 	b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
-	b.WriteString(` 
+	b.WriteString(`
 {
     public `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
-	b.WriteString(`Entity 
-    { 
-        get 
-        { 
+	b.WriteString(`Entity
+    {
+        get
+        {
             return GetGroup(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Matcher.`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`).GetSingleEntity(); 
-        } 
+	b.WriteString(`).GetSingleEntity();
+        }
     }
 
     public `)
 	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
 	b.WriteRune(' ')
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
-	b.WriteString(` 
-    { 
-        get 
-        { 
+	b.WriteString(`
+    {
+        get
+        {
             return `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
 	b.WriteString(`Entity.`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
-	b.WriteString(`; 
-        } 
+	b.WriteString(`;
+        }
     }
 
     public bool has`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` 
-    { 
-        get 
-        { 
+	b.WriteString(`
+    {
+        get
+        {
             return `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
-	b.WriteString(`Entity != null; 
-        } 
+	b.WriteString(`Entity != null;
+        }
     }
 
     public `)
@@ -65,11 +65,11 @@ public partial class `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
 	ComponentContextArgument_1_4_2(cp, b)
-	b.WriteString(`) 
+	b.WriteString(`)
     {
         if (has`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`) 
+	b.WriteString(`)
         {
             throw new Entitas.EntitasException("Could not set `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
@@ -95,20 +95,20 @@ public partial class `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
 	ComponentContextArgument_1_4_2(cp, b)
-	b.WriteString(`) 
+	b.WriteString(`)
     {
         var entity = `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
 	b.WriteString(`Entity;
-        if (entity == null) 
+        if (entity == null)
         {
             entity = Set`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
 	ComponentContextArgumentPass_1_4_2(cp, b)
 	b.WriteString(`);
-        } 
-        else 
+        }
+        else
         {
             entity.Replace`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
@@ -120,7 +120,7 @@ public partial class `)
 
     public void Remove`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`() 
+	b.WriteString(`()
     {
         `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())

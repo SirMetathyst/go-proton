@@ -9,26 +9,26 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentEntityInterface_C_1_4_2(cp *proton.CP, b *bytes.Buffer) string {
+func ComponentEntityInterface_C_1_4_2(cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public interface I`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity 
+	b.WriteString(`Entity
 {
     `)
 	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
 	b.WriteRune(' ')
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
-	b.WriteString(` 
-    { 
-        get; 
+	b.WriteString(`
+    {
+        get;
     }
-    
+
     bool has`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` 
-    { 
-        get; 
+	b.WriteString(`
+    {
+        get;
     }
 
     void Add`)

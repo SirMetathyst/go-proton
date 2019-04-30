@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"path"
 	"path/filepath"
 	"syscall"
 
@@ -219,7 +220,8 @@ func Generate(md *proton.Model) error {
 
 // ParseGenerate ...
 func (p *P) ParseGenerate(parser func(file string) (*proton.Model, error)) error {
-	md, err := parser("proton.proton")
+	file := path.Join(p.Options.ProjectPath, "proton.proton")
+	md, err := parser(file)
 	if err != nil {
 		return err
 	}
@@ -249,10 +251,6 @@ func ProtonFilesList(root string) ([]string, error) {
 
 // Daemon ...
 func Daemon(parser func(file string) (*proton.Model, error)) error {
-	err := ParseGenerate(parser)
-	if err != nil {
-		return err
-	}
 	w, err := fsnotify.NewWatcher()
 	defer w.Close()
 	if err != nil {
@@ -276,6 +274,13 @@ func Daemon(parser func(file string) (*proton.Model, error)) error {
 		}
 	}
 
+	err = ParseGenerate(parser)
+	if err != nil {
+		log.Printf("proton: %s\n", err)
+	} else {
+		log.Println("proton: generated")
+	}
+
 	go func() {
 		for {
 			select {
@@ -285,8 +290,9 @@ func Daemon(parser func(file string) (*proton.Model, error)) error {
 					err := ParseGenerate(parser)
 					if err != nil {
 						log.Printf("proton: %s\n", err)
+					} else {
+						log.Println("proton: generated")
 					}
-					log.Println("proton: generated")
 				}
 			}
 		}

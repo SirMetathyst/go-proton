@@ -9,38 +9,38 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentContextFlag_C_1_4_2(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
+func ComponentContextFlag_C_1_4_2(c *proton.Context, cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class `)
 	b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
-	b.WriteString(` 
+	b.WriteString(`
 {
     public `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
-	b.WriteString(`Entity 
-    { 
-        get 
-        { 
+	b.WriteString(`Entity
+    {
+        get
+        {
             return GetGroup(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Matcher.`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`).GetSingleEntity(); 
-        } 
+	b.WriteString(`).GetSingleEntity();
+        }
     }
 
     public bool `)
 	b.WriteString(cp.FlagPrefixOrDefault().ToLowerFirst().String())
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` 
+	b.WriteString(`
     {
-        get 
-        { 
+        get
+        {
             return `)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())
-	b.WriteString(`Entity != null; 
+	b.WriteString(`Entity != null;
         }
         set {
             var entity = `)
@@ -48,14 +48,14 @@ public partial class `)
 	b.WriteString(`Entity;
             if (value != (entity != null))
             {
-                if (value) 
+                if (value)
                 {
                     CreateEntity().`)
 	b.WriteString(cp.FlagPrefixOrDefault().WithoutComponentSuffix().ToLowerFirst().String())
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(` = true;
-                } 
-                else 
+                }
+                else
                 {
                     entity.Destroy();
                 }

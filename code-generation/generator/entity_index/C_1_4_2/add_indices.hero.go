@@ -9,18 +9,18 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EntityIndexAddIndices_C_1_4_2(cp []*proton.CP, b *bytes.Buffer) string {
+func EntityIndexAddIndices_C_1_4_2(cp []*proton.Component, b *bytes.Buffer) string {
 	for _, ccp := range cp {
 		for _, c := range ccp.ContextSlice() {
 			for _, m := range ccp.MemberSlice() {
-				if m.EntityIndex() > 0 {
+				if m.EntityIndexType() > 0 {
 
 					ID := ccp.ID().WithoutComponentSuffix().ToUpperFirst().String()
 					Type := m.Value().String()
 					IndexType := ""
-					if m.EntityIndex() == 1 {
+					if m.EntityIndexType() == 1 {
 						IndexType = "Entitas.PrimaryEntityIndex"
-					} else if m.EntityIndex() > 1 {
+					} else if m.EntityIndexType() > 1 {
 						IndexType = "Entitas.EntityIndex"
 					}
 

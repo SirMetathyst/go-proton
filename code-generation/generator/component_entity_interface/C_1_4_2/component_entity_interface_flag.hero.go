@@ -9,19 +9,19 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentEntityInterfaceFlag_C_1_4_2(cp *proton.CP, b *bytes.Buffer) string {
+func ComponentEntityInterfaceFlag_C_1_4_2(cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public interface I`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity 
+	b.WriteString(`Entity
 {
     bool `)
 	b.WriteString(cp.FlagPrefixOrDefault().ToLowerFirst().String())
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` 
-    { 
-        get; 
-        set; 
+	b.WriteString(`
+    {
+        get;
+        set;
     }
 }
 `)

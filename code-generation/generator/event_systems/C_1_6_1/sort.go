@@ -2,7 +2,7 @@ package generator
 
 import proton "github.com/SirMetathyst/go-proton"
 
-type byPriority []*proton.CP
+type byPriority []*proton.Component
 
 func (p byPriority) Len() int {
 	return len(p)

@@ -7,10 +7,14 @@ import (
 var (
 	// ErrComponentMemberIDUndefined ...
 	ErrComponentMemberIDUndefined = errors.New("proton: component member: id undefined")
+	// ErrComponentMemberIDContainsWhitespace ...
+	ErrComponentMemberIDContainsWhitespace = errors.New("proton: component member: id contains whitespace")
 	// ErrComponentMemberValueUndefined ...
 	ErrComponentMemberValueUndefined = errors.New("proton: component member: value undefined")
-	// ErrComponentMemberAliasUndefined ...
-	ErrComponentMemberAliasUndefined = errors.New("proton: component member: alias undefined")
+	// ErrComponentMemberValueContainsWhitespace ...
+	ErrComponentMemberValueContainsWhitespace = errors.New("proton: component member: value contains whitespace")
+	// ErrComponentMemberAliasShouldNotBeNil ...
+	ErrComponentMemberAliasShouldNotBeNil = errors.New("proton: component member: alias should not be nil")
 	// ErrComponentMemberEntityIndexInvalid ...
 	ErrComponentMemberEntityIndexInvalid = errors.New("proton: component member: entity index is invalid")
 )
@@ -32,8 +36,11 @@ func NewComponentMemberAlias(
 	if id == "" {
 		return nil, ErrComponentMemberIDUndefined
 	}
+	if containsWhitespace(id) {
+		return nil, ErrComponentMemberIDContainsWhitespace
+	}
 	if alias == nil {
-		return nil, ErrComponentMemberValueUndefined
+		return nil, ErrComponentMemberAliasShouldNotBeNil
 	}
 	if !entityIndexType.IsValid() {
 		return nil, ErrComponentMemberEntityIndexInvalid
@@ -54,17 +61,21 @@ func NewComponentMember(
 	if id == "" {
 		return nil, ErrComponentMemberIDUndefined
 	}
+	if containsWhitespace(id) {
+		return nil, ErrComponentMemberIDContainsWhitespace
+	}
 	if value == "" {
 		return nil, ErrComponentMemberValueUndefined
+	}
+	if containsWhitespace(value) {
+		return nil, ErrComponentMemberValueContainsWhitespace
 	}
 	if !entityIndexType.IsValid() {
 		return nil, ErrComponentMemberEntityIndexInvalid
 	}
 
-	sid := String(id).ToLowerFirst().String()
-
 	return &ComponentMember{
-		id:              sid,
+		id:              id,
 		value:           value,
 		alias:           nil,
 		entityIndexType: entityIndexType}, nil

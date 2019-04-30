@@ -9,7 +9,7 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentContextArgument_1_4_2(cp *proton.CP, b *bytes.Buffer) string {
+func ComponentContextArgument_1_4_2(cp *proton.Component, b *bytes.Buffer) string {
 	ms := cp.MemberSlice()
 	for i, m := range ms {
 		b.WriteString(m.Value().String())

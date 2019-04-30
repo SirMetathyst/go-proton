@@ -9,7 +9,7 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentEntity_C_1_4_2(c *proton.C, cp *proton.CP, isEventComponent bool, b *bytes.Buffer) string {
+func ComponentEntity_C_1_4_2(c *proton.Context, cp *proton.Component, isEventComponent bool, b *bytes.Buffer) string {
 
 	ID := proton.String("")
 
@@ -28,39 +28,39 @@ public partial class `)
 	b.WriteString(ID.WithComponentSuffix().ToUpperFirst().String())
 	b.WriteRune(' ')
 	b.WriteString(ID.WithoutComponentSuffix().ToLowerFirst().String())
-	b.WriteString(` 
-    { 
-        get 
-        { 
+	b.WriteString(`
+    {
+        get
+        {
             return (`)
 	b.WriteString(ID.WithComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`)GetComponent(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
 	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`); 
-        } 
+	b.WriteString(`);
+        }
     }
 
     public bool has`)
 	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` 
-    { 
-        get 
-        { 
+	b.WriteString(`
+    {
+        get
+        {
             return HasComponent(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
 	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`); 
-        } 
+	b.WriteString(`);
+        }
     }
 
     public void Add`)
 	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`(`)
 	ComponentEntityArgument_C_1_4_2(cp, isEventComponent, b)
-	b.WriteString(`) 
+	b.WriteString(`)
     {
         var index = `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())

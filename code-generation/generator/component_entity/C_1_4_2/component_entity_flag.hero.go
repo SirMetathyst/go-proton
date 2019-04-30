@@ -9,11 +9,11 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentEntityFlag_C_1_4_2(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
+func ComponentEntityFlag_C_1_4_2(c *proton.Context, cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity 
+	b.WriteString(`Entity
 {
     static readonly `)
 	b.WriteString(cp.ID().WithComponentSuffix().ToUpperFirst().String())
@@ -26,29 +26,29 @@ public partial class `)
     public bool `)
 	b.WriteString(cp.FlagPrefixOrDefault().ToLowerFirst().String())
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` 
+	b.WriteString(`
     {
-        get 
-        { 
+        get
+        {
             return HasComponent(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`); 
+	b.WriteString(`);
         }
-        set 
+        set
         {
             if (value != `)
 	b.WriteString(cp.FlagPrefixOrDefault().ToLowerFirst().String())
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`) 
+	b.WriteString(`)
             {
                 var index = `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`ComponentsLookup.`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
 	b.WriteString(`;
-                if (value) 
+                if (value)
                 {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
@@ -58,8 +58,8 @@ public partial class `)
 	b.WriteString(`;
 
                     AddComponent(index, component);
-                } 
-                else 
+                }
+                else
                 {
                     RemoveComponent(index);
                 }

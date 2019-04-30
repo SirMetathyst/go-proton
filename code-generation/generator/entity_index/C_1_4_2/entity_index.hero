@@ -1,4 +1,4 @@
-<%: func EntityIndex_C_1_4_2(cp []*proton.CP, ei []*entitas.EI, b *bytes.Buffer) string %>
+<%: func EntityIndex_C_1_4_2(cp []*proton.Component, ei []*entitas.EntityIndex, b *bytes.Buffer) string %>
 public partial class Contexts
 {
 <% EntityIndexConstants_C_1_4_2(cp, b) %>
@@ -12,7 +12,7 @@ public partial class Contexts
     }
 }
 
-public static class ContextsExtensions 
+public static class ContextsExtensions
 {
 <% EntityIndexGetIndices_C_1_4_2(cp, b) %>
 <% EntityIndexGetCustomIndices_C_1_4_2(ei, b) %>

@@ -12,9 +12,9 @@ func init() {
 }
 
 // eventComponentID ...
-func eventComponentID(c *proton.C, cp *proton.CP) proton.String {
+func eventComponentID(c *proton.Context, cp *proton.Component) proton.String {
 	var eventTypeSuffix = ""
-	if cp.EventType() == proton.RemovedEvent {
+	if cp.EventType() == proton.EventTypeRemoved {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
@@ -25,17 +25,17 @@ func eventComponentID(c *proton.C, cp *proton.CP) proton.String {
 }
 
 // eventComponentInterfaceID ...
-func eventComponentInterfaceID(cp *proton.CP) proton.String {
+func eventComponentInterfaceID(cp *proton.Component) proton.String {
 	var eventTypeSuffix = ""
-	if cp.EventType() == proton.RemovedEvent {
+	if cp.EventType() == proton.EventTypeRemoved {
 		eventTypeSuffix = "Removed"
 	}
 	return proton.String(proton.String(cp.ID()).WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix + "Listener")
 }
 
 // ComponentEntityGenerator_C_1_4_2 ...
-func ComponentEntityGenerator_C_1_4_2(m *proton.MD) ([]proton.FI, error) {
-	slice := make([]proton.FI, 0)
+func ComponentEntityGenerator_C_1_4_2(m *proton.Model) ([]proton.FileInfo, error) {
+	slice := make([]proton.FileInfo, 0)
 	for _, cp := range m.ComponentSlice() {
 		for _, c := range cp.ContextSlice() {
 			b := new(bytes.Buffer)
@@ -48,7 +48,7 @@ func ComponentEntityGenerator_C_1_4_2(m *proton.MD) ([]proton.FI, error) {
 
 			slice = append(slice, proton.NewFileInfo(c.ID().WithoutContextSuffix().ToUpperFirst().String()+"/Components/"+c.ID().WithoutContextSuffix().ToUpperFirst().String()+cp.ID().WithComponentSuffix().ToUpperFirst().String()+".cs", b.String(), "ComponentEntityGenerator_C_1_4_2"))
 
-			if cp.EventTarget() != proton.NoTarget {
+			if cp.EventTarget() != proton.EventTargetNone {
 				b = new(bytes.Buffer)
 				ComponentEntity_C_1_4_2(c, cp, true, b)
 				slice = append(slice, proton.NewFileInfo(c.ID().WithoutContextSuffix().ToUpperFirst().String()+"/Components/"+c.ID().WithoutContextSuffix().ToUpperFirst().String()+eventComponentID(c, cp).WithComponentSuffix().ToUpperFirst().String()+".cs", b.String(), "ComponentEntityGenerator_C_1_4_2"))

@@ -1,5 +1,5 @@
-<%: func Context_C_1_4_2(c *proton.C, b *bytes.Buffer) string %>
-public sealed partial class <%==s c.ID().WithContextSuffix().ToUpperFirst().String()%> : Entitas.Context<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> 
+<%: func Context_C_1_4_2(c *proton.Context, b *bytes.Buffer) string %>
+public sealed partial class <%==s c.ID().WithContextSuffix().ToUpperFirst().String()%> : Entitas.Context<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>
 {
     public <%==s c.ID().WithContextSuffix().ToUpperFirst().String()%>()
         : base(
@@ -16,7 +16,7 @@ public sealed partial class <%==s c.ID().WithContextSuffix().ToUpperFirst().Stri
 #else
             new Entitas.SafeAERC(entity)
 #endif
-        ) 
+        )
     {
     }
 }

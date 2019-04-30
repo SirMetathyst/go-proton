@@ -9,23 +9,23 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EventSystemSelfTarget_C_1_6_1(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
+func EventSystemSelfTarget_C_1_6_1(c *proton.Context, cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public sealed class `)
 	b.WriteString(componentID(c, cp).ToUpperFirst().String())
 	b.WriteString(`EventSystem : Entitas.ReactiveSystem<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> 
+	b.WriteString(`Entity>
 {
     readonly System.Collections.Generic.List<I`)
 	b.WriteString(componentID(c, cp).ToUpperFirst().String())
 	b.WriteString(`> _listenerBuffer;
-    
+
     public `)
 	b.WriteString(componentID(c, cp).ToUpperFirst().String())
 	b.WriteString(`EventSystem(Contexts contexts) : base(contexts.`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToLowerFirst().String())
-	b.WriteString(`) 
+	b.WriteString(`)
     {
         _listenerBuffer = new System.Collections.Generic.List<I`)
 	b.WriteString(componentID(c, cp).ToUpperFirst().String())
@@ -36,7 +36,7 @@ public sealed class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity> GetTrigger(Entitas.IContext<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> context) 
+	b.WriteString(`Entity> context)
     {
         return Entitas.CollectorContextExtension.CreateCollector(
             context, Entitas.TriggerOnEventMatcherExtension.`)
@@ -61,7 +61,7 @@ public sealed class `)
 
     protected override bool Filter(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity entity) 
+	b.WriteString(`Entity entity)
     {
         return `)
 	b.WriteString(filter(c, cp))
@@ -70,9 +70,9 @@ public sealed class `)
 
     protected override void Execute(System.Collections.Generic.List<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> entities) 
+	b.WriteString(`Entity> entities)
     {
-        foreach (var e in entities) 
+        foreach (var e in entities)
         {
             `)
 
@@ -88,7 +88,7 @@ public sealed class `)
             _listenerBuffer.AddRange(e.`)
 	b.WriteString(componentID(c, cp).ToLowerFirst().String())
 	b.WriteString(`.value);
-            foreach (var listener in _listenerBuffer) 
+            foreach (var listener in _listenerBuffer)
             {
                 listener.On`)
 	b.WriteString(methodID(cp).ToUpperFirst().String())

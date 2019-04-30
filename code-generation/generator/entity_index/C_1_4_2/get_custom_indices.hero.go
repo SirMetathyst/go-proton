@@ -9,7 +9,7 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EntityIndexGetCustomIndices_C_1_4_2(ei []*proton.EI, b *bytes.Buffer) string {
+func EntityIndexGetCustomIndices_C_1_4_2(ei []*proton.EntityIndex, b *bytes.Buffer) string {
 	for _, cei := range ei {
 		IndexType := cei.ID().String()
 		ReturnType := ""
@@ -18,7 +18,7 @@ func EntityIndexGetCustomIndices_C_1_4_2(ei []*proton.EI, b *bytes.Buffer) strin
 		} else {
 			ReturnType = cei.Context().ID().WithoutContextSuffix().ToUpperFirst().String() + "Entity"
 		}
-		for _, eim := range cei.EntityIndexMethodList() {
+		for _, eim := range cei.EntityIndexMethodSlice() {
 			b.WriteString(`
     public static `)
 			b.WriteString(ReturnType)

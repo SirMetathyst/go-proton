@@ -9,7 +9,7 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EntityIndex_C_1_4_2(cp []*proton.CP, ei []*proton.EI, b *bytes.Buffer) string {
+func EntityIndex_C_1_4_2(cp []*proton.Component, ei []*proton.EntityIndex, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class Contexts
 {
@@ -28,7 +28,7 @@ public partial class Contexts
     }
 }
 
-public static class ContextsExtensions 
+public static class ContextsExtensions
 {
 `)
 	EntityIndexGetIndices_C_1_4_2(cp, b)

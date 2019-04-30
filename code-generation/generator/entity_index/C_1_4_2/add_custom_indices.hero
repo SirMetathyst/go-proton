@@ -1,7 +1,7 @@
-<%: func EntityIndexAddCustomIndices_C_1_4_2(ei []*proton.EI, b *bytes.Buffer) string %>
-<% 
+<%: func EntityIndexAddCustomIndices_C_1_4_2(ei []*proton.EntityIndex, b *bytes.Buffer) string %>
+<%
 for _, cei := range ei { 
-    if cei.Context() != nil { 
+    if cei.Context() != nil {
         b.WriteString("\t\t")
         b.WriteString(cei.Context().ID().WithoutContextSuffix().ToLowerFirst().String())
         b.WriteRune('.')
@@ -10,6 +10,6 @@ for _, cei := range ei {
         b.WriteRune('(')
         b.WriteString(cei.Context().ID().WithoutContextSuffix().ToLowerFirst().String())
         b.WriteString("));\n")
-    } 
+    }
 } %>
 <% return b.String() %>

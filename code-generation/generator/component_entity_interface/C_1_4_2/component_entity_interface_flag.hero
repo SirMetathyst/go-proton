@@ -1,10 +1,10 @@
-<%: func ComponentEntityInterfaceFlag_C_1_4_2(cp *proton.CP, b *bytes.Buffer) string %>
-public interface I<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %>Entity 
+<%: func ComponentEntityInterfaceFlag_C_1_4_2(cp *proton.Component, b *bytes.Buffer) string %>
+public interface I<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %>Entity
 {
-    bool <%==s cp.FlagPrefixOrDefault().ToLowerFirst().String()  %><%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %> 
-    { 
-        get; 
-        set; 
+    bool <%==s cp.FlagPrefixOrDefault().ToLowerFirst().String()  %><%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %>
+    {
+        get;
+        set;
     }
 }
 <% return b.String() %>

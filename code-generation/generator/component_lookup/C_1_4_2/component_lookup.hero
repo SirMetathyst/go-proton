@@ -1,7 +1,7 @@
-<%: func ComponentLookup_C_1_4_2(c *proton.C, cp []*proton.CP, b *bytes.Buffer) string %>
-public static class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup 
+<%: func ComponentLookup_C_1_4_2(c *proton.Context, cp []*proton.Component, b *bytes.Buffer) string %>
+public static class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup
 {
-<% 
+<%
 i := 0
 ci := 0
 for _, ccp := range cp {
@@ -13,7 +13,7 @@ for _, ccp := range cp {
     i++
     ci++
 
-    if ccp.EventTarget() != proton.NoTarget {
+    if ccp.EventTarget() != proton.EventTargetNone {
         b.WriteString("\tpublic const int ")
         b.WriteString(eventComponentID(c, ccp).String())
         b.WriteString(" = ")
@@ -24,10 +24,10 @@ for _, ccp := range cp {
     }
 }%>
     public const int TotalComponents = <%==s strconv.Itoa(i) %>;
-	
-	public static readonly string[] componentNames = 
+
+	public static readonly string[] componentNames =
     {
-<% 
+<%
 i = 0
 for _, ccp := range cp {
     b.WriteString("\t\t\"")
@@ -37,7 +37,7 @@ for _, ccp := range cp {
         b.WriteString(",\n")
     }
     i++
-    if ccp.EventTarget() != proton.NoTarget {
+    if ccp.EventTarget() != proton.EventTargetNone {
         b.WriteString("\t\t\"")
         b.WriteString(eventComponentID(c, ccp).String())
         b.WriteString("\"")
@@ -46,13 +46,13 @@ for _, ccp := range cp {
         }
         i++
     }
-} 
+}
 %>
 	};
-	
-	public static readonly System.Type[] componentTypes = 
+
+	public static readonly System.Type[] componentTypes =
     {
-<% 
+<%
 i = 0
 for _, ccp := range cp {
     b.WriteString("\t\ttypeof(")
@@ -63,7 +63,7 @@ for _, ccp := range cp {
     }
     i++
 
-    if ccp.EventTarget() != proton.NoTarget {
+    if ccp.EventTarget() != proton.EventTargetNone {
         b.WriteString("\t\ttypeof(")
         b.WriteString(eventComponentID(c, ccp).WithComponentSuffix().String())
         b.WriteRune(')')
@@ -72,7 +72,7 @@ for _, ccp := range cp {
         }
         i++
     }
-} 
+}
 %>
 	};
 }

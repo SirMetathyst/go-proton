@@ -1,5 +1,5 @@
-<%: func ContextMatcher_C_1_4_2(c *proton.C, b *bytes.Buffer) string %>
-public sealed partial class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Matcher 
+<%: func ContextMatcher_C_1_4_2(c *proton.Context, b *bytes.Buffer) string %>
+public sealed partial class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Matcher
 {
     public static Entitas.IAllOfMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> AllOf(params int[] Index) => Entitas.Matcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>.AllOf(Index);
     public static Entitas.IAllOfMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> AllOf(params Entitas.IMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>[] Matcher) => Entitas.Matcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>.AllOf(Matcher);

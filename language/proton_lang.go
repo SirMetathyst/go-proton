@@ -108,7 +108,10 @@ func ASTToModel(RootAST *AST) (*proton.Model, error) {
 				newComponent.SetID(component.ID)
 
 				for _, context := range componentStatement.ContextList {
-					newComponent.AddContext(context.Key)
+					err := newComponent.AddContext(context.Key)
+					if err != nil {
+						return nil, err
+					}
 				}
 
 				for _, attribute := range component.AttributeList {

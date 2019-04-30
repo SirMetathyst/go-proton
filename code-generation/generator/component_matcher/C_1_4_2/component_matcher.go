@@ -12,9 +12,9 @@ func init() {
 }
 
 // eventComponentID ...
-func eventComponentID(c *proton.C, cp *proton.CP) proton.String {
+func eventComponentID(c *proton.Context, cp *proton.Component) proton.String {
 	var eventTypeSuffix = ""
-	if cp.EventType() == proton.RemovedEvent {
+	if cp.EventType() == proton.EventTypeRemoved {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
@@ -25,12 +25,12 @@ func eventComponentID(c *proton.C, cp *proton.CP) proton.String {
 }
 
 // ComponentMatcherGenerator_C_1_4_2 ...
-func ComponentMatcherGenerator_C_1_4_2(md *proton.MD) ([]proton.FI, error) {
-	slice := make([]proton.FI, 0)
+func ComponentMatcherGenerator_C_1_4_2(md *proton.Model) ([]proton.FileInfo, error) {
+	slice := make([]proton.FileInfo, 0)
 	for _, cp := range md.ComponentSlice() {
 		for _, c := range cp.ContextSlice() {
 			slice = append(slice, proton.NewFileInfo(c.ID().WithoutContextSuffix().ToUpperFirst().String()+"/Components/"+c.ID().WithoutContextSuffix().ToUpperFirst().String()+cp.ID().WithComponentSuffix().ToUpperFirst().String()+".cs", ComponentMatcher_C_1_4_2(c, cp, false, new(bytes.Buffer)), "ComponentMatcherGenerator_C_1_4_2"))
-			if cp.EventTarget() != proton.NoTarget {
+			if cp.EventTarget() != proton.EventTargetNone {
 				slice = append(slice, proton.NewFileInfo(c.ID().WithoutContextSuffix().ToUpperFirst().String()+"/Components/"+c.ID().WithoutContextSuffix().ToUpperFirst().String()+eventComponentID(c, cp).WithComponentSuffix().ToUpperFirst().String()+".cs", ComponentMatcher_C_1_4_2(c, cp, true, new(bytes.Buffer)), "ComponentMatcherGenerator_C_1_4_2"))
 			}
 		}

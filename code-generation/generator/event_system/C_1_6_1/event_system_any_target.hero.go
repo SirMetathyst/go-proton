@@ -9,14 +9,14 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EventSystemAnyTarget_C_1_6_1(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
+func EventSystemAnyTarget_C_1_6_1(c *proton.Context, cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public sealed class `)
 	b.WriteString(componentID(c, cp).ToUpperFirst().String())
 	b.WriteString(`EventSystem : Entitas.ReactiveSystem<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> 
-{   
+	b.WriteString(`Entity>
+{
     readonly Entitas.IGroup<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity> _listeners;
@@ -26,7 +26,7 @@ public sealed class `)
     readonly System.Collections.Generic.List<I`)
 	b.WriteString(componentID(c, cp).ToUpperFirst().String())
 	b.WriteString(`> _listenerBuffer;
-    
+
     public `)
 	b.WriteString(componentID(c, cp).ToUpperFirst().String())
 	b.WriteString(`EventSystem(Contexts contexts) : base(contexts.`)
@@ -47,7 +47,7 @@ public sealed class `)
 	b.WriteString(componentID(c, cp).ToUpperFirst().String())
 	b.WriteString(`>();
     }
-    
+
     protected override Entitas.ICollector<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity> GetTrigger(Entitas.IContext<`)
@@ -75,7 +75,7 @@ public sealed class `)
 	b.WriteString(`        );
         );
     }
-    
+
     protected override bool Filter(`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity entity)
@@ -84,7 +84,7 @@ public sealed class `)
 	b.WriteString(filter(c, cp))
 	b.WriteString(`;
     }
-    
+
     protected override void Execute(System.Collections.Generic.List<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity> entities)

@@ -12,8 +12,8 @@ func init() {
 }
 
 // ComponentContextGenerator_1_4_2 ...
-func ComponentContextGenerator_C_1_4_2(md *proton.MD) ([]proton.FI, error) {
-	slice := make([]proton.FI, 0)
+func ComponentContextGenerator_C_1_4_2(md *proton.Model) ([]proton.FileInfo, error) {
+	slice := make([]proton.FileInfo, 0)
 	for _, cp := range md.ComponentSlice() {
 		if cp.IsUnique() {
 			for _, c := range cp.ContextSlice() {

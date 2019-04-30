@@ -1,14 +1,14 @@
-<%: func ComponentEntityInterface_C_1_4_2(cp *proton.CP, b *bytes.Buffer) string %>
-public interface I<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %>Entity 
+<%: func ComponentEntityInterface_C_1_4_2(cp *proton.Component, b *bytes.Buffer) string %>
+public interface I<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %>Entity
 {
-    <%==s cp.ID().WithComponentSuffix().ToUpperFirst().String() %><% b.WriteRune(' ')%><%==s cp.ID().WithoutComponentSuffix().ToLowerFirst().String() %> 
-    { 
-        get; 
+    <%==s cp.ID().WithComponentSuffix().ToUpperFirst().String() %><% b.WriteRune(' ')%><%==s cp.ID().WithoutComponentSuffix().ToLowerFirst().String() %>
+    {
+        get;
     }
-    
-    bool has<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %> 
-    { 
-        get; 
+
+    bool has<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %>
+    {
+        get;
     }
 
     void Add<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String() %>(<% ComponentEntityInterfaceArgument_C_1_4_2(cp, b) %>);

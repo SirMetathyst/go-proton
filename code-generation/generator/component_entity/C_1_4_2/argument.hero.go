@@ -9,7 +9,7 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentEntityArgument_C_1_4_2(cp *proton.CP, isEventComponent bool, b *bytes.Buffer) string {
+func ComponentEntityArgument_C_1_4_2(cp *proton.Component, isEventComponent bool, b *bytes.Buffer) string {
 
 	if isEventComponent {
 		b.WriteString("System.Collections.Generic.List<I")

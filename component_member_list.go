@@ -19,10 +19,10 @@ func NewComponentMemberList() *ComponentMemberList {
 	return &ComponentMemberList{}
 }
 
-// AddMember ...
-func (cml *ComponentMemberList) AddMember(componentMember *ComponentMember) error {
+// AddComponentMember ...
+func (cml *ComponentMemberList) AddComponentMember(componentMember *ComponentMember) error {
 	if componentMember == nil {
-		return ErrComponentMemberListTriedToAddNilMember
+		panic(ErrComponentMemberListTriedToAddNilMember)
 	}
 	if cml.MemberWithID(componentMember.ID().String()) != nil {
 		return ErrComponentMemberListTriedToAddDuplicateMemberID
@@ -41,8 +41,8 @@ func (cml *ComponentMemberList) MemberWithID(id string) *ComponentMember {
 	return nil
 }
 
-// MembersWithEntityIndex ...
-func (cml *ComponentMemberList) MembersWithEntityIndex() []*ComponentMember {
+// ComponentMembersWithEntityIndex ...
+func (cml *ComponentMemberList) ComponentMembersWithEntityIndex() []*ComponentMember {
 	slice := make([]*ComponentMember, 0)
 	for _, componentMember := range cml.componentMemberSlice {
 		if componentMember.EntityIndexType() > 0 {
@@ -52,7 +52,7 @@ func (cml *ComponentMemberList) MembersWithEntityIndex() []*ComponentMember {
 	return slice
 }
 
-// MemberSlice ...
-func (cml *ComponentMemberList) MemberSlice() []*ComponentMember {
+// ComponentMemberSlice ...
+func (cml *ComponentMemberList) ComponentMemberSlice() []*ComponentMember {
 	return cml.componentMemberSlice
 }

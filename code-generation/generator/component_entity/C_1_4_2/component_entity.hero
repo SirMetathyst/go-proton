@@ -1,4 +1,4 @@
-<%: func ComponentEntity_C_1_4_2(c *proton.C, cp *proton.CP, isEventComponent bool, b *bytes.Buffer) string %>
+<%: func ComponentEntity_C_1_4_2(c *proton.Context, cp *proton.Component, isEventComponent bool, b *bytes.Buffer) string %>
 <%
 
 ID := proton.String("")
@@ -12,23 +12,23 @@ if isEventComponent {
 %>
 public partial class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity
 {
-    public <%==s ID.WithComponentSuffix().ToUpperFirst().String()%><% b.WriteRune(' ')%><%==s ID.WithoutComponentSuffix().ToLowerFirst().String()%> 
-    { 
-        get 
-        { 
-            return (<%==s ID.WithComponentSuffix().ToUpperFirst().String()%>)GetComponent(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>); 
-        } 
+    public <%==s ID.WithComponentSuffix().ToUpperFirst().String()%><% b.WriteRune(' ')%><%==s ID.WithoutComponentSuffix().ToLowerFirst().String()%>
+    {
+        get
+        {
+            return (<%==s ID.WithComponentSuffix().ToUpperFirst().String()%>)GetComponent(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>);
+        }
     }
 
-    public bool has<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%> 
-    { 
-        get 
-        { 
-            return HasComponent(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>); 
-        } 
+    public bool has<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>
+    {
+        get
+        {
+            return HasComponent(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>);
+        }
     }
 
-    public void Add<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>(<% ComponentEntityArgument_C_1_4_2(cp, isEventComponent, b) %>) 
+    public void Add<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>(<% ComponentEntityArgument_C_1_4_2(cp, isEventComponent, b) %>)
     {
         var index = <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>;
         var component = CreateComponent<<%==s ID.WithComponentSuffix().ToUpperFirst().String()%>>(index);

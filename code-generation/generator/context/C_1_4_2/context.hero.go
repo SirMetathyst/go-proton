@@ -9,13 +9,13 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func Context_C_1_4_2(c *proton.C, b *bytes.Buffer) string {
+func Context_C_1_4_2(c *proton.Context, b *bytes.Buffer) string {
 	b.WriteString(`
 public sealed partial class `)
 	b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
 	b.WriteString(` : Entitas.Context<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity> 
+	b.WriteString(`Entity>
 {
     public `)
 	b.WriteString(c.ID().WithContextSuffix().ToUpperFirst().String())
@@ -42,7 +42,7 @@ public sealed partial class `)
 #else
             new Entitas.SafeAERC(entity)
 #endif
-        ) 
+        )
     {
     }
 }

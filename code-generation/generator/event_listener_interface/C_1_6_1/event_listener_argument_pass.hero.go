@@ -9,9 +9,9 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EventListenerArgumentPass_1_6_1(cp *proton.CP, b *bytes.Buffer) string {
+func EventListenerArgumentPass_1_6_1(cp *proton.Component, b *bytes.Buffer) string {
 	ml := cp.MemberSlice()
-	if len(ml) > 0 && cp.EventType() == proton.AddedEvent {
+	if len(ml) > 0 && cp.EventType() == proton.EventTypeAdded {
 		b.WriteString(", ")
 		for i, m := range ml {
 			b.WriteString(m.Value().String())

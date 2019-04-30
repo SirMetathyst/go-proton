@@ -25,7 +25,7 @@ const (
 
 // IsValid ...
 func (i EntityIndexType) IsValid() bool {
-	return i >= 0 || i <= 2
+	return i >= 0 && i <= 2
 }
 
 // String ...

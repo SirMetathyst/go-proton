@@ -16,9 +16,13 @@ type AliasData struct {
 
 var (
 
+	// Valid Alias ...
+	ValidAlias, _ = CreateAliasFromEntry(ValidAliasEntrySlice[0])
+
 	// InvalidAliasEntrySlice ...
 	InvalidAliasEntrySlice = []TableEntry{
 		Entry("", AliasData{"", "", proton.ErrAliasIDUndefined}),                       // 0
+		Entry("", AliasData{" ", "", proton.ErrAliasIDContainsWhitespace}),             // 0
 		Entry("", AliasData{"", "value", proton.ErrAliasIDUndefined}),                  // 1
 		Entry("", AliasData{"id ", "value", proton.ErrAliasIDContainsWhitespace}),      // 2
 		Entry("", AliasData{"id", "  value", proton.ErrAliasValueContainsWhitespace}),  // 3
@@ -40,13 +44,23 @@ var (
 	}
 )
 
+// CreateAliasFromAliasData ...
+func CreateAliasFromAliasData(aliasData AliasData) (*proton.Alias, error) {
+	return proton.NewAlias(aliasData.id, aliasData.value)
+}
+
+// CreateAliasFromEntry
+func CreateAliasFromEntry(entry TableEntry) (*proton.Alias, error) {
+	return CreateAliasFromAliasData(entry.Parameters[0].(AliasData))
+}
+
 // Describe Alias ...
 var _ = Describe("Alias", func() {
 
 	// Creating an invalid alias ...
 	DescribeTable("creating an invalid alias",
 		func(aliasData AliasData) {
-			alias, err := proton.NewAlias(aliasData.id, aliasData.value)
+			alias, err := CreateAliasFromAliasData(aliasData)
 			Expect(err).To(Equal(aliasData.expectedErr))
 			Expect(alias).To(BeNil())
 		}, InvalidAliasEntrySlice...,
@@ -55,7 +69,7 @@ var _ = Describe("Alias", func() {
 	// Creating a valid alias ...
 	DescribeTable("creating a valid alias",
 		func(aliasData AliasData) {
-			alias, err := proton.NewAlias(aliasData.id, aliasData.value)
+			alias, err := CreateAliasFromAliasData(aliasData)
 			Expect(err).To(BeNil())
 			Expect(alias).ToNot(BeNil())
 			Expect(alias.ID()).To(Equal(proton.String(aliasData.id)))

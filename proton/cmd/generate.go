@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+
 	codegeneration "github.com/SirMetathyst/go-proton/code-generation"
 	language "github.com/SirMetathyst/go-proton/language"
 
@@ -29,7 +31,12 @@ and re-generate the code.`,
 		if Daemonize {
 			codegeneration.Daemon(language.Parse)
 		} else {
-			codegeneration.ParseGenerate(language.Parse)
+			err := codegeneration.ParseGenerate(language.Parse)
+			if err != nil {
+				log.Printf("proton: %s\n", err)
+				return
+			}
+			log.Println("proton: generated")
 		}
 	},
 }

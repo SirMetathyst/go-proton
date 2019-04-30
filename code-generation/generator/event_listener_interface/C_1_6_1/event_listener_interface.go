@@ -12,8 +12,8 @@ func init() {
 }
 
 // EventListenerInterfaceGenerator_C_1_6_1 ...
-func EventListenerInterfaceGenerator_C_1_6_1(md *proton.MD) ([]proton.FI, error) {
-	slice := make([]proton.FI, 0)
+func EventListenerInterfaceGenerator_C_1_6_1(md *proton.Model) ([]proton.FileInfo, error) {
+	slice := make([]proton.FileInfo, 0)
 	for _, cp := range md.ComponentSlice() {
 		if cp.IsEvent() {
 			for _, c := range cp.ContextSlice() {

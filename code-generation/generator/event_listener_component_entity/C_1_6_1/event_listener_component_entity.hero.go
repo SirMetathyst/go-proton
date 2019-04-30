@@ -9,7 +9,7 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EventListenerComponentEntity_C_1_6_1(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
+func EventListenerComponentEntity_C_1_6_1(c *proton.Context, cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
@@ -19,7 +19,7 @@ public partial class `)
 	b.WriteString(componentID(c, cp).String())
 	b.WriteString(`(I`)
 	b.WriteString(componentID(c, cp).String())
-	b.WriteString(` value) 
+	b.WriteString(` value)
     {
         var listeners = has`)
 	b.WriteString(componentID(c, cp).String())
@@ -35,7 +35,7 @@ public partial class `)
 	b.WriteString(componentID(c, cp).String())
 	b.WriteString(`(listeners);
     }
-    
+
     public void Remove`)
 	b.WriteString(componentID(c, cp).String())
 	b.WriteString(`(I`)
@@ -46,13 +46,13 @@ public partial class `)
 	b.WriteString(componentID(c, cp).ToLowerFirst().String())
 	b.WriteString(`.value;
         listeners.Remove(value);
-        if (removeComponentWhenEmpty && listeners.Count == 0) 
+        if (removeComponentWhenEmpty && listeners.Count == 0)
         {
             Remove`)
 	b.WriteString(componentID(c, cp).String())
 	b.WriteString(`();
-        } 
-        else 
+        }
+        else
         {
             Replace`)
 	b.WriteString(componentID(c, cp).String())

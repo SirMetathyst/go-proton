@@ -9,7 +9,7 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentMatcher_C_1_4_2(c *proton.C, cp *proton.CP, isEventComponent bool, b *bytes.Buffer) string {
+func ComponentMatcher_C_1_4_2(c *proton.Context, cp *proton.Component, isEventComponent bool, b *bytes.Buffer) string {
 
 	ID := proton.String("")
 
@@ -35,13 +35,13 @@ public sealed partial class `)
 	b.WriteString(`Entity>`)
 	b.WriteRune(' ')
 	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` 
+	b.WriteString(`
     {
-        get 
+        get
         {
             if (_matcher`)
 	b.WriteString(ID.WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(` == null) 
+	b.WriteString(` == null)
             {
                 var matcher = (Entitas.Matcher<`)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())

@@ -1,17 +1,17 @@
-<%: func EventSystemAnyTarget_C_1_6_1(c *proton.C, cp *proton.CP, b *bytes.Buffer) string %>
-public sealed class <%==s componentID(c, cp).ToUpperFirst().String()%>EventSystem : Entitas.ReactiveSystem<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> 
-{   
+<%: func EventSystemAnyTarget_C_1_6_1(c *proton.Context, cp *proton.Component, b *bytes.Buffer) string %>
+public sealed class <%==s componentID(c, cp).ToUpperFirst().String()%>EventSystem : Entitas.ReactiveSystem<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>
+{
     readonly Entitas.IGroup<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> _listeners;
     readonly System.Collections.Generic.List<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> _entityBuffer;
     readonly System.Collections.Generic.List<I<%==s componentID(c, cp).ToUpperFirst().String()%>> _listenerBuffer;
-    
+
     public <%==s componentID(c, cp).ToUpperFirst().String()%>EventSystem(Contexts contexts) : base(contexts.<%==s c.ID().WithoutContextSuffix().ToLowerFirst().String()%>)
     {
         _listeners = contexts.<%==s c.ID().WithoutContextSuffix().ToLowerFirst().String()%>.GetGroup(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Matcher.<%==s cp.ID().WithoutComponentSuffix().ToUpperFirst().String()%>);
         _entityBuffer = new System.Collections.Generic.List<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>();
         _listenerBuffer = new System.Collections.Generic.List<I<%==s componentID(c, cp).ToUpperFirst().String()%>>();
     }
-    
+
     protected override Entitas.ICollector<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> GetTrigger(Entitas.IContext<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> context)
     {
         return Entitas.CollectorContextExtension.CreateCollector(
@@ -26,17 +26,17 @@ public sealed class <%==s componentID(c, cp).ToUpperFirst().String()%>EventSyste
                 b.WriteRune('\n') } %>        );
         );
     }
-    
+
     protected override bool Filter(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity entity)
     {
         return <%==s filter(c, cp)%>;
     }
-    
+
     protected override void Execute(System.Collections.Generic.List<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> entities)
     {
         foreach (var e in entities)
         {
-            <% 
+            <%
                 if len(cp.MemberSlice()) > 0 {
                     b.WriteString("var component = e.")
                     b.WriteString(cp.ID().WithoutComponentSuffix().ToLowerFirst().String())

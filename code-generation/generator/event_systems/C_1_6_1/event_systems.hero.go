@@ -11,7 +11,7 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EventSystems_C_1_6_1(c *proton.C, cp []*proton.CP, b *bytes.Buffer) string {
+func EventSystems_C_1_6_1(c *proton.Context, cp []*proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public sealed partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
@@ -19,7 +19,7 @@ public sealed partial class `)
 {
     public `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
-	b.WriteString(`EventSystems(Contexts contexts) 
+	b.WriteString(`EventSystems(Contexts contexts)
     {
 `)
 

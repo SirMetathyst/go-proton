@@ -107,7 +107,7 @@ Flags:
 - Cleanup packages and write tests, coverage: at least 80%
 - Rewrite documentation
 - Currently all generators are off by default, create system to find newest version
-and enable the latest generators/post-processors. Default would be set to latest but allow change of generator/post-processor through command line flag. Only one be allowed to be set per "set" under generator name
+and enable the latest generators/post-processors. Default would be set to latest but allow change of generator/post-processor through command line flag. Only one be allowed to be set per "set" under generator name. Also, move more work out of generators into code-generation package
 - Add system syntax (cleanup, reactive, initialize etc) to DSL
 - Add context divert syntax back e.g. "context PhysicsKit : Game" for project modules.
 - Add "init" command for proton file generation. Tutorial of dsl syntax and project quickstart

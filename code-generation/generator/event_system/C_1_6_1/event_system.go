@@ -12,13 +12,13 @@ func init() {
 }
 
 // EventSystemGenerator_C_1_6_1 ...
-func EventSystemGenerator_C_1_6_1(md *proton.MD) ([]proton.FI, error) {
-	slice := make([]proton.FI, 0)
+func EventSystemGenerator_C_1_6_1(md *proton.Model) ([]proton.FileInfo, error) {
+	slice := make([]proton.FileInfo, 0)
 	for _, cp := range md.ComponentSlice() {
 		if cp.IsEvent() {
 			for _, c := range cp.ContextSlice() {
 				b := new(bytes.Buffer)
-				if cp.EventTarget() == proton.AnyTarget {
+				if cp.EventTarget() == proton.EventTargetAny {
 					EventSystemAnyTarget_C_1_6_1(c, cp, b)
 				} else {
 					EventSystemSelfTarget_C_1_6_1(c, cp, b)

@@ -223,10 +223,10 @@ func (cp *Component) ContextSlice() []*Context {
 
 // MembersWithEntityIndex ...
 func (cp *Component) MembersWithEntityIndex() []*ComponentMember {
-	return cp.componentMemberList.MembersWithEntityIndex()
+	return cp.componentMemberList.ComponentMembersWithEntityIndex()
 }
 
 // MemberSlice ...
 func (cp *Component) MemberSlice() []*ComponentMember {
-	return cp.componentMemberList.MemberSlice()
+	return cp.componentMemberList.ComponentMemberSlice()
 }

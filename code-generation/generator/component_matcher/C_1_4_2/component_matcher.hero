@@ -1,4 +1,4 @@
-<%: func ComponentMatcher_C_1_4_2(c *proton.C, cp *proton.CP, isEventComponent bool, b *bytes.Buffer) string %>
+<%: func ComponentMatcher_C_1_4_2(c *proton.Context, cp *proton.Component, isEventComponent bool, b *bytes.Buffer) string %>
 <%
 
 ID := proton.String("")
@@ -14,11 +14,11 @@ public sealed partial class <%==s c.ID().WithoutContextSuffix().ToUpperFirst().S
 {
     static Entitas.IMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity> _matcher<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>;
 
-    public static Entitas.IMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity><% b.WriteRune(' ')%><%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%> 
+    public static Entitas.IMatcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity><% b.WriteRune(' ')%><%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>
     {
-        get 
+        get
         {
-            if (_matcher<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%> == null) 
+            if (_matcher<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%> == null)
             {
                 var matcher = (Entitas.Matcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>)Entitas.Matcher<<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>Entity>.AllOf(<%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.<%==s ID.WithoutComponentSuffix().ToUpperFirst().String()%>);
                 matcher.componentNames = <%==s c.ID().WithoutContextSuffix().ToUpperFirst().String()%>ComponentsLookup.componentNames;

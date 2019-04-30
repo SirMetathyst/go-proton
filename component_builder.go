@@ -102,10 +102,9 @@ func (cpb *ComponentBuilder) SetCleanupMode(m CleanupMode) *ComponentBuilder {
 }
 
 // AddContext ...
-func (cpb *ComponentBuilder) AddContext(id string) *ComponentBuilder {
+func (cpb *ComponentBuilder) AddContext(id string) error {
 	ctx := cpb.contextList.ContextWithID(id)
-	cpb.targetContextList.AddContext(ctx)
-	return cpb
+	return cpb.targetContextList.AddContext(ctx)
 }
 
 // NewMember ...

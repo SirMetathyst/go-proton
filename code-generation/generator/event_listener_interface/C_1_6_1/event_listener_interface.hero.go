@@ -9,7 +9,7 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func EventListenerInterface_C_1_6_1(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
+func EventListenerInterface_C_1_6_1(c *proton.Context, cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public interface I`)
 	b.WriteString(componentID(c, cp).ToUpperFirst().String())

@@ -3,9 +3,9 @@ package generator
 import proton "github.com/SirMetathyst/go-proton"
 
 // componentID ...
-func componentID(c *proton.C, cp *proton.CP) proton.String {
+func componentID(c *proton.Context, cp *proton.Component) proton.String {
 	var eventTypeSuffix = ""
-	if cp.EventType() == proton.RemovedEvent {
+	if cp.EventType() == proton.EventTypeRemoved {
 		eventTypeSuffix = "Removed"
 	}
 	var optionalContextID = ""
@@ -17,9 +17,9 @@ func componentID(c *proton.C, cp *proton.CP) proton.String {
 }
 
 // methodID ...
-func methodID(cp *proton.CP) proton.String {
+func methodID(cp *proton.Component) proton.String {
 	var eventTypeSuffix = ""
-	if cp.EventType() == proton.RemovedEvent {
+	if cp.EventType() == proton.EventTypeRemoved {
 		eventTypeSuffix = "Removed"
 	}
 	componentID := cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + eventTypeSuffix
@@ -27,7 +27,7 @@ func methodID(cp *proton.CP) proton.String {
 }
 
 // filter ...
-func filter(c *proton.C, cp *proton.CP) string {
+func filter(c *proton.Context, cp *proton.Component) string {
 	filter := ""
 	if len(cp.MemberSlice()) == 0 {
 		//switch cp.EventType() {
@@ -40,15 +40,15 @@ func filter(c *proton.C, cp *proton.CP) string {
 		//}
 	} else {
 		switch cp.EventType() {
-		case proton.AddedEvent:
+		case proton.EventTypeAdded:
 			filter = "entity.has" + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + " && "
 			break
-		case proton.RemovedEvent:
+		case proton.EventTypeRemoved:
 			filter = "!entity.has" + cp.ID().WithoutComponentSuffix().ToUpperFirst().String() + " && "
 			break
 		}
 	}
-	if cp.EventTarget() == proton.SelfTarget {
+	if cp.EventTarget() == proton.EventTargetSelf {
 		filter += "entity.has" + componentID(c, cp).ToUpperFirst().String()
 	}
 	return filter

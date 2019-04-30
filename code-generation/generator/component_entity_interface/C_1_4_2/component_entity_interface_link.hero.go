@@ -9,14 +9,14 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ComponentEntityInterfaceLink_C_1_4_2(c *proton.C, cp *proton.CP, b *bytes.Buffer) string {
+func ComponentEntityInterfaceLink_C_1_4_2(c *proton.Context, cp *proton.Component, b *bytes.Buffer) string {
 	b.WriteString(`
 public partial class `)
 	b.WriteString(c.ID().WithoutContextSuffix().ToUpperFirst().String())
 	b.WriteString(`Entity : I`)
 	b.WriteString(cp.ID().WithoutComponentSuffix().ToUpperFirst().String())
-	b.WriteString(`Entity 
-{ 
+	b.WriteString(`Entity
+{
 }
 `)
 	return b.String()

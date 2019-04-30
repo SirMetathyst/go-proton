@@ -9,17 +9,17 @@ import (
 	proton "github.com/SirMetathyst/go-proton"
 )
 
-func ContextObserver_C_1_4_2(c []*proton.C, b *bytes.Buffer) string {
+func ContextObserver_C_1_4_2(c []*proton.Context, b *bytes.Buffer) string {
 	b.WriteString(`
-public partial class Contexts 
+public partial class Contexts
 {
 
 #if (!ENTITAS_DISABLE_VISUAL_DEBUGGING && UNITY_EDITOR)
 
     [Entitas.CodeGeneration.Attributes.PostConstructor]
-    public void InitializeContexObservers() 
+    public void InitializeContexObservers()
     {
-        try 
+        try
         {
 `)
 	for _, cc := range c {
@@ -30,14 +30,14 @@ public partial class Contexts
 		b.WriteRune('\n')
 	}
 	b.WriteString(`
-        } 
-        catch(System.Exception) 
+        }
+        catch(System.Exception)
         {
         }
     }
-    public void CreateContextObserver(Entitas.IContext context) 
+    public void CreateContextObserver(Entitas.IContext context)
     {
-        if (UnityEngine.Application.isPlaying) 
+        if (UnityEngine.Application.isPlaying)
         {
             var observer = new Entitas.VisualDebugging.Unity.ContextObserver(context);
             UnityEngine.Object.DontDestroyOnLoad(observer.gameObject);

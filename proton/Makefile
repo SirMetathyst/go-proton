@@ -12,7 +12,7 @@ buildadvfinal: build
 	upx.exe --brute $(OUTPUT)
 
 install: buildadvfinal
-	cp ./proton.exe ../../../../../bin/proton.exe
+	cp ./proton.exe /mnt/c/Users/alexa/go/bin/proton.exe
 
-install_clean: buildadvfinal
+install_clean: install
 	rm ./proton.exe

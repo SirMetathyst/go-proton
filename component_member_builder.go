@@ -71,14 +71,14 @@ func (cpmb *ComponentMemberBuilder) Build() error {
 		if err != nil {
 			return err
 		}
-		cpmb.componentMemberList.AddMember(componentMember)
+		cpmb.componentMemberList.AddComponentMember(componentMember)
 		return nil
 	}
 	componentMember, err := NewComponentMember(cpmb.id, cpmb.value, cpmb.entityIndexType)
 	if err != nil {
 		return err
 	}
-	err = cpmb.componentMemberList.AddMember(componentMember)
+	err = cpmb.componentMemberList.AddComponentMember(componentMember)
 	if err != nil {
 		return err
 	}
