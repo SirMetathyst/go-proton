@@ -9,12 +9,15 @@ var (
 	ErrComponentMemberBuilderAliasListShouldNotBeNil = errors.New("proton: component member builder: alias list should not be nil")
 	// ErrComponentMemberBuilderMemberShouldNotBeNil ...
 	ErrComponentMemberBuilderMemberShouldNotBeNil = errors.New("proton: component member builder: component member list should not be nil")
+	// ErrComponentMemberBuilderAliasNotFound ...
+	ErrComponentMemberBuilderAliasNotFound = errors.New("proton: component member builder: the given alias id was not found")
 )
 
 // ComponentMemberBuilder ...
 type ComponentMemberBuilder struct {
 	aliasList           *AliasList
 	componentMemberList *ComponentMemberList
+	useAlias            bool
 	alias               *Alias
 	built               bool
 	id                  string
@@ -34,7 +37,8 @@ func NewComponentMemberBuilder(
 	}
 	return &ComponentMemberBuilder{
 		aliasList:           aliasList,
-		componentMemberList: componentMemberList}
+		componentMemberList: componentMemberList,
+		useAlias:            false}
 }
 
 // SetID ...
@@ -58,6 +62,7 @@ func (cpmb *ComponentMemberBuilder) SetEntityIndexType(value EntityIndexType) *C
 // SetAlias ...
 func (cpmb *ComponentMemberBuilder) SetAlias(id string) *ComponentMemberBuilder {
 	cpmb.alias = cpmb.aliasList.AliasWithID(id)
+	cpmb.useAlias = true
 	return cpmb
 }
 
@@ -66,12 +71,16 @@ func (cpmb *ComponentMemberBuilder) Build() error {
 	if cpmb.built {
 		return ErrComponentMemberBuilderMemberAlreadyBuilt
 	}
-	if cpmb.alias != nil {
+	if cpmb.useAlias {
 		componentMember, err := NewComponentMemberAlias(cpmb.id, cpmb.alias, cpmb.entityIndexType)
 		if err != nil {
+			if err == ErrComponentMemberAliasShouldNotBeNil {
+				return ErrComponentMemberBuilderAliasNotFound
+			}
 			return err
 		}
 		cpmb.componentMemberList.AddComponentMember(componentMember)
+		cpmb.built = true
 		return nil
 	}
 	componentMember, err := NewComponentMember(cpmb.id, cpmb.value, cpmb.entityIndexType)

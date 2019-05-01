@@ -24,15 +24,15 @@ func (cml *ComponentMemberList) AddComponentMember(componentMember *ComponentMem
 	if componentMember == nil {
 		panic(ErrComponentMemberListTriedToAddNilMember)
 	}
-	if cml.MemberWithID(componentMember.ID().String()) != nil {
+	if cml.ComponentMemberWithID(componentMember.ID().String()) != nil {
 		return ErrComponentMemberListTriedToAddDuplicateMemberID
 	}
 	cml.componentMemberSlice = append(cml.componentMemberSlice, componentMember)
 	return nil
 }
 
-// MemberWithID ...
-func (cml *ComponentMemberList) MemberWithID(id string) *ComponentMember {
+// ComponentMemberWithID ...
+func (cml *ComponentMemberList) ComponentMemberWithID(id string) *ComponentMember {
 	for _, componentMember := range cml.componentMemberSlice {
 		if componentMember.ID().EqualTo(id) {
 			return componentMember
